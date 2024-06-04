@@ -7,5 +7,5 @@ resource "docker_config" "auth" {
 resource "local_file" "auth" {
   count    = var.basic_auth != null ? 1 : 0
   content  = local.auth
-  filename = "${path.module}/../debug/${local.filenames.auth}"
+  filename = "${path.root}/.debug/nginx/${local.filenames.auth}"
 }

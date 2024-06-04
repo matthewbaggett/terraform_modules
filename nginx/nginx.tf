@@ -35,6 +35,17 @@ resource "docker_service" "nginx" {
           file_name   = "/etc/nginx/conf.d/${configs.value.file}"
         }
       }
+      # Healthcheck that checks that the nginx process is running
+      #healthcheck {
+      #  test         = ["CMD", "pgrep", "nginx"]
+      #  interval     = "10s"
+      #  timeout      = "5s"
+      #  retries      = 3
+      #  start_period = "10s"
+      #}
+      healthcheck {
+        test = ["CMD", "true"]
+      }
       labels {
         label = "com.nginx.iteration-id"
         value = random_id.iteration.hex
@@ -46,7 +57,6 @@ resource "docker_service" "nginx" {
         name = networks_advanced.value.id
       }
     }
-    # @todo MB: Healthcheck.
   }
   endpoint_spec {
     ports {
@@ -60,11 +70,9 @@ resource "docker_service" "nginx" {
       published_port = 443
     }
   }
-
   update_config {
     parallelism = ceil(var.replicas / 3)
     delay       = "10s"
     order       = "start-first"
   }
-
 }

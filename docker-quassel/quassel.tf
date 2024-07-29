@@ -1,0 +1,39 @@
+module "network" {
+  source     = "../docker-network"
+  stack_name = var.stack_name
+}
+module "postgres" {
+  source                = "../docker-postgres"
+  postgres_version      = "16"
+  stack_name            = var.stack_name
+  networks              = [module.network.network]
+  username              = "postgres"
+  database              = "postgres"
+  placement_constraints = var.placement_constraints
+  ports = {
+    65432 = 5432
+  }
+}
+module "service" {
+  source       = "../docker-service"
+  image        = "${var.quassel_image}:${var.quassel_version}"
+  stack_name   = var.stack_name
+  service_name = "quassel"
+  networks     = [module.network.network]
+  environment_variables = {
+    PUID               = 1000
+    PGID               = 1000
+    TZ                 = "Europe/Amsterdam"
+    RUN_OPTS           = "--config-from-environment"
+    DB_BACKEND         = "PostgreSQL"
+    DB_PGSQL_USERNAME  = module.postgres.username
+    DB_PGSQL_PASSWORD  = module.postgres.password
+    DB_PGSQL_HOSTNAME  = module.postgres.service_name
+    DB_PGSQL_PORT      = 5432
+    AUTH_AUTHENTICATOR = "Database"
+  }
+  placement_constraints = var.placement_constraints
+  ports = {
+    4242 = 4242
+  }
+}

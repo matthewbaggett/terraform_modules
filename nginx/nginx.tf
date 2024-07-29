@@ -57,6 +57,9 @@ resource "docker_service" "nginx" {
         name = networks_advanced.value.id
       }
     }
+    placement {
+      constraints = var.placement_constraints
+    }
   }
   endpoint_spec {
     ports {
@@ -74,5 +77,10 @@ resource "docker_service" "nginx" {
     parallelism = ceil(var.replicas / 3)
     delay       = "10s"
     order       = "start-first"
+  }
+  lifecycle {
+    ignore_changes = [
+      task_spec[0].placement[0].platforms,
+    ]
   }
 }

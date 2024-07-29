@@ -20,3 +20,8 @@ variable "replicas" {
   default     = 2
   description = "The number of instances to deploy"
 }
+variable "placement_constraints" {
+  default     = []
+  type        = list(string)
+  description = "Docker Swarm placement constraints"
+}

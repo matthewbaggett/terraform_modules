@@ -54,8 +54,10 @@ resource "docker_service" "instance" {
         name = networks_advanced.value
       }
     }
+
+    # Apply restart policy
     restart_policy {
-      condition    = "any"
+      condition    = var.one_shot ? "none" : "any"
       delay        = "0s"
       window       = "0s"
       max_attempts = 0

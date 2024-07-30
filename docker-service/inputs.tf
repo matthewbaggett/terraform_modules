@@ -5,6 +5,11 @@ variable "command" {
   type    = list(string)
   default = null
 }
+variable "one_shot" {
+  type        = bool
+  default     = false
+  description = "Whether to run the service as a one-shot task."
+}
 variable "stack_name" {
   type = string
 }

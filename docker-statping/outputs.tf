@@ -11,6 +11,3 @@ output "statping" {
     }
   }
 }
-output "nginx_files" {
-  value = var.nginx_hostname != null ? module.nginx_config[0].files : []
-}

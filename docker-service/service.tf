@@ -27,6 +27,23 @@ resource "docker_service" "instance" {
           type   = "volume"
         }
       }
+      dynamic "mounts" {
+        for_each = var.mounts
+        content {
+          target = mounts.value
+          source = mounts.key
+          type   = "bind"
+        }
+      }
+
+      dynamic "configs" {
+        for_each = var.configs
+        content {
+          config_id   = docker_config.config[configs.key].id
+          config_name = docker_config.config[configs.key].name
+          file_name   = configs.value.path
+        }
+      }
 
       # Apply the healthcheck
       dynamic "healthcheck" {
@@ -135,4 +152,19 @@ resource "docker_service" "instance" {
     label = "com.docker.stack.image"
     value = var.image
   }
+}
+
+resource "docker_config" "config" {
+  for_each = var.configs
+  data     = base64encode(each.value.contents)
+  name     = join("-", concat(each.value.name_prefix, [substr(sha1(each.value.contents), 0, 7)]))
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "local_file" "config" {
+  for_each = var.configs
+  content  = each.value.contents
+  filename = "${path.root}/.debug/docker-service/${var.stack_name}-${var.service_name}/configs/${each.key}"
 }

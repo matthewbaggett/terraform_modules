@@ -1,8 +1,12 @@
 variable "quassel_image" {
-  default = "lscr.io/linuxserver/quassel-core"
+  default     = "lscr.io/linuxserver/quassel-core"
+  type        = string
+  description = "The image to use for the quassel service"
 }
 variable "quassel_version" {
-  default = "latest"
+  default     = "latest"
+  type        = string
+  description = "The version of the quassel image to use"
 }
 variable "stack_name" {
   default     = "quassel"

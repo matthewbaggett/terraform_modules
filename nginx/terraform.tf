@@ -10,6 +10,14 @@ terraform {
       source  = "BrendanThompson/scratch"
       version = "0.4.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~>2.1"
+    }
   }
 }
 

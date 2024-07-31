@@ -1,8 +1,12 @@
 variable "threeproxy_image" {
-  default = "ghcr.io/tarampampam/3proxy"
+  type        = string
+  description = "The image to use for the 3proxy service."
+  default     = "ghcr.io/tarampampam/3proxy"
 }
 variable "threeproxy_version" {
-  default = "latest"
+  type        = string
+  description = "The version of the 3proxy image to use."
+  default     = "latest"
 }
 variable "stack_name" {
   default     = "proxy"

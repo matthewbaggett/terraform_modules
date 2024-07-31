@@ -8,9 +8,7 @@ module "postgres" {
   stack_name            = var.stack_name
   networks              = [module.network.network]
   placement_constraints = var.placement_constraints
-  ports = {
-    65200 = 5432
-  }
+  ports                 = [{ container = 5432, host = 65200 }]
 }
 data "docker_network" "loadbalancer" {
   name = "loadbalancer"

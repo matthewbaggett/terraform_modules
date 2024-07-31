@@ -23,10 +23,15 @@ module "service" {
     SECONDARY_RESOLVER = "4.2.2.4"
   }
   placement_constraints = var.placement_constraints
-  ports = {
-    "${var.socks_proxy_port}" = 1080
-    "${var.http_proxy_port}"  = 3128
-  }
+  ports = [
+    {
+      host      = var.socks_proxy_port
+      container = 1080
+      }, {
+      host      = var.http_proxy_port
+      container = 3128
+    }
+  ]
 }
 output "curl" {
   value = {

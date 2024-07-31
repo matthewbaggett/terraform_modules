@@ -1,9 +1,13 @@
 variable "statping_image" {
   #default = "quay.io/statping-ng/statping-ng"
-  default = "adamboutcher/statping-ng"
+  default     = "adamboutcher/statping-ng"
+  type        = string
+  description = "The image to use for the statping service"
 }
 variable "statping_version" {
-  default = "latest"
+  default     = "latest"
+  type        = string
+  description = "The version of the statping image to use"
 }
 variable "stack_name" {
   default     = "statping"

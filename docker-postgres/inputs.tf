@@ -33,9 +33,17 @@ variable "networks" {
   default = []
 }
 variable "ports" {
-  type        = map(number)
-  default     = {}
+  type = list(object({
+    host      = number
+    container = number
+  }))
+  default     = []
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
+
+  validation {
+    error_message = "Ports must be between 1024 and 65535"
+    condition     = alltrue([for p in var.ports : p.host >= 1024 && p.host <= 65535 && p.container >= 1024 && p.container <= 65535])
+  }
 }
 variable "placement_constraints" {
   default     = []

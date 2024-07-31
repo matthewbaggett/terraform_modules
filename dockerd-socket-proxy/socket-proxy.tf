@@ -17,7 +17,7 @@ module "service" {
     NODES      = 1
     NETWORKS   = 1
   }
-  placement_constraints = ["node.role == manager"]
+  placement_constraints = var.placement_constraints
   global                = true
   networks              = [module.network.network.id]
   mounts = [

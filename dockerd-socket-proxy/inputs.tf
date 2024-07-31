@@ -1,8 +1,12 @@
 variable "docker_socket_proxy_image" {
-  default = "ghcr.io/tecnativa/docker-socket-proxy"
+  default     = "ghcr.io/tecnativa/docker-socket-proxy"
+  type        = string
+  description = "The docker image to use for the docker-socket-proxy service."
 }
 variable "docker_socket_proxy_version" {
-  default = "latest"
+  default     = "latest"
+  type        = string
+  description = "The version of the docker image to use for the docker-socket-proxy service."
 }
 variable "stack_name" {
   default     = "proxy"
@@ -15,19 +19,7 @@ variable "service_name" {
   description = "The name of the service to create."
 }
 variable "placement_constraints" {
-  default     = []
+  default     = ["node.role == manager"]
   type        = list(string)
   description = "Docker Swarm placement constraints"
-}
-variable "endpoint" {
-  type        = string
-  description = "The endpoint to connect to."
-}
-variable "port" {
-  type        = number
-  description = "The port to expose on the host."
-}
-variable "networks" {
-  type        = list(string)
-  description = "Docker networks to connect the service to."
 }

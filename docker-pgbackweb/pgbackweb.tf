@@ -8,7 +8,7 @@ resource "random_password" "encryption_key" {
 }
 module "pgbackweb" {
   source = "../docker-service"
-  image  = "eduardolat/pgbackweb"
+  image  = "${var.pgbackweb_image}:${var.pgbackweb_version}"
   environment_variables = {
     PBW_ENCRYPTION_KEY       = nonsensitive(random_password.encryption_key.result)
     PBW_POSTGRES_CONN_STRING = "postgres://${module.postgres.username}:${module.postgres.password}@${module.postgres.service_name}:5432?sslmode=disable"
@@ -26,9 +26,7 @@ module "postgres" {
   placement_constraints = var.placement_constraints
   database              = "pgbackweb"
   username              = "pgbackweb"
-  ports = {
-    64000 = 5432
-  }
+  ports                 = [{ container = 5432, host = 64000 }]
 }
 output "pgbackweb" {
   value = module.pgbackweb

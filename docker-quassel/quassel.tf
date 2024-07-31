@@ -10,9 +10,7 @@ module "postgres" {
   username              = "postgres"
   database              = "postgres"
   placement_constraints = var.placement_constraints
-  ports = {
-    65432 = 5432
-  }
+  ports                 = [{ container = 5432, host = 65432 }]
 }
 module "service" {
   source       = "../docker-service"
@@ -33,7 +31,5 @@ module "service" {
     AUTH_AUTHENTICATOR = "Database"
   }
   placement_constraints = var.placement_constraints
-  ports = {
-    4242 = 4242
-  }
+  ports                 = [{ container = 4242, host = 4242 }]
 }

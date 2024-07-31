@@ -1,8 +1,12 @@
 variable "pgbackweb_image" {
-  default = "eduardolat/pgbackweb"
+  default     = "eduardolat/pgbackweb"
+  type        = string
+  description = "The image to use for the pgbackweb service"
 }
 variable "pgbackweb_version" {
-  default = "latest"
+  default     = "latest"
+  type        = string
+  description = "The version of the pgbackweb image to use"
 }
 variable "stack_name" {
   default     = "backup"

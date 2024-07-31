@@ -22,8 +22,18 @@ variable "description" {
   type    = string
   default = "This is an install of statping"
 }
+variable "networks" {
+  type        = list(string)
+  default     = []
+  description = "A list of network names to attach the service to."
+}
 variable "placement_constraints" {
   default     = []
   type        = list(string)
   description = "Docker Swarm placement constraints"
+}
+variable "extra_environment_variables" {
+  type        = map(string)
+  default     = {}
+  description = "Extra environment variables to pass to the service."
 }

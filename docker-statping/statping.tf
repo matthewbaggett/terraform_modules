@@ -10,20 +10,13 @@ module "postgres" {
   placement_constraints = var.placement_constraints
   ports                 = [{ container = 5432, host = 65200 }]
 }
-data "docker_network" "loadbalancer" {
-  name = "loadbalancer"
-}
-
 module "service" {
   source       = "../docker-service"
   image        = "${var.statping_image}:${var.statping_version}"
   stack_name   = var.stack_name
   service_name = "statping"
-  networks = [
-    module.network.network,
-    data.docker_network.loadbalancer.id,
-  ]
-  environment_variables = {
+  networks     = concat([module.network.network, ], var.networks)
+  environment_variables = merge({
     VIRTUAL_HOST = "localhost"
     VIRTUAL_PORT = "8080"
     DB_CONN      = "postgres"
@@ -33,6 +26,6 @@ module "service" {
     DB_DATABASE  = module.postgres.database
     NAME         = var.name
     DESCRIPTION  = var.description
-  }
+  }, var.extra_environment_variables)
   placement_constraints = var.placement_constraints
 }

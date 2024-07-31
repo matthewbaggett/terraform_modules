@@ -1,5 +1,15 @@
+resource "random_password" "salt" {
+  count   = var.basic_auth != null ? 1 : 0
+  length  = 8
+  special = false
+}
+resource "htpasswd_password" "hash" {
+  count    = var.basic_auth != null ? 1 : 0
+  password = var.basic_auth.password
+  salt     = random_password.salt[0].result
+}
 locals {
-  auth = var.basic_auth != null ? "${var.basic_auth.username}:${var.basic_auth.password}" : null
+  auth = var.basic_auth != null ? "${var.basic_auth.username}:${htpasswd_password.hash[0].bcrypt}\n" : null
   config = templatefile("${path.module}/nginx_template.conf", {
     hostname         = var.hostname
     service_name     = var.service_name
@@ -9,7 +19,7 @@ locals {
     enable_ssl       = var.certificate != null
     certificate      = var.certificate
     basic_auth       = var.basic_auth
-    auth_file        = var.basic_auth != null ? "${var.hostname}-auth.conf" : ""
+    auth_file        = var.basic_auth != null ? "${var.hostname}.auth" : ""
     allow_non_ssl    = var.allow_non_ssl
     redirect_non_ssl = var.redirect_non_ssl
     timeout_seconds  = var.timeout_seconds

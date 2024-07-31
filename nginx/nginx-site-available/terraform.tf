@@ -18,6 +18,10 @@ terraform {
       source  = "BrendanThompson/scratch"
       version = "0.4.0"
     }
+    htpasswd = {
+      source  = "loafoe/htpasswd"
+      version = "1.2.1"
+    }
   }
 }
 

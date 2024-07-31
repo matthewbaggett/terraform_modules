@@ -126,18 +126,9 @@ resource "docker_service" "instance" {
     dynamic "ports" {
       for_each = var.ports
       content {
-        target_port    = ports.value
-        published_port = ports.key
-        protocol       = "tcp"
-        publish_mode   = "ingress"
-      }
-    }
-    dynamic "ports" {
-      for_each = var.ports
-      content {
-        target_port    = ports.value
-        published_port = ports.key
-        protocol       = "udp"
+        target_port    = ports.value.container
+        published_port = ports.value.host
+        protocol       = ports.value.protocol
         publish_mode   = "ingress"
       }
     }

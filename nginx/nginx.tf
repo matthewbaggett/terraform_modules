@@ -1,12 +1,12 @@
 data "docker_registry_image" "nginx" {
   name = "nginx:latest"
 }
-resource "random_id" "iteration" {
-  keepers = {
-    configs = jsonencode(var.configs)
-  }
-  byte_length = 4
-}
+#resource "random_id" "iteration" {
+#  keepers = {
+#    configs = jsonencode(var.configs)
+#  }
+#  byte_length = 4
+#}
 resource "docker_service" "nginx" {
   name = var.service_name
   mode {
@@ -46,10 +46,10 @@ resource "docker_service" "nginx" {
       healthcheck {
         test = ["CMD", "true"]
       }
-      labels {
-        label = "com.nginx.iteration-id"
-        value = random_id.iteration.hex
-      }
+      #labels {
+      #  label = "com.nginx.iteration-id"
+      #  value = random_id.iteration.hex
+      #}
     }
     dynamic "networks_advanced" {
       for_each = var.networks
@@ -82,5 +82,10 @@ resource "docker_service" "nginx" {
     ignore_changes = [
       task_spec[0].placement[0].platforms,
     ]
+    create_before_destroy = true
+  }
+  converge_config {
+    delay   = "5s"
+    timeout = "2m"
   }
 }

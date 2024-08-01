@@ -50,7 +50,7 @@ locals {
   ] : f if f != null]
 }
 
-# Nginx config
+# Calculate a random ID for the configuration files and tie it to the config, auth and cert files
 resource "random_id" "config_instance" {
   byte_length = 4
   keepers = {
@@ -60,11 +60,17 @@ resource "random_id" "config_instance" {
     cert_private : local.cert_private,
   }
 }
+
+# Create our nginx site_available configuration file.
 resource "docker_config" "nginx_site_available" {
   name = join(".", [var.config_prefix, "conf", var.hostname, random_id.config_instance.id])
   data = base64encode(local.config)
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
+# Debug copy of the configuration file
 resource "local_file" "nginx_site_available" {
   filename = "${path.root}/.debug/nginx/${local.filenames.nginx}"
   content  = local.config

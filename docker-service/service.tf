@@ -120,12 +120,12 @@ resource "docker_service" "instance" {
     # Parallelism must be the size of the count of instances, divided by the number of update waves
     # with a minimum of 1.
     # Confusingly, the max() function gives you the largest number of the two, so if the parallelism is 0, 1 will be greater.
-    parallelism = max(1,ceil(var.parallelism / var.update_waves))
+    parallelism = max(1, ceil(var.parallelism / var.update_waves))
 
     # The order of stopping and starting containers.
     # Some containers can be run while the previous is still running (e.g web servers, anything ephemeral)
     # Some cannot have more than 1 instance running at the same time (e.g databases, anything concrete)
-    order       = var.start_first ? "start-first" : "stop-first"
+    order = var.start_first ? "start-first" : "stop-first"
   }
 
   # Ports and such

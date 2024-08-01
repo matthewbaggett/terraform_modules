@@ -1,14 +1,13 @@
 variable "gitea_actions_runner_image" {
   default     = "gitea/act_runner"
   type        = string
-  description = "The docker image to use for the github actions runner service."
+  description = "The docker image to use for the gitea runner service."
 }
 variable "gitea_actions_runner_version" {
   default     = "latest"
   type        = string
-  description = "The version of the docker image to use for the github actions runner service."
+  description = "The version of the docker image to use for the gitea runner service."
 }
-
 variable "parallelism" {
   description = "The number of instances of the runner to run"
   type        = number

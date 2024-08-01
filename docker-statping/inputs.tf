@@ -27,6 +27,11 @@ variable "networks" {
   default     = []
   description = "A list of network names to attach the service to."
 }
+variable "dns_nameservers" {
+  type        = list(string)
+  default     = []
+  description = "A list of DNS servers to use for the service."
+}
 variable "placement_constraints" {
   default     = []
   type        = list(string)

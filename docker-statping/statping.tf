@@ -28,4 +28,5 @@ module "service" {
     DESCRIPTION  = var.description
   }, var.extra_environment_variables)
   placement_constraints = var.placement_constraints
+  dns_nameservers       = var.dns_nameservers
 }

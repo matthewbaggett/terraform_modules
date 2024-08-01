@@ -45,6 +45,11 @@ resource "docker_service" "instance" {
         }
       }
 
+      # Allow overriding DNS server in use
+      dns_config {
+        nameservers = var.dns_nameservers
+      }
+
       # Apply the healthcheck
       dynamic "healthcheck" {
         for_each = var.healthcheck != null ? [var.healthcheck] : []

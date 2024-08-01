@@ -73,6 +73,11 @@ variable "ports" {
     condition     = alltrue([for port in var.ports : port.protocol == "tcp" || port.protocol == "udp"])
   }
 }
+variable "dns_nameservers" {
+  type        = list(string)
+  default     = []
+  description = "A list of DNS nameservers to use for the service."
+}
 
 # Scaling and deployment variables
 variable "parallelism" {

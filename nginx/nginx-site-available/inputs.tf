@@ -61,6 +61,10 @@ variable "extra_upstreams" {
   }))
   default = []
 }
+variable "extra_config" {
+  type    = string
+  default = ""
+}
 variable "extra_locations" {
   type    = string
   default = ""

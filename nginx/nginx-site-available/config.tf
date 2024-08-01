@@ -25,6 +25,7 @@ locals {
     timeout_seconds  = var.timeout_seconds
     host_override    = var.host_override
     extra_upstreams  = var.extra_upstreams
+    extra_config     = var.extra_config
     extra_locations  = var.extra_locations
   })
   cert_public  = "${var.certificate.issuer_pem}${var.certificate.certificate_pem}"

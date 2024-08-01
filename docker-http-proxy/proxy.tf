@@ -39,6 +39,9 @@ output "curl" {
     "http"  = "curl -x ${local.http_endpoint} https://ifconfig.me"
   }
 }
-output "endpoint" {
+output "socks_endpoint" {
   value = local.socks_endpoint
+}
+output "http_endpoint" {
+  value = local.http_endpoint
 }

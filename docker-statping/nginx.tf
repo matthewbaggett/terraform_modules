@@ -16,7 +16,7 @@ module "nginx_config" {
   service_name  = module.service.service_name
   hostname      = var.nginx_hostname
   upstream_host = "${module.service.service_name}:8080"
-  config_prefix = "nginx"
+  config_prefix = module.service.service_name
   certificate   = var.acme_certificate
 }
 output "nginx_files" {

@@ -17,7 +17,7 @@ module "nginx_config" {
   service_name  = module.pgbackweb.service_name
   hostname      = var.nginx_hostname
   upstream_host = "${module.pgbackweb.service_name}:8085"
-  config_prefix = "nginx"
+  config_prefix = module.pgbackweb.service_name
   certificate   = var.acme_certificate
 }
 output "nginx_files" {

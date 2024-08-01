@@ -1,13 +1,3 @@
-resource "random_password" "salt" {
-  count   = var.basic_auth != null ? 1 : 0
-  length  = 8
-  special = false
-}
-resource "htpasswd_password" "hash" {
-  count    = var.basic_auth != null ? 1 : 0
-  password = var.basic_auth.password
-  salt     = random_password.salt[0].result
-}
 locals {
   auth = var.basic_auth != null ? "${var.basic_auth.username}:${htpasswd_password.hash[0].bcrypt}\n" : null
   config = templatefile("${path.module}/nginx_template.conf", {

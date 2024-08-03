@@ -7,7 +7,7 @@ output "quassel" {
       port     = module.postgres.ports[0]
     }
     quassel = {
-
+      port = module.service.ports[0]
     }
   }
 }

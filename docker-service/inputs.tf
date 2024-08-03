@@ -75,7 +75,7 @@ variable "ports" {
 }
 variable "dns_nameservers" {
   type        = list(string)
-  default     = []
+  default     = null
   description = "A list of DNS nameservers to use for the service."
 }
 

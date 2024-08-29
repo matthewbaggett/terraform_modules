@@ -78,6 +78,11 @@ variable "dns_nameservers" {
   default     = null
   description = "A list of DNS nameservers to use for the service."
 }
+variable "labels" {
+  type        = map(string)
+  default     = {}
+  description = "A map of labels to apply to the service"
+}
 
 # Scaling and deployment variables
 variable "parallelism" {

@@ -70,6 +70,14 @@ resource "docker_service" "instance" {
         label = "com.docker.stack.namespace"
         value = var.stack_name
       }
+
+      dynamic "labels" {
+        for_each = var.labels
+        content {
+          label = labels.key
+          value = labels.value
+        }
+      }
     }
 
     # Apply the networks

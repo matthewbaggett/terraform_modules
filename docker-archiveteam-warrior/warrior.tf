@@ -21,5 +21,6 @@ module "warrior" {
     "CONCURRENT_ITEMS"     = var.concurrency
     "SHARED_RSYNC_THREADS" = var.shared_rsync_threads
   }
+  parallelism = var.warrior_instances
 }
 

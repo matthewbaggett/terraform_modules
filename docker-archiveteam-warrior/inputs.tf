@@ -27,6 +27,11 @@ variable "concurrency" {
   description = "The number of concurrent downloads"
   default     = 5
 }
+variable "warrior_instances" {
+  type        = number
+  description = "The number of warrior instances"
+  default     = 1
+}
 variable "shared_rsync_threads" {
   type        = number
   description = "The number of rsync threads to use"

@@ -49,3 +49,9 @@ variable "port" {
   description = "The port to expose the warrior on"
   default     = 8001
 }
+
+variable "service_name" {
+    type        = string
+    description = "The name of the service to create."
+    default     = "warrior"
+}

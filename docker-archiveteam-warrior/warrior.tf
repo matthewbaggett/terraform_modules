@@ -2,7 +2,7 @@ module "warrior" {
   source                = "../docker-service"
   image                 = "atdr.meo.ws/archiveteam/warrior-dockerfile"
   stack_name            = "archiveteam"
-  service_name          = "warrior"
+  service_name          = var.service_name
   placement_constraints = var.placement_constraints
   ports = [
     {

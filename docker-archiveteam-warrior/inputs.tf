@@ -51,7 +51,7 @@ variable "port" {
 }
 
 variable "service_name" {
-    type        = string
-    description = "The name of the service to create."
-    default     = "warrior"
+  type        = string
+  description = "The name of the service to create."
+  default     = "warrior"
 }

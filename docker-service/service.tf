@@ -127,7 +127,7 @@ resource "docker_service" "instance" {
     for_each = !var.global ? [{}] : []
     content {
       delay   = "5s"
-      timeout = "2m"
+      timeout = var.converge_timeout
     }
   }
 

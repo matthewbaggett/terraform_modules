@@ -120,3 +120,8 @@ variable "operating_system" {
   type        = string
   description = "The operating system to use for the service. Almost always 'linux'."
 }
+variable "converge_timeout" {
+  default     = "2m"
+  type        = string
+  description = "The timeout for the service to converge."
+}

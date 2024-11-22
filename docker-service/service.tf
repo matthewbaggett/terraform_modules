@@ -3,6 +3,12 @@ resource "docker_volume" "volume" {
   name     = lower("${var.stack_name}-${replace(each.key, "/", "-")}")
 }
 
+variable "remote_volumes" {
+  type        = map(string)
+  description = "A map of remote volumes to mount into the container."
+  default     = {}
+}
+
 data "docker_registry_image" "image" {
   name = var.image
 }
@@ -25,6 +31,14 @@ resource "docker_service" "instance" {
           target = mounts.value
           source = docker_volume.volume[mounts.key].id
           type   = "volume"
+        }
+      }
+      dynamic "mounts" {
+        for_each = var.remote_volumes
+        content {
+          target = mounts.value
+          source = mounts.key
+          type   = "bind"
         }
       }
       dynamic "mounts" {
@@ -124,7 +138,7 @@ resource "docker_service" "instance" {
 
   # Behaviour regarding startup and delaying/waiting. Not possible in global deploy mode.
   dynamic "converge_config" {
-    for_each = !var.global ? [{}] : []
+    for_each = !var.global && !var.one_shot ? [{}] : []
     content {
       delay   = "5s"
       timeout = var.converge_timeout

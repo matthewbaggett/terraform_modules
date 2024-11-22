@@ -10,10 +10,10 @@ variable "label" {
 variable "ip" {
   description = "The target IP address to forward to"
   type        = string
-  validation {
-    condition     = can(cidrnetmask(var.ip))
-    error_message = "Must be a valid IPv4 CIDR block address."
-  }
+  #validation {
+  #  condition     = can(cidrnetmask(var.ip))
+  #  error_message = "Must be a valid IPv4 CIDR block address."
+  #}
 }
 variable "port" {
   description = "The port to forward"

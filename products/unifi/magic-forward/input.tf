@@ -15,6 +15,7 @@ variable "docker_service" {
       protocol       = optional(string)
       target_port    = optional(number)
       published_port = number
+      publish_mode   = optional(string)
     }))
   })
 }

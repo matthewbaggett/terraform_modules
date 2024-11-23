@@ -12,10 +12,12 @@ variable "docker_service" {
   type = object({
     name = string
     endpoint_spec = list(object({
-      protocol       = optional(string)
-      target_port    = optional(number)
-      published_port = number
-      publish_mode   = optional(string)
+      ports = list(object({
+        target_port    = number
+        published_port = number
+        protocol       = string
+        publish_mode   = string
+      }))
     }))
   })
 }

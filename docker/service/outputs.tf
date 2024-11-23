@@ -11,3 +11,7 @@ output "ports" {
 output "volumes" {
   value = docker_service.instance.task_spec[0].container_spec[0].mounts[*].source
 }
+
+output "docker_service" {
+  value = docker_service.instance
+}

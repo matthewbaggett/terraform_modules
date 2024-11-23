@@ -1,4 +1,4 @@
-output "quassel" {
+output "configuration" {
   value = {
     database = {
       username = module.postgres.username
@@ -10,4 +10,10 @@ output "quassel" {
       port = module.service.ports[0]
     }
   }
+}
+output "docker_service" {
+  value = module.service
+}
+output "postgres_service" {
+  value = module.postgres
 }

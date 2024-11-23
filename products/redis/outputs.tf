@@ -7,3 +7,6 @@ output "service_name" {
 output "ports" {
   value = module.service.ports
 }
+output "docker_service" {
+  value = module.service.docker_service
+}

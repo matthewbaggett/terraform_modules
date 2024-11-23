@@ -6,8 +6,8 @@ locals {
   // I will share that into 20 bytes for the stack name, remaining bytes for the config name
   config_name = join("-", [
     substr(var.stack_name, 0, 20),
-    substr(local.file_name, 0, 64 - 1 - 7 - 2 - 20),
-    substr(sha1(var.value), 0, 7)
+    substr(local.file_name, 0, 64 - 20 - 1 - (random_id.randomiser.byte_length * 2) - 1),
+    random_id.randomiser.hex
   ])
 
   // define config labels

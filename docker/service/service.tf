@@ -1,21 +1,10 @@
-resource "docker_volume" "volume" {
-  for_each = var.volumes
-  name     = lower("${var.stack_name}-${replace(each.key, "/", "-")}")
-}
-
-variable "remote_volumes" {
-  type        = map(string)
-  description = "A map of remote volumes to mount into the container."
-  default     = {}
-}
-
 data "docker_registry_image" "image" {
   name = var.image
 }
 
 resource "docker_service" "instance" {
   # The name of the service is the stack name and the service name combined
-  name = "${var.stack_name}-${var.service_name}"
+  name = local.service_name
 
   # Define the task spec
   task_spec {
@@ -33,14 +22,18 @@ resource "docker_service" "instance" {
           type   = "volume"
         }
       }
+
+      # Mount all the volumes being remotely attached to the container
       dynamic "mounts" {
         for_each = var.remote_volumes
         content {
           target = mounts.value
           source = mounts.key
-          type   = "bind"
+          type   = "volume"
         }
       }
+
+      # Iterate through "mounts" to bind host paths to container paths
       dynamic "mounts" {
         for_each = var.mounts
         content {
@@ -50,12 +43,13 @@ resource "docker_service" "instance" {
         }
       }
 
+      # Iterate through configs and attach the docker configs
       dynamic "configs" {
         for_each = var.configs
         content {
-          config_id   = docker_config.config[configs.key].id
-          config_name = docker_config.config[configs.key].name
-          file_name   = configs.value.path
+          config_id   = module.config[configs.key].id
+          config_name = module.config[configs.key].name
+          file_name   = configs.value
         }
       }
 
@@ -67,26 +61,18 @@ resource "docker_service" "instance" {
         }
       }
 
-      # Apply the healthcheck
-      dynamic "healthcheck" {
-        for_each = var.healthcheck != null ? [var.healthcheck] : []
-        content {
-          test         = healthcheck.value
-          interval     = "10s"
-          timeout      = "3s"
-          retries      = 0
-          start_period = "0s"
-        }
+      # Apply the healthcheck settings
+      healthcheck {
+        test         = var.healthcheck != null ? var.healthcheck : []
+        interval     = var.healthcheck != null ? "10s" : "0s"
+        timeout      = var.healthcheck != null ? "3s" : "0s"
+        retries      = 0
+        start_period = "0s"
       }
 
-      # Container labels
-      labels {
-        label = "com.docker.stack.namespace"
-        value = var.stack_name
-      }
-
+      # Apply the list of Container Labels
       dynamic "labels" {
-        for_each = var.labels
+        for_each = local.labels
         content {
           label = labels.key
           value = labels.value
@@ -104,7 +90,7 @@ resource "docker_service" "instance" {
 
     # Apply restart policy
     restart_policy {
-      condition    = var.one_shot ? "none" : "any"
+      condition    = var.one_shot ? "none" : var.restart_policy
       delay        = "0s"
       window       = "0s"
       max_attempts = 0
@@ -136,9 +122,14 @@ resource "docker_service" "instance" {
     }
   }
 
-  # Behaviour regarding startup and delaying/waiting. Not possible in global deploy mode.
+  # Behaviour regarding startup and delaying/waiting.
+  # Converging is not possible when:
+  #  * in global deploy mode
+  #  * in one-shot mode
+  #  * converging is disabled
+  #  * the service does not have a well-defined healthcheck, maybe you should add one to the service, or to the container itself ideally.
   dynamic "converge_config" {
-    for_each = !var.global && !var.one_shot ? [{}] : []
+    for_each = var.converge_enable && !var.global && !var.one_shot ? [{}] : []
     content {
       delay   = "5s"
       timeout = var.converge_timeout
@@ -172,27 +163,11 @@ resource "docker_service" "instance" {
   }
 
   # Service Labels
-  labels {
-    label = "com.docker.stack.namespace"
-    value = var.stack_name
+  dynamic "labels" {
+    for_each = local.labels
+    content {
+      label = labels.key
+      value = labels.value
+    }
   }
-  labels {
-    label = "com.docker.stack.image"
-    value = var.image
-  }
-}
-
-resource "docker_config" "config" {
-  for_each = var.configs
-  data     = base64encode(each.value.contents)
-  name     = join("-", concat(each.value.name_prefix, [substr(sha1(each.value.contents), 0, 7)]))
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "local_file" "config" {
-  for_each = var.configs
-  content  = each.value.contents
-  filename = "${path.root}/.debug/docker-service/${var.stack_name}-${var.service_name}/configs/${each.key}"
 }

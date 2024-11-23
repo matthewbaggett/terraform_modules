@@ -1,8 +1,13 @@
 resource "docker_network" "instance" {
-  name   = var.stack_name
+  name   = local.network_name
   driver = "overlay"
-  labels {
-    label = "com.docker.stack.namespace"
-    value = var.stack_name
+
+  # Attach labels
+  dynamic "labels" {
+    for_each = local.labels
+    content {
+      label = labels.key
+      value = labels.value
+    }
   }
 }

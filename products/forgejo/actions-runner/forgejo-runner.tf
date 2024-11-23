@@ -5,6 +5,7 @@ module "forgejo_actions_runner" {
   placement_constraints = var.placement_constraints
   image                 = "${var.forgejo_actions_runner_image}:${var.forgejo_actions_runner_version}"
   parallelism           = var.parallelism
+  converge_enable       = false
   environment_variables = {
     forgejo_INSTANCE_URL              = var.forgejo_instance_url
     forgejo_RUNNER_NAME               = var.forgejo_runner_name
@@ -16,7 +17,7 @@ module "forgejo_actions_runner" {
     "/var/run/docker.sock" = "/var/run/docker.sock"
   }
   configs = {
-    forgejo-config = {
+    forgejo-config = yamlencode({
       name_prefix = ["forgejo-config", var.stack_name, var.service_name]
       path        = "/config.yaml"
       contents = yamlencode({
@@ -54,6 +55,6 @@ module "forgejo_actions_runner" {
           workdir_parent : null
         }
       })
-    }
+    })
   }
 }

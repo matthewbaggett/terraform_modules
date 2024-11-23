@@ -5,6 +5,15 @@ variable "command" {
   type    = list(string)
   default = null
 }
+variable "restart_policy" {
+  type        = string
+  default     = "any"
+  description = "The restart policy for the service."
+  validation {
+    error_message = "Restart policy must be either 'any', 'on-failure', or 'none'."
+    condition     = var.restart_policy == "any" || var.restart_policy == "on-failure" || var.restart_policy == "none"
+  }
+}
 variable "one_shot" {
   type        = bool
   default     = false
@@ -38,19 +47,20 @@ variable "volumes" {
   default     = {}
   description = "A map of volume names to create and mount. The key is the volume name, and the value is the mount point."
 }
+variable "remote_volumes" {
+  type        = map(string)
+  default     = {}
+  description = "A map of remote volumes to mount into the container."
+}
 variable "mounts" {
   type        = map(string)
   default     = {}
   description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
 variable "configs" {
-  type = map(object({
-    name_prefix = list(string),
-    contents    = string,
-    path        = string
-  }))
+  type        = map(string)
   default     = {}
-  description = "A map of config names to create and mount. The key is the config name, and the value is the config contents."
+  description = "A map of config files to create. Key being the path to the file, and the value being the content. The config will be created using the truncated file name and a timestamp."
 }
 variable "ports" {
   type = list(object({
@@ -119,6 +129,11 @@ variable "operating_system" {
   default     = "linux"
   type        = string
   description = "The operating system to use for the service. Almost always 'linux'."
+}
+variable "converge_enable" {
+  default     = true
+  type        = bool
+  description = "Whether to enable the converge configuration."
 }
 variable "converge_timeout" {
   default     = "2m"

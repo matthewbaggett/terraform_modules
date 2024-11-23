@@ -12,8 +12,8 @@ output "configuration" {
   }
 }
 output "docker_service" {
-  value = module.service
+  value = module.service.docker_service
 }
 output "postgres_service" {
-  value = module.postgres
+  value = module.postgres.docker_service
 }

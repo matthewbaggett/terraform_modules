@@ -1,6 +1,11 @@
 variable "image" {
   type = string
 }
+variable "mirror" {
+  type        = string
+  default     = null
+  description = "Whether to mirror the image to the local registry. Value is the mirror location."
+}
 variable "command" {
   type    = list(string)
   default = null

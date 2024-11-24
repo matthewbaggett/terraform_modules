@@ -37,9 +37,10 @@ resource "docker_service" "instance" {
       dynamic "mounts" {
         for_each = var.mounts
         content {
-          target = mounts.value
-          source = mounts.key
-          type   = "bind"
+          target    = mounts.value
+          source    = mounts.key
+          type      = "bind"
+          read_only = false # Nice assumption bro.
         }
       }
 

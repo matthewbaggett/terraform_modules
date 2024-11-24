@@ -7,13 +7,11 @@ locals {
 
   # Define service labels en-masse
   labels = merge(var.labels, {
-    "com.docker.stack.namespace" = var.stack_name
-    "com.docker.stack.image"     = data.docker_registry_image.image.name
-    "com.docker.stack.hash"      = data.docker_registry_image.image.sha256_digest
-    "ooo.grey.service.stack"     = var.stack_name
-    "ooo.grey.service.name"      = var.service_name
-    #"ooo.grey.service.created"   = timestamp()
-    "ooo.grey.service.image" = data.docker_registry_image.image.name
-    "ooo.grey.service.hash"  = data.docker_registry_image.image.sha256_digest
+    "com.docker.stack.namespace"    = var.stack_name
+    "com.docker.stack.image"        = data.docker_registry_image.image.name
+    "ooo.grey.service.stack"        = var.stack_name
+    "ooo.grey.service.name"         = var.service_name
+    "ooo.grey.service.image"        = data.docker_registry_image.image.name
+    "ooo.grey.service.image.digest" = data.docker_registry_image.image.sha256_digest
   })
 }

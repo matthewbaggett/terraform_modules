@@ -17,9 +17,10 @@ resource "docker_service" "instance" {
       dynamic "mounts" {
         for_each = var.volumes
         content {
-          target = mounts.value
-          source = docker_volume.volume[mounts.key].id
-          type   = "volume"
+          source    = docker_volume.volume[mounts.key].id
+          target    = mounts.value
+          type      = "volume"
+          read_only = false # Nice assumption bro.
         }
       }
 
@@ -27,9 +28,10 @@ resource "docker_service" "instance" {
       dynamic "mounts" {
         for_each = var.remote_volumes
         content {
-          target = mounts.value
-          source = mounts.key
-          type   = "volume"
+          source    = mounts.value.id
+          target    = mounts.key
+          type      = "volume"
+          read_only = false # Nice assumption bro.
         }
       }
 
@@ -37,8 +39,8 @@ resource "docker_service" "instance" {
       dynamic "mounts" {
         for_each = var.mounts
         content {
-          target    = mounts.value
           source    = mounts.key
+          target    = mounts.value
           type      = "bind"
           read_only = false # Nice assumption bro.
         }
@@ -50,7 +52,7 @@ resource "docker_service" "instance" {
         content {
           config_id   = module.config[configs.key].id
           config_name = module.config[configs.key].name
-          file_name   = configs.value
+          file_name   = configs.key
         }
       }
 
@@ -83,25 +85,39 @@ resource "docker_service" "instance" {
 
     # Apply the networks
     dynamic "networks_advanced" {
-      for_each = var.networks
+      for_each = data.docker_network.networks
       content {
-        name = networks_advanced.value
+        name = networks_advanced.value.id
       }
     }
 
     # Apply restart policy
     restart_policy {
       condition    = var.one_shot ? "none" : var.restart_policy
-      delay        = "0s"
+      delay        = var.restart_delay
       window       = "0s"
       max_attempts = 0
     }
 
+    # Apply the placement constraints
     placement {
-      constraints = var.placement_constraints
+      max_replicas = var.parallelism_per_node
+      constraints  = var.placement_constraints
       platforms {
         architecture = var.processor_architecture
         os           = var.operating_system
+      }
+    }
+
+    # Apply the resource limits and reservations
+    resources {
+      limits {
+        memory_bytes = var.limit_ram_mb != null ? 1024 * 1024 * var.limit_ram_mb : 0
+        nano_cpus    = var.limit_cpu != null ? (1000000000 / 100) * var.limit_cpu : 0
+      }
+      reservation {
+        memory_bytes = var.reserved_ram_mb != null ? 1024 * 1024 * var.reserved_ram_mb : 0
+        nano_cpus    = var.reserved_cpu != null ? (1000000000 / 100) * var.reserved_cpu : 0
       }
     }
   }

@@ -1,5 +1,6 @@
 terraform {
   required_version = "~> 1.6"
+
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
@@ -7,7 +8,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "~>3.3"
+      version = "~> 3.5"
     }
   }
 }

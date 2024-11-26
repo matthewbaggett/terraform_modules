@@ -15,7 +15,5 @@ module "github_actions_runner" {
     EPHEMERAL           = true
     DISABLE_AUTO_UPDATE = "disable_updates"
   }
-  mounts = {
-    "/var/run/docker.sock" = "/var/run/docker.sock"
-  }
+  mounts = { "/var/run/docker.sock" = "/var/run/docker.sock" }
 }

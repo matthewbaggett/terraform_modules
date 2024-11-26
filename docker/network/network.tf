@@ -1,6 +1,13 @@
 resource "docker_network" "instance" {
-  name   = local.network_name
-  driver = "overlay"
+  name        = local.network_name
+  driver      = "overlay"
+  attachable  = true
+  ipam_driver = "default"
+  ipam_config {
+    aux_address = {}
+    subnet      = local.subnet
+    gateway     = local.gateway
+  }
 
   # Attach labels
   dynamic "labels" {
@@ -9,5 +16,9 @@ resource "docker_network" "instance" {
       label = labels.key
       value = labels.value
     }
+  }
+
+  lifecycle {
+    create_before_destroy = false
   }
 }

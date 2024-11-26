@@ -19,6 +19,11 @@ variable "restart_policy" {
     condition     = var.restart_policy == "any" || var.restart_policy == "on-failure" || var.restart_policy == "none"
   }
 }
+variable "restart_delay" {
+  type        = string
+  default     = "0s"
+  description = "The delay before restarting the service."
+}
 variable "one_shot" {
   type        = bool
   default     = false
@@ -53,9 +58,12 @@ variable "volumes" {
   description = "A map of volume names to create and mount. The key is the volume name, and the value is the mount point."
 }
 variable "remote_volumes" {
-  type        = map(string)
+  type = map(object({
+    id     = string
+    driver = string
+  }))
   default     = {}
-  description = "A map of remote volumes to mount into the container."
+  description = "A map of remote volumes to mount into the container. The key is the source, and the value is the target."
 }
 variable "mounts" {
   type        = map(string)
@@ -76,8 +84,8 @@ variable "ports" {
   default     = []
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
   validation {
-    error_message = "Host Ports must be between 1024 and 65535."
-    condition     = alltrue([for port in var.ports : port.host >= 1024 && port.host <= 65535])
+    error_message = "Host Ports must be between 1 and 65535."
+    condition     = alltrue([for port in var.ports : port.host >= 1 && port.host <= 65535])
   }
   validation {
     error_message = "Container Ports must be between 1 and 65535."
@@ -104,6 +112,11 @@ variable "parallelism" {
   default     = 1
   type        = number
   description = "The number of instances to run."
+}
+variable "parallelism_per_node" {
+  default     = 0
+  type        = number
+  description = "The maximum number of instances to run per node. 0 means no limit."
 }
 variable "update_waves" {
   default     = 3
@@ -144,4 +157,32 @@ variable "converge_timeout" {
   default     = "2m"
   type        = string
   description = "The timeout for the service to converge."
+}
+variable "traefik" {
+  default = null
+  type = object({
+    domain = string
+    port   = optional(number)
+  })
+  description = "Whether to enable traefik for the service."
+}
+variable "limit_cpu" {
+  default     = null
+  type        = number
+  description = "The CPU limit for the service."
+}
+variable "limit_ram_mb" {
+  default     = null
+  type        = number
+  description = "The RAM limit for the service, measured in megabytes."
+}
+variable "reserved_cpu" {
+  default     = null
+  type        = number
+  description = "The CPU reservation for the service."
+}
+variable "reserved_ram_mb" {
+  default     = null
+  type        = number
+  description = "The RAM reservation for the service, measured in megabytes."
 }

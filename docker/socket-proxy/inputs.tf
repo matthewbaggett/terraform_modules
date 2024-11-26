@@ -19,7 +19,8 @@ variable "service_name" {
   description = "The name of the service to create."
 }
 variable "placement_constraints" {
-  default     = ["node.role == manager"]
+  default     = []
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
+

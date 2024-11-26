@@ -7,7 +7,7 @@ output "statping" {
       port     = module.postgres.ports[0]
     }
     statping = {
-      instance = var.nginx_hostname != null ? "https://${var.nginx_hostname}" : null
+      instance = try("https://${var.traefik.domain}", "unknown")
     }
   }
 }

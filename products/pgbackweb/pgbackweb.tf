@@ -17,6 +17,7 @@ module "pgbackweb" {
   service_name          = var.service_name
   networks              = concat([module.network.network], var.networks)
   placement_constraints = var.placement_constraints
+  traefik               = { domain = var.domain }
 }
 module "postgres" {
   source                = "../postgres"

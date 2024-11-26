@@ -27,3 +27,7 @@ variable "networks" {
   type    = list(string)
   default = []
 }
+variable "domain" {
+  type        = string
+  description = "The domain to use for the service's traefik configuration."
+}

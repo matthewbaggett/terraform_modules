@@ -42,3 +42,11 @@ variable "extra_environment_variables" {
   default     = {}
   description = "Extra environment variables to pass to the service."
 }
+variable "traefik" {
+  default = null
+  type = object({
+    domain = string
+    port   = optional(number)
+  })
+  description = "Whether to enable traefik for the service."
+}

@@ -15,7 +15,7 @@ module "service" {
   image        = "${var.statping_image}:${var.statping_version}"
   stack_name   = var.stack_name
   service_name = "statping"
-  networks     = concat([module.network.network, ], var.networks)
+  networks     = concat([module.network.network, "loadbalancer-traefik"], var.networks)
   environment_variables = merge({
     VIRTUAL_HOST = "localhost"
     VIRTUAL_PORT = "8080"
@@ -29,4 +29,5 @@ module "service" {
   }, var.extra_environment_variables)
   placement_constraints = var.placement_constraints
   dns_nameservers       = var.dns_nameservers
+  traefik               = var.traefik
 }

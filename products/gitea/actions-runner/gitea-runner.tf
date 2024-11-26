@@ -12,9 +12,7 @@ module "gitea_actions_runner" {
     GITEA_RUNNER_REGISTRATION_TOKEN = var.gitea_token
     CONFIG_FILE                     = "/config.yaml"
   }
-  mounts = {
-    "/var/run/docker.sock" = "/var/run/docker.sock"
-  }
+  mounts = { "/var/run/docker.sock" = "/var/run/docker.sock" }
   configs = {
     gitea-config = {
       name_prefix = ["gitea-config", var.stack_name, var.service_name]

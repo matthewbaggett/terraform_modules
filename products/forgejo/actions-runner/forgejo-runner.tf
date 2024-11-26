@@ -13,9 +13,7 @@ module "forgejo_actions_runner" {
     forgejo_RUNNER_REGISTRATION_TOKEN = var.forgejo_token
     CONFIG_FILE                       = "/config.yaml"
   }
-  mounts = {
-    "/var/run/docker.sock" = "/var/run/docker.sock"
-  }
+  mounts = { "/var/run/docker.sock" = "/var/run/docker.sock" }
   configs = {
     forgejo-config = yamlencode({
       name_prefix = ["forgejo-config", var.stack_name, var.service_name]

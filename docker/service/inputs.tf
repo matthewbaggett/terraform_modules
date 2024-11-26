@@ -55,7 +55,7 @@ variable "healthcheck" {
 variable "volumes" {
   type        = map(string)
   default     = {}
-  description = "A map of volume names to create and mount. The key is the volume name, and the value is the mount point."
+  description = "A map of internally created volume names to create and mount. The key is the volume name, and the value is the mount point."
 }
 variable "remote_volumes" {
   type = map(object({
@@ -63,7 +63,7 @@ variable "remote_volumes" {
     driver = string
   }))
   default     = {}
-  description = "A map of remote volumes to mount into the container. The key is the source, and the value is the target."
+  description = "A remote volume is a volume created explicitly and not implicitly by this Service. This is a map of remote volumes to mount into the container. The key is the source, and the value is the target."
 }
 variable "mounts" {
   type        = map(string)

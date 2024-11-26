@@ -187,4 +187,9 @@ resource "docker_service" "instance" {
       value = labels.value
     }
   }
+
+  lifecycle {
+    # Help prevent "this service already exists" irritations
+    create_before_destroy = false
+  }
 }

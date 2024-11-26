@@ -85,7 +85,7 @@ resource "docker_service" "instance" {
 
     # Apply the networks
     dynamic "networks_advanced" {
-      for_each = data.docker_network.networks
+      for_each = var.networks
       content {
         name = networks_advanced.value.id
       }

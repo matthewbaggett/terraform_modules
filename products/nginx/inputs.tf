@@ -14,6 +14,8 @@ variable "networks" {
     name = string
     id   = string
   }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }
 variable "replicas" {
   type        = number

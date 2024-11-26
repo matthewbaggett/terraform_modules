@@ -20,8 +20,12 @@ variable "stack_name" {
   type = string
 }
 variable "networks" {
-  type    = list(string)
-  default = []
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }
 variable "ports" {
   type = list(object({

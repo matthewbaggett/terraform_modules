@@ -21,7 +21,13 @@ variable "forgejo_runner_name" {
 variable "forgejo_runner_labels" {
   description = "The labels to use for the runner"
   type        = list(string)
-  default     = []
+  default = [
+    "self-hosted:docker://gitea/runner-images:ubuntu-latest",
+    "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest",
+    "ubuntu-24.04:docker://gitea/runner-images:ubuntu-24.04",
+    "ubuntu-22.04:docker://gitea/runner-images:ubuntu-22.04",
+    "ubuntu-20.04:docker://gitea/runner-images:ubuntu-20.04",
+  ]
 }
 variable "forgejo_instance_url" {
   type        = string

@@ -24,8 +24,12 @@ variable "placement_constraints" {
   description = "Docker Swarm placement constraints"
 }
 variable "networks" {
-  type    = list(string)
-  default = []
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }
 variable "domain" {
   type        = string

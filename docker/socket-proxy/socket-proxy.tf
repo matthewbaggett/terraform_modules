@@ -10,7 +10,7 @@ module "service" {
   service_name          = var.service_name
   placement_constraints = concat(["node.role == manager"], var.placement_constraints)
   global                = true
-  networks              = [module.network.network]
+  networks              = [module.network]
   mounts                = { "/var/run/docker.sock" = "/var/run/docker.sock" }
   environment_variables = {
     SWARM      = 1

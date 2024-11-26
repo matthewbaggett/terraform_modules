@@ -32,7 +32,7 @@ module "minio" {
     MINIO_API_ROOT_ACCESS      = "on"
   }
   mounts                = var.mounts
-  networks              = concat(["loadbalancer-traefik"], var.networks)
+  networks              = var.networks
   placement_constraints = var.placement_constraints
   labels = {
     "traefik.enable" = "true"

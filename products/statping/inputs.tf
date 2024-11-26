@@ -23,7 +23,10 @@ variable "description" {
   default = "This is an install of statping"
 }
 variable "networks" {
-  type        = list(string)
+  type = list(object({
+    name = string
+    id   = string
+  }))
   default     = []
   description = "A list of network names to attach the service to."
 }
@@ -46,7 +49,7 @@ variable "traefik" {
   default = null
   type = object({
     domain = string
-    port   = optional(number)
+    port   = optional(number, 8080)
   })
   description = "Whether to enable traefik for the service."
 }

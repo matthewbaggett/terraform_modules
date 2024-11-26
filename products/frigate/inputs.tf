@@ -8,7 +8,10 @@ variable "shm_size_mb" {
   description = "The size of the shared memory segment in MB"
 }
 variable "networks" {
-  type        = list(string)
+  type = list(object({
+    name = string
+    id   = string
+  }))
   default     = []
   description = "A list of network names to attach the service to."
 }

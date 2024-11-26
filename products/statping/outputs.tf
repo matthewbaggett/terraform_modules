@@ -11,3 +11,9 @@ output "statping" {
     }
   }
 }
+output "endpoint" {
+  value = module.statping.endpoint
+}
+output "postgres" {
+  value = module.postgres
+}

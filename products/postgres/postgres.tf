@@ -10,9 +10,18 @@ module "service" {
     POSTGRES_PASSWORD = local.password
     POSTGRES_DB       = local.database
   }
-  volumes = {
-    "data" = "/var/lib/postgresql/data",
-  }
+  volumes               = local.volumes
+  mounts                = local.mounts
   ports                 = var.ports
   placement_constraints = var.placement_constraints
+}
+
+locals {
+  volumes = var.data_persist_path == null ? {
+    "data" = "/var/lib/postgres/data"
+  } : {}
+  mounts = var.data_persist_path != null ? {
+    "${var.data_persist_path}" = "/var/lib/postgres/data"
+  } : {}
+
 }

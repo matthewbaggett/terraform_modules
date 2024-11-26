@@ -15,3 +15,11 @@ output "volumes" {
 output "docker_service" {
   value = docker_service.instance
 }
+
+output "endpoint" {
+  value = try(
+    "https://${var.traefik.domain}",
+    "http://${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
+    null
+  )
+}

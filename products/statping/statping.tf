@@ -6,16 +6,16 @@ module "postgres" {
   source                = "../../products/postgres"
   postgres_version      = "16"
   stack_name            = var.stack_name
-  networks              = [module.network.network]
+  networks              = [module.network]
   placement_constraints = var.placement_constraints
   ports                 = [{ container = 5432, host = 65200 }]
 }
-module "service" {
+module "statping" {
   source       = "../../docker/service"
   image        = "${var.statping_image}:${var.statping_version}"
   stack_name   = var.stack_name
   service_name = "statping"
-  networks     = concat([module.network.network, "loadbalancer-traefik"], var.networks)
+  networks     = concat([module.network], var.networks)
   environment_variables = merge({
     VIRTUAL_HOST = "localhost"
     VIRTUAL_PORT = "8080"

@@ -43,7 +43,10 @@ variable "environment_variables" {
   description = "A map of environment variables to set in the container."
 }
 variable "networks" {
-  type        = list(string)
+  type = list(object({
+    name = string
+    id   = string
+  }))
   default     = []
   description = "A list of network names to attach the service to."
 }

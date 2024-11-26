@@ -29,7 +29,7 @@ module "portainer" {
   }
   traefik     = var.traefik
   mounts      = var.should_mount_local_docker_socket ? { "/var/run/docker.sock" = "/var/run/docker.sock" } : {}
-  networks    = ["loadbalancer-traefik"]
+  networks    = var.networks
   start_first = false
   placement_constraints = concat([
     "node.role == manager",

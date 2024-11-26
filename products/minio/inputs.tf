@@ -4,7 +4,10 @@ variable "stack_name" {
   description = "The name of the stack to create."
 }
 variable "networks" {
-  type        = list(string)
+  type = list(object({
+    name = string
+    id   = string
+  }))
   default     = []
   description = "A list of network names to attach the service to."
 }

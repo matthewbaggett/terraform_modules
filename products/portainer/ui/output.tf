@@ -7,3 +7,7 @@ output "portainer" {
     service_name = module.portainer.docker_service.name
   }
 }
+
+output "network" {
+  value = module.portainer_network
+}

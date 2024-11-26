@@ -17,7 +17,7 @@ module "service" {
   image        = "${var.quassel_image}:${var.quassel_version}"
   stack_name   = var.stack_name
   service_name = "quassel"
-  networks     = [module.network.network]
+  networks     = [module.network]
   environment_variables = {
     PUID               = 1000
     PGID               = 1000

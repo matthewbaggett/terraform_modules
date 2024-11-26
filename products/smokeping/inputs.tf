@@ -7,7 +7,7 @@ variable "traefik" {
   default = null
   type = object({
     domain = string
-    port   = optional(number)
+    port   = optional(number, 80)
   })
   description = "Whether to enable traefik for the service."
 }
@@ -15,4 +15,12 @@ variable "placement_constraints" {
   default     = []
   type        = list(string)
   description = "Docker Swarm placement constraints"
+}
+variable "networks" {
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }

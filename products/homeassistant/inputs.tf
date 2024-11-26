@@ -21,7 +21,10 @@ variable "mounts" {
   description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
 variable "networks" {
-  type        = list(string)
+  type = list(object({
+    name = string
+    id   = string
+  }))
   default     = []
   description = "A list of network names to attach the service to."
 }

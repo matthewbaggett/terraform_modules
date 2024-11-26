@@ -29,8 +29,12 @@ variable "stack_name" {
   type = string
 }
 variable "networks" {
-  type    = list(string)
-  default = []
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }
 variable "ports" {
   type = list(object({
@@ -57,4 +61,9 @@ variable "placement_constraints" {
   default     = []
   type        = list(string)
   description = "Docker Swarm placement constraints"
+}
+variable "data_persist_path" {
+  default     = null
+  description = "Path on host machine to persist data. Leaving this blank will provision an ephemeral volume."
+  type        = string
 }

@@ -3,6 +3,14 @@ variable "stack_name" {
   type        = string
   description = "The name of the stack to create."
 }
+variable "networks" {
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
+}
 variable "traefik" {
   default = null
   type = object({

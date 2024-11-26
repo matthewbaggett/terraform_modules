@@ -9,7 +9,7 @@ module "traefik" {
   stack_name            = var.stack_name
   service_name          = "traefik"
   image                 = "traefik:v3.2"
-  networks              = [module.traefik_network.network, module.docker_socket_proxy.network, ]
+  networks              = [module.traefik_network, module.docker_socket_proxy.network, ]
   mounts                = { "/goliath/letsencrypt" = "/certs" }
   placement_constraints = var.placement_constraints
   converge_enable       = false // @todo add healthcheck

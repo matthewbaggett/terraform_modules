@@ -10,6 +10,6 @@ module "smokeping" {
     TZ   = var.timezone
   }
   traefik               = var.traefik
-  networks              = ["loadbalancer-traefik"]
+  networks              = var.networks
   placement_constraints = var.placement_constraints
 }

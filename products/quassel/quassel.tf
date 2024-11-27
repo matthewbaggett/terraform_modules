@@ -6,7 +6,7 @@ module "postgres" {
   source                = "../postgres"
   postgres_version      = "16"
   stack_name            = var.stack_name
-  networks              = [module.network.network]
+  networks              = [module.network]
   username              = "postgres"
   database              = "postgres"
   placement_constraints = var.placement_constraints

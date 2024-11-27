@@ -3,5 +3,9 @@ output "docker_service" {
 }
 
 output "endpoint" {
-  value = module.minio.endpoint
+  value = try(
+    "https://${var.traefik.domain}",
+    "https://${var.domain}",
+    null
+  )
 }

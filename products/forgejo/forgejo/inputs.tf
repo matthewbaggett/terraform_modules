@@ -55,6 +55,12 @@ variable "mounts" {
   description = "A map of host paths to container paths to mount. Key is Host path, Value is Container path"
 }
 
+variable "database_storage_path" {
+    type        = string
+    description = "Specify path to store the database data."
+    default     = null
+}
+
 variable "traefik" {
   default = null
   type = object({

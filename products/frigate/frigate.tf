@@ -39,7 +39,7 @@ resource "docker_container" "frigate" {
   dynamic "networks_advanced" {
     for_each = var.networks
     content {
-      name = networks_advanced.value
+      name = networks_advanced.value.id
     }
   }
   dynamic "labels" {

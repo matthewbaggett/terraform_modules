@@ -6,7 +6,7 @@ module "traefik_hello" {
   image                 = "traefik/whoami"
   parallelism           = 3
   placement_constraints = var.placement_constraints
-  networks              = [module.traefik_network.network, ]
+  networks              = [module.traefik_network, ]
   traefik = {
     domain = var.hello_service_domain
     port   = 80

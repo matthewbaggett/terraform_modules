@@ -26,8 +26,8 @@ module "minio" {
     MINIO_CONSOLE_ADDRESS      = "0.0.0.0:9001"
     MINIO_ROOT_USER            = random_pet.minio_admin_user.id
     MINIO_ROOT_PASSWORD        = random_password.minio_admin_password.result
-    MINIO_SERVER_URL           = "https://s3.grey.ooo"
-    MINIO_BROWSER_REDIRECT_URL = "https://s3.grey.ooo/ui/"
+    MINIO_SERVER_URL           = "https://${var.domain}"
+    MINIO_BROWSER_REDIRECT_URL = "https://${var.domain}/ui/"
     MINIO_BROWSER_REDIRECT     = true
     MINIO_API_ROOT_ACCESS      = "on"
   }
@@ -38,15 +38,15 @@ module "minio" {
     "traefik.enable" = "true"
 
     // API redirect
-    "traefik.http.routers.minio_api.rule" = "Host(`${var.domain}`) && !PathPrefix(`/ui`)"
-    #"traefik.http.routers.minio_api.service"                   = "minio_api"
+    "traefik.http.routers.minio_api.rule"                      = "Host(`${var.domain}`) && !PathPrefix(`/ui`)"
+    "traefik.http.routers.minio_api.service"                   = "minio_api"
     "traefik.http.routers.minio_api.entrypoints"               = "websecure"
     "traefik.http.routers.minio_api.tls.certresolver"          = "default"
     "traefik.http.services.minio_api.loadbalancer.server.port" = "9000"
 
     // UI redirect
-    "traefik.http.routers.minio_ui.rule" = "Host(`${var.domain}`) && PathPrefix(`/ui`)"
-    #"traefik.http.routers.minio_ui.service"                   = "minio_ui"
+    "traefik.http.routers.minio_ui.rule"                      = "Host(`${var.domain}`) && PathPrefix(`/ui`)"
+    "traefik.http.routers.minio_ui.service"                   = "minio_ui"
     "traefik.http.routers.minio_ui.entrypoints"               = "websecure"
     "traefik.http.routers.minio_ui.tls.certresolver"          = "default"
     "traefik.http.services.minio_ui.loadbalancer.server.port" = "9001"

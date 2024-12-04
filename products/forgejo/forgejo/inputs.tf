@@ -56,9 +56,9 @@ variable "mounts" {
 }
 
 variable "database_storage_path" {
-    type        = string
-    description = "Specify path to store the database data."
-    default     = null
+  type        = string
+  description = "Specify path to store the database data."
+  default     = null
 }
 
 variable "traefik" {

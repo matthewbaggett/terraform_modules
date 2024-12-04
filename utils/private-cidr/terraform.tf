@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.5"
     }
+    scratch = {
+      source  = "BrendanThompson/scratch"
+      version = "~> 0.4"
+    }
   }
 }
 

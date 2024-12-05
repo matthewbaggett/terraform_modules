@@ -16,7 +16,7 @@ locals {
       } : {
       "traefik.enable"                                              = "true"
       "traefik.http.routers.${local.service_name}.rule"             = "Host(`${var.traefik.domain}`)"
-      "traefik.http.routers.${local.service_name}.entrypoints"      = var.traefik.ssl ? "websecure" : "web"
+      "traefik.http.routers.${local.service_name}.entrypoints"      = var.traefik.ssl ? "web,websecure" : "web"
       "traefik.http.routers.${local.service_name}.tls.certresolver" = var.traefik.ssl ? "default" : ""
     }),
     (try(var.traefik.port, null) == null ? {} : {

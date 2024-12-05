@@ -169,6 +169,7 @@ variable "traefik" {
   type = object({
     domain = string
     port   = optional(number)
+    ssl    = optional(bool,false)
   })
   description = "Whether to enable traefik for the service."
 }

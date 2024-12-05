@@ -3,7 +3,7 @@ module "traefik_hello" {
   source                = "../../docker/service"
   stack_name            = var.stack_name
   service_name          = "hello"
-  image                 = "traefik/whoami"
+  image                 = "nginxdemos/hello:plain-text"
   parallelism           = 1
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]

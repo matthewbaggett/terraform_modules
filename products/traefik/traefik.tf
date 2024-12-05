@@ -20,7 +20,9 @@ module "traefik" {
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
     (var.ping_enable ? "--ping=true" : null),
-    (var.ping_enable ? "--ping.entrypoint=traefik,web,websecure" : null),
+    (var.ping_enable ? "--ping.entrypoint=web" : null),
+    (var.ping_enable ? "--ping.entrypoint=websecure" : null),
+    (var.ping_enable ? "--ping.entrypoint=traefik" : null),
 
     # Confirm Docker Provider
     "--providers.docker=true",
@@ -39,9 +41,9 @@ module "traefik" {
 
     # Configure HTTPS
     (var.https_port != null && var.ssl_enable ? "--entrypoints.websecure.address=:${var.https_port}" : null),
-    (var.https_port != null &&var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.address=:${var.http_port}" : null),
-    (var.https_port != null &&var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : null),
-    (var.https_port != null &&var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : null),
+    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.address=:${var.http_port}" : null),
+    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : null),
+    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : null),
 
     # Configure the acme provider
     (var.ssl_enable ? "--certificatesresolvers.default.acme.tlschallenge=true" : null),

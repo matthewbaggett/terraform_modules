@@ -47,23 +47,23 @@ variable "redirect_to_ssl" {
   description = "Whether to redirect HTTP to HTTPS."
 }
 variable "http_port" {
-    type        = number
-    default     = 80
-    description = "The port to listen on for HTTP traffic."
+  type        = number
+  default     = 80
+  description = "The port to listen on for HTTP traffic."
 }
 variable "https_port" {
-    type        = number
-    default     = 443
-    description = "The port to listen on for HTTPS traffic."
+  type        = number
+  default     = 443
+  description = "The port to listen on for HTTPS traffic."
 }
 variable "dashboard_port" {
-    type        = number
-    default     = 8080
-    description = "The port to listen on for the dashboard."
+  type        = number
+  default     = 8080
+  description = "The port to listen on for the dashboard."
 }
 
 variable "ping_enable" {
-    type        = bool
-    default     = false
-    description = "Whether to enable the ping endpoint."
+  type        = bool
+  default     = false
+  description = "Whether to enable the ping endpoint."
 }

@@ -46,3 +46,18 @@ variable "redirect_to_ssl" {
   default     = true
   description = "Whether to redirect HTTP to HTTPS."
 }
+variable "http_port" {
+    type        = number
+    default     = 80
+    description = "The port to listen on for HTTP traffic."
+}
+variable "https_port" {
+    type        = number
+    default     = 443
+    description = "The port to listen on for HTTPS traffic."
+}
+variable "dashboard_port" {
+    type        = number
+    default     = 8080
+    description = "The port to listen on for the dashboard."
+}

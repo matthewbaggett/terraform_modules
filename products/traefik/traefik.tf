@@ -15,7 +15,7 @@ module "traefik" {
   converge_enable       = false // @todo add healthcheck
   command = compact([
     "/usr/local/bin/traefik",
-    "--api.insecure=true",
+    "--api.insecure=true", # @todo MB: Revisit this and swap to using traefik-ception routing
     "--api.dashboard=true",
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
@@ -33,11 +33,12 @@ module "traefik" {
     "--providers.swarm.network=${module.traefik_network.name}",
     "--providers.swarm.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",
 
-    # Configure HTTP and redirect to HTTPS
-    var.ssl_enable ? "--entrypoints.web.address=:80" : null,
+    # Configure HTTP
+    !var.ssl_enable ? "--entrypoints.web.address=:${var.http_port}" : null,
 
     # Configure HTTPS
-    var.ssl_enable ? "--entrypoints.websecure.address=:443" : null,
+    var.ssl_enable ? "--entrypoints.websecure.address=:${var.https_port}" : null,
+    var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.address=:${var.http_port}" : null,
     var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : null,
     var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : null,
 
@@ -49,21 +50,20 @@ module "traefik" {
   ])
   traefik = var.traefik_service_domain != null ? {
     domain = var.traefik_service_domain
-    port   = 8080
+    port   = var.dashboard_port
   } : null
   ports = [
     {
-      host      = 80
-      container = 80
+      host      = var.http_port
+      container = var.http_port
     },
     {
-      host      = 443
-      container = 443
+      host      = var.https_port
+      container = var.https_port
     },
     {
-      host      = 8080
-      container = 8080
+      host      = var.dashboard_port
+      container = var.dashboard_port
     },
   ]
-
 }

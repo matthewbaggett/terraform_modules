@@ -4,7 +4,7 @@ module "traefik_hello" {
   stack_name            = var.stack_name
   service_name          = "hello"
   image                 = "nginxdemos/hello:plain-text"
-  parallelism           = 1
+  parallelism           = 3
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]
   ports                 = [{ container = 80 }]

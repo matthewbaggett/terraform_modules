@@ -76,7 +76,7 @@ resource "docker_service" "instance" {
       # Apply the list of Container Labels
       dynamic "labels" {
         # Filter out null values
-        for_each = { for key, value in var.labels : key => value if value != null }
+        for_each = { for key, value in local.labels : key => value if value != null }
         content {
           label = labels.key
           value = labels.value
@@ -182,7 +182,7 @@ resource "docker_service" "instance" {
 
   # Service Labels
   dynamic "labels" {
-    for_each = local.labels
+    for_each = { for key, value in local.labels : key => value if value != null }
     content {
       label = labels.key
       value = labels.value

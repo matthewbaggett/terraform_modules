@@ -19,7 +19,8 @@ module "traefik" {
     "--api.dashboard=true",
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
-    "--ping=true",
+    (var.ping_enable ? "--ping=true" : null),
+    (var.ping_enable ? "--ping.entrypoint=traefik,web,websecure" : null),
 
     # Confirm Docker Provider
     "--providers.docker=true",

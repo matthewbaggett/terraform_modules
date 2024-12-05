@@ -61,3 +61,9 @@ variable "dashboard_port" {
     default     = 8080
     description = "The port to listen on for the dashboard."
 }
+
+variable "ping_enable" {
+    type        = bool
+    default     = false
+    description = "Whether to enable the ping endpoint."
+}

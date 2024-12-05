@@ -13,7 +13,7 @@ module "traefik" {
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
   converge_enable       = false // @todo add healthcheck
-  command = compact([
+  command = distinct(compact([
     "/usr/local/bin/traefik",
     "--api.insecure=true", # @todo MB: Revisit this and swap to using traefik-ception routing
     "--api.dashboard=true",
@@ -47,7 +47,7 @@ module "traefik" {
     var.ssl_enable && var.acme_use_staging ? "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" : null,
     var.ssl_enable ? "--certificatesresolvers.default.acme.email=${var.acme_email}" : null,
     var.ssl_enable ? "--certificatesresolvers.default.acme.storage=/certs/acme.json" : null,
-  ])
+  ]))
   traefik = var.traefik_service_domain != null ? {
     domain = var.traefik_service_domain
     port   = var.dashboard_port

@@ -11,6 +11,7 @@ module "traefik_hello" {
   traefik = {
     domain = var.hello_service_domain
     port   = 80
+    ssl = var.ssl_enable
   }
 }
 output "hello_service" {

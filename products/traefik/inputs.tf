@@ -9,6 +9,11 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
+variable "ssl_enable" {
+  type        = bool
+  default     = true
+  description = "Whether to enable SSL & ACME certificate generation."
+}
 variable "acme_use_staging" {
   type        = bool
   default     = false

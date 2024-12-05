@@ -13,7 +13,7 @@ module "traefik" {
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
   converge_enable       = false // @todo add healthcheck
-  command = [
+  command = compact([
     "/usr/local/bin/traefik",
     "--api.insecure=true",
     "--api.dashboard=true",
@@ -34,19 +34,19 @@ module "traefik" {
     "--providers.swarm.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",
 
     # Configure HTTP and redirect to HTTPS
-    "--entrypoints.web.address=:80",
+    var.ssl_enable ? "--entrypoints.web.address=:80" : null,
 
     # Configure HTTPS
-    "--entrypoints.websecure.address=:443",
-    var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : "",
-    var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : "",
+      var.ssl_enable ? "--entrypoints.websecure.address=:443" : null,
+      var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure"  : null,
+      var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https"  : null,
 
     # Configure the acme provider
-    "--certificatesresolvers.default.acme.tlschallenge=true",
-    var.acme_use_staging ? "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" : "",
-    "--certificatesresolvers.default.acme.email=${var.acme_email}",
-    "--certificatesresolvers.default.acme.storage=/certs/acme.json",
-  ]
+      var.ssl_enable ? "--certificatesresolvers.default.acme.tlschallenge=true" : null,
+      var.ssl_enable && var.acme_use_staging ? "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"  : null,
+      var.ssl_enable ? "--certificatesresolvers.default.acme.email=${var.acme_email}" : null,
+      var.ssl_enable ? "--certificatesresolvers.default.acme.storage=/certs/acme.json" : null,
+  ])
   traefik = var.traefik_service_domain != null ? {
     domain = var.traefik_service_domain
     port   = 8080

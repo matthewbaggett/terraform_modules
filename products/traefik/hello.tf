@@ -4,7 +4,7 @@ module "traefik_hello" {
   stack_name            = var.stack_name
   service_name          = "hello"
   image                 = "traefik/whoami"
-  parallelism           = 3
+  parallelism           = 1
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]
   ports                 = [{ container = 80 }]

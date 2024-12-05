@@ -10,7 +10,7 @@ module "traefik" {
   service_name          = "traefik"
   image                 = "traefik:v3.2"
   networks              = [module.traefik_network, module.docker_socket_proxy.network, ]
-  mounts                = { "/goliath/letsencrypt" = "/certs" }
+  remote_volumes        = { "/certs" = module.traefik_certs_volume }
   placement_constraints = var.placement_constraints
   converge_enable       = false // @todo add healthcheck
   command = [

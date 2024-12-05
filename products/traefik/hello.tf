@@ -7,6 +7,7 @@ module "traefik_hello" {
   parallelism           = 3
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]
+  ports                 = [{ target = 80 }]
   traefik = {
     domain = var.hello_service_domain
     port   = 80

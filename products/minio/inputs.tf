@@ -17,6 +17,7 @@ variable "traefik" {
   type = object({
     domain = string
     port   = optional(number)
+    ssl = optional(bool)
   })
   description = "Whether to enable traefik for the service."
 }
@@ -24,4 +25,14 @@ variable "placement_constraints" {
   default     = []
   type        = list(string)
   description = "Docker Swarm placement constraints"
+}
+
+variable "domain" {
+  type        = string
+  description = "The domain to use for the service."
+}
+variable "mounts" {
+  type        = map(string)
+  default     = {}
+  description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }

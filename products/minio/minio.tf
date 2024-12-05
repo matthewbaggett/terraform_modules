@@ -6,15 +6,7 @@ resource "random_password" "minio_admin_password" {
   length  = 32
   special = false
 }
-variable "domain" {
-  type        = string
-  description = "The domain to use for the service."
-}
-variable "mounts" {
-  type        = map(string)
-  default     = {}
-  description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
-}
+
 module "minio" {
   source       = "../../docker/service"
   stack_name   = "minio"
@@ -40,15 +32,15 @@ module "minio" {
     // API redirect
     "traefik.http.routers.minio_api.rule"                      = "Host(`${var.domain}`) && !PathPrefix(`/ui`)"
     "traefik.http.routers.minio_api.service"                   = "minio_api"
-    "traefik.http.routers.minio_api.entrypoints"               = "websecure"
-    "traefik.http.routers.minio_api.tls.certresolver"          = "default"
+    "traefik.http.routers.minio_api.entrypoints"               = var.traefik.ssl ? "websecure" : "web"
+    "traefik.http.routers.minio_api.tls.certresolver"          = var.traefik.ssl ? "default" : null
     "traefik.http.services.minio_api.loadbalancer.server.port" = "9000"
 
     // UI redirect
     "traefik.http.routers.minio_ui.rule"                      = "Host(`${var.domain}`) && PathPrefix(`/ui`)"
     "traefik.http.routers.minio_ui.service"                   = "minio_ui"
-    "traefik.http.routers.minio_ui.entrypoints"               = "websecure"
-    "traefik.http.routers.minio_ui.tls.certresolver"          = "default"
+    "traefik.http.routers.minio_ui.entrypoints"               = var.traefik.ssl ? "websecure" : "web"
+    "traefik.http.routers.minio_ui.tls.certresolver"          = var.traefik.ssl ? "default" : null
     "traefik.http.services.minio_ui.loadbalancer.server.port" = "9001"
   }
 }

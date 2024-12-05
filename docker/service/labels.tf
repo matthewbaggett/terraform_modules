@@ -14,13 +14,16 @@ locals {
     (var.traefik == null ? {
       "traefik.enable" = "false"
       } : {
-      "traefik.enable"                                              = "true"
-      "traefik.http.routers.${local.service_name}.rule"             = "Host(`${var.traefik.domain}`)"
-      "traefik.http.routers.${local.service_name}.entrypoints"      = var.traefik.ssl ? "web,websecure" : "web"
-      "traefik.http.routers.${local.service_name}.tls.certresolver" = var.traefik.ssl ? "default" : ""
+      "traefik.enable"                                                  = "true"
+      "traefik.http.routers.${local.service_name}.rule"                 = "Host(`${var.traefik.domain}`)"
+      "traefik.http.routers.${local.service_name}.entrypoints"          = "web"
+      "traefik.http.routers.${local.service_name}_ssl.rule"             = var.traefik.ssl ? "Host(`${var.traefik.domain}`)" : null
+      "traefik.http.routers.${local.service_name}_ssl.entrypoints"      = var.traefik.ssl ? "websecure" : null
+      "traefik.http.routers.${local.service_name}_ssl.tls.certresolver" = var.traefik.ssl ? "default" : null
     }),
     (try(var.traefik.port, null) == null ? {} : {
-      "traefik.http.services.${local.service_name}.loadbalancer.server.port" = var.traefik.port
+      "traefik.http.services.${local.service_name}.loadbalancer.server.port"     = var.traefik.port
+      "traefik.http.services.${local.service_name}_ssl.loadbalancer.server.port" = var.traefik.ssl ? var.traefik.port : null
     })
   )
 

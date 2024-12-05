@@ -12,3 +12,6 @@ module "traefik_hello" {
     port   = 80
   }
 }
+output "hello_service" {
+  value = module.traefik_hello
+}

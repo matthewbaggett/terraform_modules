@@ -67,3 +67,8 @@ variable "ping_enable" {
   default     = false
   description = "Whether to enable the ping endpoint."
 }
+variable "ping_entrypoint" {
+  type        = string
+  default     = "web"
+  description = "The traefik entrypoint to use for the ping endpoint."
+}

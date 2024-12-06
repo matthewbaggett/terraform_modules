@@ -12,3 +12,6 @@ output "arn" {
 output "region" {
   value = aws_s3_bucket.bucket.region
 }
+output "endpoint" {
+  value = aws_s3_bucket.bucket.bucket_regional_domain_name
+}

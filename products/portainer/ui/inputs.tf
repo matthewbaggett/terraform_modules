@@ -1,5 +1,5 @@
 variable "stack_name" {
-  default     = "loadbalancer"
+  default     = "portainer"
   type        = string
   description = "The name of the stack to create."
 }

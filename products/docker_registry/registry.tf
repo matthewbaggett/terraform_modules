@@ -1,16 +1,11 @@
-
-locals{
+resource "random_password" "http_secret" {
+  length = 16
+}
+locals {
   registry_config_yaml = {
     version = 0.1
     storage = {
-      s3 = {
-        accesskey      = var.s3_accesskey
-        secretkey      = var.s3_secretkey
-        region         = var.s3_region
-        regionendpoint = var.s3_regionendpoint
-        forcepathstyle = var.s3_forcepathstyle
-        bucket         = var.s3_bucket
-      }
+      s3 = var.s3
       delete = {
         enabled = var.enable_delete
       }
@@ -50,12 +45,11 @@ locals{
   }
 }
 
-# Configuration file
 module "docker_registry_config" {
-  source = "../../docker/config"
-    name   = "docker-registry-config"
+  source     = "../../docker/config"
+  name       = "docker-registry-config"
   stack_name = var.stack_name
-  value = yamlencode(local.registry_config_yaml)
+  value      = yamlencode(local.registry_config_yaml)
 }
 resource "local_file" "docker_registry_config_yml" {
   content         = yamlencode(local.registry_config_yaml)
@@ -63,23 +57,18 @@ resource "local_file" "docker_registry_config_yml" {
   file_permission = "0600"
 }
 
-# Registry Service
 module "docker_registry" {
   source       = "../../docker/service"
   stack_name   = var.stack_name
   service_name = "registry"
   image        = "registry:2"
   configs = {
-    "/etc/docker/registry/config.yml" = nonsensitive(yamlencode(local.registry_config_yaml))
-    "/etc/docker/registry/htpasswd"   = nonsensitive(local.registry_htpasswd)
+    "/etc/docker/registry/config.yml" = yamlencode(local.registry_config_yaml)
+    "/etc/docker/registry/htpasswd"   = local.registry_htpasswd
   }
   restart_policy        = "on-failure"
   placement_constraints = var.placement_constraints
-  networks              = [module.registry_network]
-  ports = [
-    {
-      host      = 5000
-      container = 5000
-    }
-  ]
+  ports                 = [{ container = 5000 }]
+  networks              = [module.registry_network, ] #var.traefik.network, ]
+  #traefik               = merge(var.traefik, { port = 5000 })
 }

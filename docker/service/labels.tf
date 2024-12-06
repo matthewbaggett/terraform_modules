@@ -34,6 +34,7 @@ locals {
       "traefik.http.routers.${local.traefik_service}.rule"                         = local.traefik_rule
       "traefik.http.routers.${local.traefik_service}.service"                      = local.traefik_service
       "traefik.http.routers.${local.traefik_service}.entrypoints"                  = "web"
+      "traefik.http.routers.${local.traefik_service}.tls"                          = ""
       "traefik.http.services.${local.traefik_service}.loadbalancer.passhostheader" = "true"
       "traefik.http.services.${local.traefik_service}.loadbalancer.server.port"    = var.traefik.port
 

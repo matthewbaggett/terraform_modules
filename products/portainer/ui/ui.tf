@@ -18,12 +18,12 @@ module "portainer" {
   stack_name   = var.stack_name
   service_name = "portainer"
   image        = "portainer/portainer-ce:${var.portainer_version}"
-  command = [
+  command = compact([
     "/portainer",
     //"--edge-compute",
-    "--logo", coalesce(var.portainer_logo),
+    var.portainer_logo != null ? "--logo" : null, var.portainer_logo != null ? var.portainer_logo : null,
     "--admin-password", htpasswd_password.hash.bcrypt,
-  ]
+  ])
   remote_volumes = {
     "/data" = module.vol_portainer.volume
   }

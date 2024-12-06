@@ -41,6 +41,11 @@ variable "access_log" {
   default     = false
   description = "Whether to enable access logging."
 }
+variable "access_log_fields_default_mode" {
+  type        = string
+  default     = "deny"
+  description = "The default mode for access log fields."
+}
 variable "redirect_to_ssl" {
   type        = bool
   default     = true
@@ -71,4 +76,14 @@ variable "ping_entrypoint" {
   type        = string
   default     = "web"
   description = "The traefik entrypoint to use for the ping endpoint."
+}
+variable "enable_docker_provider" {
+  type        = bool
+  default     = true
+  description = "Whether to enable the Docker provider."
+}
+variable "enable_swarm_provider" {
+  type        = bool
+  default     = true
+  description = "Whether to enable the Swarm provider."
 }

@@ -19,17 +19,18 @@ module "traefik" {
     "--api.dashboard=true",
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
+    "--accesslog.fields.defaultmode=${var.access_log_fields_default_mode}",
     (var.ping_enable ? "--ping=true" : null),
     (var.ping_enable ? "--ping.entrypoint=${var.ping_entrypoint}" : null),
 
     # Confirm Docker Provider
-    "--providers.docker=true",
+    "--providers.docker=${var.enable_docker_provider ? "true" : "false"}",
     "--providers.docker.exposedbydefault=false",
     "--providers.docker.network=${module.traefik_network.name}",
     "--providers.docker.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",
 
     # Confirm Swarm Provider
-    "--providers.swarm=true",
+    "--providers.swarm=${var.enable_swarm_provider ? "true" : "false"}",
     "--providers.swarm.exposedByDefault=false",
     "--providers.swarm.network=${module.traefik_network.name}",
     "--providers.swarm.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",

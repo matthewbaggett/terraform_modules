@@ -41,6 +41,11 @@ variable "access_log" {
   default     = false
   description = "Whether to enable access logging."
 }
+variable "access_log_format" {
+  type        = string
+  default     = "json"
+  description = "The format to use for access logs."
+}
 variable "access_log_fields_default_mode" {
   type        = string
   default     = "deny"

@@ -19,6 +19,7 @@ module "traefik" {
     "--api.dashboard=true",
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
+    "--accesslog.format=${var.access_log_format}",
     "--accesslog.fields.defaultmode=${var.access_log_fields_default_mode}",
     (var.ping_enable ? "--ping=true" : null),
     (var.ping_enable ? "--ping.entrypoint=${var.ping_entrypoint}" : null),

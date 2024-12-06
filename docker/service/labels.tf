@@ -10,7 +10,7 @@ locals {
   }, local.traefik_labels, var.labels)
 
   # Calculate the traefik labels to use if enabled
-  traefik_rule = "Host(\"${var.traefik.domain}\")"
+  traefik_rule = var.traefik != null ? "Host(\"${var.traefik.domain}\")" : null
   traefik_labels = merge(
     (var.traefik == null ? {
       "traefik.enable" = "false"

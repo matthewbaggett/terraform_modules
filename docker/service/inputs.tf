@@ -170,6 +170,7 @@ variable "traefik" {
     domain = string
     port   = optional(number)
     ssl    = optional(bool, false)
+    rule   = optional(string)
   })
   description = "Whether to enable traefik for the service."
 }

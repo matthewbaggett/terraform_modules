@@ -20,7 +20,7 @@ locals {
       var.traefik.rule != null
       ? var.traefik.rule
       : (
-        var.traefik.domain
+        var.traefik.domain != null
         ? "Host(\"${var.traefik.domain}\")"
         : null
       )

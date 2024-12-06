@@ -15,7 +15,7 @@ locals {
       secret = nonsensitive(random_password.http_secret.result)
       host   = var.domain
       headers = {
-        Access-Control-Allow-Origin      = concat(["https://${var.domain}", ], formatlist("https://%s",var.cors_domains))
+        Access-Control-Allow-Origin      = concat(["https://${var.domain}", ], formatlist("https://%s", var.cors_domains))
         Access-Control-Allow-Methods     = ["HEAD", "GET", "DELETE", "OPTIONS"]
         Access-Control-Allow-Credentials = ["true"]
         Access-Control-Allow-Headers     = ["Authorization", "Cache-Control", "Accept"]

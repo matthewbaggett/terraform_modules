@@ -15,13 +15,16 @@ locals {
     substr(var.service_name, 0, 63 - 1 - 20),
   ])
   traefik_rule = (
-    var.traefik == null
-    ? null
-    : (
-      var.traefik.rule == null
-      ? "Host(\"${var.traefik.domain}\")"
-      : var.traefik.rule
-    )
+    var.traefik != null
+    ? (
+      var.traefik.rule != null
+      ? var.traefik.rule
+      : (
+        var.traefik.domain
+        ? "Host(\"${var.traefik.domain}\")"
+        : null
+      )
+    ) : null
   )
   traefik_labels = merge(
     (var.traefik == null ? {

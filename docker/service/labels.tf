@@ -14,7 +14,7 @@ locals {
     substr(var.stack_name, 0, 20),
     substr(var.service_name, 0, 63 - 1 - 20),
   ])
-  traefik_rule = try(var.traefik.rule, "Host(\"${var.traefik.domain}\")")
+  traefik_rule = try(var.traefik.rule, "Host(\"${var.traefik.domain}\")", null)
   traefik_labels = merge(
     (var.traefik == null ? {
       "traefik.enable" = "false"

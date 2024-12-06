@@ -58,8 +58,9 @@ module "docker_registry_config" {
   value = yamlencode(local.registry_config_yaml)
 }
 resource "local_file" "docker_registry_config_yml" {
-  content  = yamlencode(local.registry_config_yaml)
-  filename = "${path.root}/.debug/docker-registry/config.yml"
+  content         = yamlencode(local.registry_config_yaml)
+  filename        = "${path.root}/.debug/docker-registry/config.yml"
+  file_permission = "0600"
 }
 
 # Registry Service

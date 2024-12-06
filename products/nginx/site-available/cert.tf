@@ -7,9 +7,10 @@ resource "docker_config" "certificate" {
   }
 }
 resource "local_file" "certificate" {
-  count    = var.certificate != null ? 1 : 0
-  content  = local.cert_public
-  filename = "${path.root}/.debug/nginx/${local.filenames.certificate}"
+  count           = var.certificate != null ? 1 : 0
+  content         = local.cert_public
+  filename        = "${path.root}/.debug/nginx/${local.filenames.certificate}"
+  file_permission = "0600"
 }
 resource "docker_config" "certificate_key" {
   count = var.certificate != null ? 1 : 0
@@ -20,7 +21,8 @@ resource "docker_config" "certificate_key" {
   }
 }
 resource "local_file" "certificate_key" {
-  count    = var.certificate != null ? 1 : 0
-  content  = var.certificate.private_key_pem
-  filename = "${path.root}/.debug/nginx/${local.filenames.certificate_key}"
+  count           = var.certificate != null ? 1 : 0
+  content         = var.certificate.private_key_pem
+  filename        = "${path.root}/.debug/nginx/${local.filenames.certificate_key}"
+  file_permission = "0600"
 }

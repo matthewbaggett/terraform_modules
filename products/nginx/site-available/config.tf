@@ -72,6 +72,7 @@ resource "docker_config" "nginx_site_available" {
 
 # Debug copy of the configuration file
 resource "local_file" "nginx_site_available" {
-  filename = "${path.root}/.debug/nginx/${local.filenames.nginx}"
-  content  = local.config
+  filename        = "${path.root}/.debug/nginx/${local.filenames.nginx}"
+  content         = local.config
+  file_permission = "0600"
 }

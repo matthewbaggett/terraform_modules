@@ -16,7 +16,8 @@ resource "docker_config" "auth" {
   data  = base64encode(local.auth)
 }
 resource "local_file" "auth" {
-  count    = var.basic_auth != null ? 1 : 0
-  content  = local.auth
-  filename = "${path.root}/.debug/nginx/${local.filenames.auth}"
+  count           = var.basic_auth != null ? 1 : 0
+  content         = local.auth
+  filename        = "${path.root}/.debug/nginx/${local.filenames.auth}"
+  file_permission = "0600"
 }

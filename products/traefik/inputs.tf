@@ -109,6 +109,6 @@ variable "api_debug" {
 }
 variable "enable_dashboard" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to enable the dashboard."
 }

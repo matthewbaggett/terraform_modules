@@ -5,17 +5,17 @@ locals {
   registry_config_yaml = {
     version = 0.1
     storage = {
-      s3 = var.s3
+      s3 = nonsensitive(var.s3)
       delete = {
         enabled = var.enable_delete
       }
     }
     http = {
       addr   = "0.0.0.0:5000"
-      secret = random_password.http_secret.result
+      secret = nonsensitive(random_password.http_secret.result)
       host   = var.domain
       headers = {
-        Access-Control-Allow-Origin      = ["https://${var.domain}", ] // @todo add s3 domain here
+        Access-Control-Allow-Origin      = concat(["https://${var.domain}", ], formatlist("https://%s",var.cors_domains))
         Access-Control-Allow-Methods     = ["HEAD", "GET", "DELETE", "OPTIONS"]
         Access-Control-Allow-Credentials = ["true"]
         Access-Control-Allow-Headers     = ["Authorization", "Cache-Control", "Accept"]
@@ -69,6 +69,6 @@ module "docker_registry" {
   restart_policy        = "on-failure"
   placement_constraints = var.placement_constraints
   ports                 = [{ container = 5000 }]
-  networks              = [module.registry_network, ] #var.traefik.network, ]
-  #traefik               = merge(var.traefik, { port = 5000 })
+  networks              = [module.registry_network, var.traefik.network, ]
+  traefik               = merge(var.traefik, { port = 5000, rule = "Host(`${var.domain}`) && PathPrefix(`/v2`)" })
 }

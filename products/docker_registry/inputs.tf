@@ -40,3 +40,8 @@ variable "domain" {
   type        = string
   description = "The domain for the registry"
 }
+variable "cors_domains" {
+  type = list(string)
+  description = "A list of domains to allow CORS requests from"
+  default = []
+}

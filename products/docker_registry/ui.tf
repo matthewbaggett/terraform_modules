@@ -13,7 +13,7 @@ locals {
     CATALOG_ELEMENTS_LIMIT = 1000
   }
 }
-resource "local_file" "docker_registry_ui_config_yml" {
+resource "local_file" "ui_debug" {
   content         = yamlencode(local.docker_registry_ui_conf)
   filename        = "${path.root}/.debug/docker-registry/ui.yml"
   file_permission = "0600"
@@ -28,7 +28,7 @@ module "docker_registry_ui" {
   environment_variables = local.docker_registry_ui_conf
   networks              = [module.registry_network, var.traefik.network, ]
   placement_constraints = var.placement_constraints
-  traefik               = merge(var.traefik, { port = 80 })
+  traefik               = merge(var.traefik, { port = 80, rule = "Host(`${var.domain}`) && !PathPrefix(`/v2`)" })
 }
 
 variable "traefik" {

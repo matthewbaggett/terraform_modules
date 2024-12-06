@@ -16,6 +16,7 @@ locals {
       } : {
       "traefik.enable"                                                  = "true"
       "traefik.http.routers.${local.service_name}.rule"                 = "Host(`${var.traefik.domain}`)"
+      "traefik.http.routers.${local.service_name}.service"              = local.service_name
       "traefik.http.routers.${local.service_name}.entrypoints"          = "web"
       "traefik.http.routers.${local.service_name}_ssl.rule"             = var.traefik.ssl ? "Host(`${var.traefik.domain}`)" : null
       "traefik.http.routers.${local.service_name}_ssl.entrypoints"      = var.traefik.ssl ? "websecure" : null

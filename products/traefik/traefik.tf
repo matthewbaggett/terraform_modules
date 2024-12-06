@@ -17,6 +17,7 @@ module "traefik" {
     "/usr/local/bin/traefik",
     "--api.insecure=true", # @todo MB: Revisit this and swap to using traefik-ception routing
     "--api.dashboard=true",
+    "--api.debug=true",
     "--log.level=${var.log_level}",
     "--accesslog=${var.access_log ? "true" : "false"}",
     "--accesslog.format=${var.access_log_format}",

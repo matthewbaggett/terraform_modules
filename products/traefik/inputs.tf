@@ -92,3 +92,23 @@ variable "enable_swarm_provider" {
   default     = true
   description = "Whether to enable the Swarm provider."
 }
+variable "enable_stats_collection" {
+  type        = bool
+  default     = true
+  description = "Whether to enable stats collection."
+}
+variable "api_insecure" {
+  type        = bool
+  default     = false
+  description = "Whether to enable the insecure API."
+}
+variable "api_debug" {
+  type        = bool
+  default     = false
+  description = "Whether to enable the debug API."
+}
+variable "enable_dashboard" {
+  type        = bool
+  default     = true
+  description = "Whether to enable the dashboard."
+}

@@ -10,15 +10,16 @@ locals {
   }, local.traefik_labels, var.labels)
 
   # Calculate the traefik labels to use if enabled
+  traefik_rule = "Host(\"${var.traefik.domain}\")"
   traefik_labels = merge(
     (var.traefik == null ? {
       "traefik.enable" = "false"
       } : {
       "traefik.enable"                                                              = "true"
-      "traefik.http.routers.${local.service_name}.rule"                             = "Host(`${var.traefik.domain}`)"
+      "traefik.http.routers.${local.service_name}.rule"                             = local.traefik_rule
       "traefik.http.routers.${local.service_name}.service"                          = "${local.service_name}"
       "traefik.http.routers.${local.service_name}.entrypoints"                      = "web"
-      "traefik.http.routers.${local.service_name}_ssl.rule"                         = var.traefik.ssl ? "Host(`${var.traefik.domain}`)" : null
+      "traefik.http.routers.${local.service_name}_ssl.rule"                         = var.traefik.ssl ? local.traefik_rule : null
       "traefik.http.routers.${local.service_name}_ssl.service"                      = var.traefik.ssl ? "${local.service_name}_ssl" : null
       "traefik.http.routers.${local.service_name}_ssl.entrypoints"                  = var.traefik.ssl ? "websecure" : null
       "traefik.http.routers.${local.service_name}_ssl.tls.certresolver"             = var.traefik.ssl ? "default" : null

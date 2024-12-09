@@ -1,5 +1,15 @@
 variable "image" {
-  type = string
+  type        = string
+  description = "The image to deploy/build/tag."
+}
+variable "build" {
+  type = object({
+    context    = string
+    dockerfile = optional(string, "Dockerfile")
+    args       = optional(map(string))
+  })
+  default     = null
+  description = "The build configuration for the image."
 }
 variable "mirror" {
   type        = string

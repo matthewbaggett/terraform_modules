@@ -1,6 +1,4 @@
-data "docker_registry_image" "image" {
-  name = var.image
-}
+
 
 resource "docker_service" "instance" {
   # The name of the service is the stack name and the service name combined
@@ -9,7 +7,7 @@ resource "docker_service" "instance" {
   # Define the task spec
   task_spec {
     container_spec {
-      image   = local.image
+      image   = "${local.image.name}@${local.image.sha256_digest}"
       command = var.command
       env     = var.environment_variables
 

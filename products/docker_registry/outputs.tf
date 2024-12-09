@@ -6,3 +6,7 @@ output "registry_user_login" {
     for user, pass in local.registry_users : user => "docker login -u ${user} -p${pass} ${var.domain}"
   }
 }
+
+output "domain" {
+  value = var.domain
+}

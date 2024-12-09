@@ -2,11 +2,11 @@ locals {
   # Define service labels en-masse
   labels = merge({
     "com.docker.stack.namespace" = var.stack_name
-    "com.docker.stack.image"     = data.docker_registry_image.image.name
+    "com.docker.stack.image"     = local.image.name
     "ooo.grey.service.stack"     = var.stack_name
     "ooo.grey.service.name"      = var.service_name
-    "ooo.grey.service.image"     = data.docker_registry_image.image.name
-    #"ooo.grey.service.image.digest" = data.docker_registry_image.image.sha256_digest
+    "ooo.grey.service.image"     = local.image.name
+    #"ooo.grey.service.image.digest" = local.image.sha256_digest
   }, local.traefik_labels, var.labels)
 
   # Calculate the traefik labels to use if enabled

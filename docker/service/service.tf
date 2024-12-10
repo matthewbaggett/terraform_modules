@@ -7,7 +7,7 @@ resource "docker_service" "instance" {
   # Define the task spec
   task_spec {
     container_spec {
-      image   = "${local.image.name}@${local.image.sha256_digest}"
+      image   = local.image_fully_qualified
       command = var.command
       env     = var.environment_variables
 

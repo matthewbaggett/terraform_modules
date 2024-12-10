@@ -11,9 +11,23 @@ locals {
     substr(var.stack_name, 0, 20),
     substr(var.service_name, 0, 63 - 1 - 20),
   ])
-
-  enable_mirror = false // var.mirror != null
-
   # Calculate the docker image to use
-  image = (local.is_build ? docker_registry_image.build[0] : data.docker_registry_image.image[0])
+  image = (
+    local.is_build
+    ? docker_image.build[0].name
+    : (
+      local.is_mirror
+      ? docker_registry_image.mirror[0].name
+      : data.docker_registry_image.image[0].name
+    )
+  )
+  image_fully_qualified = (
+    local.is_build
+    ? docker_image.build[0].name
+    : (
+      local.is_mirror
+      ? "${docker_registry_image.mirror[0].name}@${docker_registry_image.mirror[0].sha256_digest}"
+      : "${data.docker_registry_image.image[0].name}@${data.docker_registry_image.image[0].sha256_digest}"
+    )
+  )
 }

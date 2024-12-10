@@ -9,4 +9,5 @@ resource "docker_image" "build" {
   build {
     context = var.build.context
   }
+  force_remove = true
 }

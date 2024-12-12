@@ -14,7 +14,7 @@ locals {
   labels = merge(var.labels, {
     "com.docker.stack.namespace" = var.stack_name
     "ooo.grey.config.stack"      = var.stack_name
-    #"ooo.grey.config.created"   = timestamp()
+    #"ooo.grey.config.created"   = plantimestamp()
     "ooo.grey.config.bytes" = length(var.value)
     "ooo.grey.config.name"  = local.config_name
     "ooo.grey.config.hash"  = sha1(var.value)

@@ -25,7 +25,7 @@ resource "htpasswd_password" "registry_users" {
   salt     = random_password.salt[each.key].result
 }
 resource "docker_config" "docker_registry_htpasswd" {
-  name = "docker-registry-htpasswd-${replace(timestamp(), ":", ".")}"
+  name = "docker-registry-htpasswd-${replace(plantimestamp(), ":", ".")}"
   data = base64encode(local.registry_htpasswd)
   lifecycle {
     ignore_changes        = [name]

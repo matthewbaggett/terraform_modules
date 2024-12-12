@@ -6,7 +6,9 @@ variable "build" {
   type = object({
     context    = string
     dockerfile = optional(string, "Dockerfile")
-    args       = optional(map(string))
+    target     = optional(string, null)
+    args       = optional(map(string), {})
+    tags       = optional(list(string), [])
   })
   default     = null
   description = "The build configuration for the image."

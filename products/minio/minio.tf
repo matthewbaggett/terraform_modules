@@ -32,15 +32,15 @@ module "minio" {
     // API redirect
     "traefik.http.routers.minio_api.rule"                      = "Host(`${var.domain}`) && !PathPrefix(`/ui`)"
     "traefik.http.routers.minio_api.service"                   = "minio_api"
-    "traefik.http.routers.minio_api.entrypoints"               = var.traefik.ssl ? "websecure" : "web"
-    "traefik.http.routers.minio_api.tls.certresolver"          = var.traefik.ssl ? "default" : null
+    "traefik.http.routers.minio_api.entrypoints"               = try(var.traefik.ssl, false) ? "websecure" : "web"
+    "traefik.http.routers.minio_api.tls.certresolver"          = try(var.traefik.ssl, false) ? "default" : null
     "traefik.http.services.minio_api.loadbalancer.server.port" = "9000"
 
     // UI redirect
     "traefik.http.routers.minio_ui.rule"                      = "Host(`${var.domain}`) && PathPrefix(`/ui`)"
     "traefik.http.routers.minio_ui.service"                   = "minio_ui"
-    "traefik.http.routers.minio_ui.entrypoints"               = var.traefik.ssl ? "websecure" : "web"
-    "traefik.http.routers.minio_ui.tls.certresolver"          = var.traefik.ssl ? "default" : null
+    "traefik.http.routers.minio_ui.entrypoints"               = try(var.traefik.ssl, false) ? "websecure" : "web"
+    "traefik.http.routers.minio_ui.tls.certresolver"          = try(var.traefik.ssl, false) ? "default" : null
     "traefik.http.services.minio_ui.loadbalancer.server.port" = "9001"
   }
 }

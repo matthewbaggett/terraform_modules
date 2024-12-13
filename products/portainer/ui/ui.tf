@@ -27,7 +27,7 @@ module "portainer" {
   remote_volumes = {
     "/data" = module.vol_portainer.volume
   }
-  traefik     = var.traefik
+  traefik     = merge(var.traefik, { port = 9000 })
   mounts      = var.should_mount_local_docker_socket ? { "/var/run/docker.sock" = "/var/run/docker.sock" } : {}
   networks    = var.networks
   start_first = false

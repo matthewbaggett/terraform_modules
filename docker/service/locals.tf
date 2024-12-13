@@ -3,9 +3,6 @@ data "docker_registry_image" "image" {
   name  = var.image
 }
 locals {
-  is_build  = var.build != null
-  is_mirror = var.mirror != null
-
   // Name can be 64 bytes long, including a null byte seemingly, limiting the length to 63.
   service_name = join("-", [
     substr(var.stack_name, 0, 20),

@@ -1,3 +1,6 @@
+locals {
+  is_mirror = var.mirror != null
+}
 resource "docker_image" "source" {
   count         = local.is_mirror ? 1 : 0
   name          = data.docker_registry_image.image[0].name

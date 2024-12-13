@@ -9,7 +9,7 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
-variable "ssl_enable" {
+variable "enable_ssl" {
   type        = bool
   default     = true
   description = "Whether to enable SSL & ACME certificate generation."
@@ -72,7 +72,7 @@ variable "dashboard_port" {
   description = "The port to listen on for the dashboard."
 }
 
-variable "ping_enable" {
+variable "enable_ping" {
   type        = bool
   default     = false
   description = "Whether to enable the ping endpoint."

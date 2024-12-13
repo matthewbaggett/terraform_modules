@@ -30,8 +30,8 @@ module "traefik" {
     "--accesslog.fields.defaultmode=${var.access_log_fields_default_mode}",
 
     # Ping settings
-    (var.ping_enable ? "--ping=true" : null),
-    (var.ping_enable ? "--ping.entrypoint=${var.ping_entrypoint}" : null),
+    (var.enable_ping ? "--ping=true" : null),
+    (var.enable_ping ? "--ping.entrypoint=${var.ping_entrypoint}" : null),
 
     # Docker Provider
     "--providers.docker=${var.enable_docker_provider ? "true" : "false"}",
@@ -49,16 +49,16 @@ module "traefik" {
     (var.http_port != null ? "--entrypoints.web.address=:${var.http_port}" : null),
 
     # Configure HTTPS
-    (var.https_port != null && var.ssl_enable ? "--entrypoints.websecure.address=:${var.https_port}" : null),
-    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.address=:${var.http_port}" : null),
-    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : null),
-    (var.https_port != null && var.ssl_enable && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : null),
+    (var.https_port != null && var.enable_ssl ? "--entrypoints.websecure.address=:${var.https_port}" : null),
+    (var.https_port != null && var.enable_ssl && var.redirect_to_ssl ? "--entrypoints.web.address=:${var.http_port}" : null),
+    (var.https_port != null && var.enable_ssl && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.to=websecure" : null),
+    (var.https_port != null && var.enable_ssl && var.redirect_to_ssl ? "--entrypoints.web.http.redirections.entrypoint.scheme=https" : null),
 
     # Configure the acme provider
-    (var.ssl_enable ? "--certificatesresolvers.default.acme.tlschallenge=true" : null),
-    (var.ssl_enable && var.acme_use_staging ? "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" : null),
-    (var.ssl_enable ? "--certificatesresolvers.default.acme.email=${var.acme_email}" : null),
-    (var.ssl_enable ? "--certificatesresolvers.default.acme.storage=/certs/acme.json" : null),
+    (var.enable_ssl ? "--certificatesresolvers.default.acme.tlschallenge=true" : null),
+    (var.enable_ssl && var.acme_use_staging ? "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" : null),
+    (var.enable_ssl ? "--certificatesresolvers.default.acme.email=${var.acme_email}" : null),
+    (var.enable_ssl ? "--certificatesresolvers.default.acme.storage=/certs/acme.json" : null),
   ]))
   traefik = var.traefik_service_domain != null ? {
     domain = var.traefik_service_domain

@@ -31,27 +31,46 @@ variable "engine" {
     condition     = contains(["aurora-mysql", "aurora-postgresql"], var.engine)
   }
 }
-variable "engine_version" {
-  type    = string
-  default = "13.6"
-}
 
 variable "scaling" {
   type = object({
-    max_capacity             = optional(number, 0.5)
-    min_capacity             = optional(number, 0)
-    seconds_until_auto_pause = optional(number, 3600)
+    max_capacity = optional(number, 1)
+    min_capacity = optional(number, 0)
   })
+  default = {
+    max_capacity = 1
+    min_capacity = 0
+  }
   validation {
-    error_message = "max_capacity must be greater or equal to min_capacity"
+    error_message = "max_capacity must be greater or equal to min_capacity."
     condition     = var.scaling.max_capacity >= var.scaling.min_capacity
   }
   validation {
-    error_message = "min_capacity must be between 0 and 128 in steps of 0.5"
-    condition     = var.scaling.min_capacity % 0.5 == 0 && var.scaling.min_capacity >= 0 && var.scaling.min_capacity <= 128
+    error_message = "min_capacity must be one of 0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 384."
+    condition     = contains([0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 384], var.scaling.min_capacity)
   }
   validation {
-    error_message = "max_capacity must be between 0 and 128 in steps of 0.5"
-    condition     = var.scaling.max_capacity % 0.5 == 0 && var.scaling.max_capacity >= 0 && var.scaling.max_capacity <= 128
+    error_message = "max_capacity must be one of 1, 2, 4, 8, 16, 32, 64, 128, 256, 384."
+    condition     = contains([1, 2, 4, 8, 16, 32, 64, 128, 256, 384], var.scaling.max_capacity)
   }
 }
+
+variable "backup_window" {
+  type        = string
+  description = "The daily time range during which automated backups are created if automated backups are enabled."
+  default     = "03:00-05:00"
+}
+variable "backup_retention_period_days" {
+  type    = number
+  default = 30
+  validation {
+    error_message = "backup_retention_period_days must be between 1 and 35."
+    condition     = var.backup_retention_period_days >= 1 && var.backup_retention_period_days <= 35
+  }
+}
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "Determines whether a final DB snapshot is created before the DB cluster is deleted."
+  default     = false
+}
+

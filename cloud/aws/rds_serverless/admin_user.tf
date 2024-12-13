@@ -1,21 +1,12 @@
-variable "admin_user" {
-  type = object({
-    username = string
-    password = string
-  })
+variable "admin_username" {
+  type    = string
   default = null
 }
 resource "random_pet" "admin_user" {
-  count     = var.admin_user == null ? 1 : 0
-  separator = "-"
+  count     = var.admin_username == null ? 1 : 0
+  separator = "_"
 }
-resource "random_password" "admin_user" {
-  length  = 32
-  special = false
-}
+
 locals {
-  admin_user = var.admin_user != null ? var.admin_user : {
-    username = random_pet.admin_user.id
-    password = random_password.admin_user.result
-  }
+  admin_username = coalesce(var.admin_username, random_pet.admin_user[0].id)
 }

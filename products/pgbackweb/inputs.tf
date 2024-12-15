@@ -31,7 +31,13 @@ variable "networks" {
   default     = []
   description = "A list of network names to attach the service to."
 }
-variable "domain" {
-  type        = string
-  description = "The domain to use for the service's traefik configuration."
+
+variable "traefik" {
+  default = null
+  type = object({
+    domain = string
+    port   = optional(number)
+    ssl    = optional(bool)
+  })
+  description = "Whether to enable traefik for the service."
 }

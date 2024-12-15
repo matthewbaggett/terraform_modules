@@ -63,6 +63,7 @@ module "traefik" {
   traefik = var.traefik_service_domain != null ? {
     domain = var.traefik_service_domain
     port   = var.dashboard_port
+    ssl    = var.enable_ssl
   } : null
   ports = [
     {

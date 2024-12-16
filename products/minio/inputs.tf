@@ -36,3 +36,12 @@ variable "mounts" {
   default     = {}
   description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
+
+variable "ports" {
+  type = list(object({
+    host = optional(number, null)
+    container = number
+    protocol = optional(string, "tcp")
+  }))
+  default = []
+}

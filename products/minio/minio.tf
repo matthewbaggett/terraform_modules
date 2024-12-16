@@ -20,9 +20,10 @@ module "minio" {
     MINIO_ROOT_PASSWORD        = random_password.minio_admin_password.result
     MINIO_SERVER_URL           = "https://${var.domain}"
     MINIO_BROWSER_REDIRECT_URL = "https://${var.domain}/ui/"
-    MINIO_BROWSER_REDIRECT     = true
+    #MINIO_BROWSER_REDIRECT     = true
     MINIO_API_ROOT_ACCESS      = "on"
   }
+  ports = var.ports
   mounts                = var.mounts
   networks              = var.networks
   placement_constraints = var.placement_constraints
@@ -42,6 +43,12 @@ module "minio" {
     "traefik.http.routers.minio_ui.entrypoints"               = try(var.traefik.ssl, false) ? "websecure" : "web"
     "traefik.http.routers.minio_ui.tls.certresolver"          = try(var.traefik.ssl, false) ? "default" : null
     "traefik.http.services.minio_ui.loadbalancer.server.port" = "9001"
+
+    // Create middleware to strip the prefix
+    "traefik.http.middlewares.minio_ui.stripprefix.prefixes" = "/ui"
+
+    # Attach the middleware to the UI router
+    "traefik.http.routers.minio_ui.middlewares"              = "minio_ui"
   }
 }
 

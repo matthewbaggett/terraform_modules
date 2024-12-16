@@ -11,6 +11,6 @@ resource "local_file" "debug" {
     configs               = var.configs
     traefik               = var.traefik
     placement_constraints = var.placement_constraints
-    tags                  = local.tags
+    build_tags            = local.is_build ? local.tags : []
   })
 }

@@ -39,5 +39,5 @@ module "forgejo" {
       container = 3000
     },
   ]
-  traefik = merge( var.traefik, {port = 3000})
+  traefik = merge(var.traefik, { port = 3000 })
 }

@@ -21,9 +21,9 @@ module "minio" {
     MINIO_SERVER_URL           = "https://${var.domain}"
     MINIO_BROWSER_REDIRECT_URL = "https://${var.domain}/ui/"
     #MINIO_BROWSER_REDIRECT     = true
-    MINIO_API_ROOT_ACCESS      = "on"
+    MINIO_API_ROOT_ACCESS = "on"
   }
-  ports = var.ports
+  ports                 = var.ports
   mounts                = var.mounts
   networks              = var.networks
   placement_constraints = var.placement_constraints
@@ -48,7 +48,7 @@ module "minio" {
     "traefik.http.middlewares.minio_ui.stripprefix.prefixes" = "/ui"
 
     # Attach the middleware to the UI router
-    "traefik.http.routers.minio_ui.middlewares"              = "minio_ui"
+    "traefik.http.routers.minio_ui.middlewares" = "minio_ui"
   }
 }
 

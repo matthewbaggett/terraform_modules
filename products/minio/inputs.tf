@@ -39,9 +39,9 @@ variable "mounts" {
 
 variable "ports" {
   type = list(object({
-    host = optional(number, null)
+    host      = optional(number, null)
     container = number
-    protocol = optional(string, "tcp")
+    protocol  = optional(string, "tcp")
   }))
   default = []
 }

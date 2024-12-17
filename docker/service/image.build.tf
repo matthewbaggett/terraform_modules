@@ -28,7 +28,7 @@ resource "random_pet" "build" {
 resource "docker_image" "build" {
   count        = local.is_build ? 1 : 0
   name         = var.image
-  force_remove = true
+  force_remove = false
   build {
     # We are reading these variables via the random_pet entity to ensure that the build is triggered when changes happen
     context = random_pet.build[0].keepers.build_context
@@ -40,7 +40,7 @@ resource "docker_image" "build" {
     ignore_changes = [
       build,
     ]
-    replace_triggered_by = [random_pet.build]
+    replace_triggered_by = [random_pet.build, docker_registry_image.tags, ]
   }
 }
 

@@ -8,11 +8,19 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.2"
+      version = "~> 3.0"
     }
     local = {
       source  = "hashicorp/local"
-      version = "~>2.1"
+      version = "~> 2.0"
+    }
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = "~> 1.0"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.0"
     }
   }
 }

@@ -11,7 +11,7 @@ data "aws_subnets" "subnets" {
   }
 }
 resource "aws_db_subnet_group" "sg" {
-  name       = "${var.instance_name}-subnet-group"
+  name       = lower(join("-", [var.instance_name, "subnet-group"]))
   subnet_ids = data.aws_subnets.subnets.ids
   tags = merge(
     try(var.application.application_tag, {}),

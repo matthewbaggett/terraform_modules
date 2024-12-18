@@ -3,11 +3,14 @@ variable "instance_name" {
   description = "The name of the RDS serverless instance"
   default     = "serverless-multitennant"
 }
-variable "tennants" {
+locals {
+  sanitised_name = lower(replace(var.instance_name, "[^a-zA-Z0-9]", "-"))
+}
+variable "tenants" {
   type = map(object({
     username = string
-    password = string
     database = string
+    active   = optional(bool, true)
   }))
   default = null
 }
@@ -74,3 +77,17 @@ variable "skip_final_snapshot" {
   default     = false
 }
 
+variable "enable_performance_insights" {
+  type    = bool
+  default = false
+}
+
+variable "bastion" {
+  description = "The ssh bastion to use for creating the database"
+  type = object({
+    host        = string
+    user        = optional(string)
+    password    = optional(string)
+    private_key = optional(string)
+  })
+}

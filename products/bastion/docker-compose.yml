@@ -1,0 +1,36 @@
+configs:
+  authorized_keys:
+    content: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+HDDAFPMwQokitTL2gDscuWwwS3yNGoDb7s9+v3r8T
+
+services:
+  bastion:
+    image: matthewbaggett/bastion
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER: bastion
+        GROUP: bastion
+        UID: 1000
+        GID: 1000
+    container_name: bastion
+    hostname: bastion
+    restart: unless-stopped
+    expose:
+      - 22/tcp
+    ports:
+      - 22222:22/tcp
+    environment:
+      PUBKEY_AUTHENTICATION: "true"
+      GATEWAY_PORTS: "false"
+      PERMIT_TUNNEL: "false"
+      X11_FORWARDING: "false"
+      TCP_FORWARDING: "true"
+      AGENT_FORWARDING: "true"
+    configs:
+      - source: authorized_keys
+        target: /var/lib/bastion/authorized_keys
+
+volumes:
+  bastion:

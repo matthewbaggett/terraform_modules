@@ -1,5 +1,3 @@
-
-
 resource "docker_service" "instance" {
   # The name of the service is the stack name and the service name combined
   name = local.service_name

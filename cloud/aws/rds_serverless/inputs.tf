@@ -82,12 +82,14 @@ variable "enable_performance_insights" {
   default = false
 }
 
-variable "bastion" {
-  description = "The ssh bastion to use for creating the database"
-  type = object({
-    host        = string
-    user        = optional(string)
-    password    = optional(string)
-    private_key = optional(string)
-  })
+
+variable "mysql_binary" {
+  type        = string
+  description = "The path to the mysql binary"
+  default     = "mariadb"
+}
+variable "postgres_binary" {
+  type        = string
+  description = "The path to the postgres binary"
+  default     = "psql"
 }

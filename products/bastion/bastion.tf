@@ -12,7 +12,7 @@ module "bastion" {
   environment_variables = {
     AUTHORIZED_KEYS       = "/usr/etc/ssh/authorized_keys"
     PUBKEY_AUTHENTICATION = true,
-    GATEWAY_PORTS         = false,
+    GATEWAY_PORTS         = true,
     PERMIT_TUNNEL         = true,
     X11_FORWARDING        = false,
     TCP_FORWARDING        = true,

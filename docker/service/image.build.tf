@@ -26,8 +26,9 @@ resource "random_pet" "build" {
 }
 // Do the build
 resource "docker_image" "build" {
-  count        = local.is_build ? 1 : 0
-  name         = var.image
+  count = local.is_build ? 1 : 0
+  name  = var.image
+
   force_remove = false
   build {
     # We are reading these variables via the random_pet entity to ensure that the build is triggered when changes happen
@@ -40,12 +41,13 @@ resource "docker_image" "build" {
     ignore_changes = [
       build,
     ]
-    replace_triggered_by = [random_pet.build, docker_registry_image.tags, ]
+    replace_triggered_by = [random_pet.build, ]
   }
 }
 
 // Push it to the registry
 resource "docker_registry_image" "build" {
+  depends_on    = [docker_image.build]
   count         = local.is_build ? 1 : 0
   name          = docker_image.build[0].name
   keep_remotely = true
@@ -54,11 +56,15 @@ resource "docker_registry_image" "build" {
   }
 }
 resource "docker_registry_image" "tags" {
+  depends_on    = [docker_registry_image.build]
   for_each      = local.is_build ? toset(local.tags) : []
   name          = each.value
   keep_remotely = true
   lifecycle {
     replace_triggered_by = [random_pet.build]
+    ignore_changes = [
+      name,
+    ]
   }
 }
 

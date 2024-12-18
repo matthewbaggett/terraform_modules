@@ -22,5 +22,9 @@ terraform {
       source  = "hashicorp/null"
       version = "~> 3.0"
     }
+    ssh = {
+      source  = "matthewbaggett/ssh"
+      version = "~> 0.1"
+    }
   }
 }

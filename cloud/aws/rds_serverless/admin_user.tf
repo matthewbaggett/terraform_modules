@@ -8,5 +8,4 @@ resource "random_pet" "admin_user" {
 }
 locals {
   admin_username = coalesce(var.admin_username, random_pet.admin_user[0].id)
-  admin_token    = ""
 }

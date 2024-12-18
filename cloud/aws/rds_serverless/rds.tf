@@ -42,6 +42,7 @@ resource "aws_rds_cluster" "cluster" {
   kms_key_id                          = aws_kms_key.db_key.arn
   apply_immediately                   = true
   db_subnet_group_name                = aws_db_subnet_group.sg.name
+  vpc_security_group_ids              = [aws_security_group.rds.id]
 
   serverlessv2_scaling_configuration {
     max_capacity = var.scaling.max_capacity
@@ -58,6 +59,17 @@ resource "aws_rds_cluster" "cluster" {
       Name = var.instance_name
     }
   )
+}
+
+data "aws_secretsmanager_secret" "admin" {
+  arn = join("", aws_rds_cluster.cluster.master_user_secret.*.secret_arn)
+}
+data "aws_secretsmanager_secret_version" "admin" {
+  secret_id     = data.aws_secretsmanager_secret.admin.id
+  version_stage = "AWSCURRENT"
+}
+locals {
+  admin = nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.admin.secret_string))
 }
 
 resource "aws_rds_cluster_instance" "instance" {
@@ -97,23 +109,34 @@ resource "aws_rds_cluster_endpoint" "endpoint" {
   )
 }
 
-resource "null_resource" "database_create" {
+locals {
+  db_tunnel_remote = {
+    host = aws_rds_cluster_endpoint.endpoint["write"].endpoint
+    port = var.engine == "aurora-postgres" ? 5432 : (var.engine == "aurora-mysql" ? 3306 : null)
+  }
+}
+data "ssh_tunnel" "db" {
+  connection_name = "db-${var.engine}"
+  remote          = local.db_tunnel_remote
+}
+resource "null_resource" "db" {
   for_each   = var.tenants
   depends_on = [aws_rds_cluster_instance.instance]
+  provisioner "local-exec" {
+    command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${local.admin.username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
+  }
+  provisioner "local-exec" {
+    command = (var.engine == "aurora-mysql"
+      ? "echo 'CREATE DATABASE ${each.value.database}' | ${var.mysql_binary}    -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${local.admin.username}    ${local.admin.username}"
+      : "echo 'CREATE DATABASE ${each.value.database}' | ${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${local.admin.username} -d ${local.admin.username}"
+    )
+    environment = {
+      PGPASSWORD = var.engine == "aurora-postgres" ? local.admin.password : null,
+      MYSQL_PWD  = var.engine == "aurora-mysql" ? local.admin.password : null,
+    }
+  }
   triggers = {
     cluster_id = aws_rds_cluster.cluster.id
-  }
-  connection {
-    type        = "ssh"
-    host        = var.bastion.host
-    user        = var.bastion.user
-    password    = var.bastion.password
-    private_key = var.bastion.private_key
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "PGPASSWORD=${local.admin_token} psql -h ${aws_rds_cluster_endpoint.endpoint["write"].endpoint} -U ${local.admin_username} -d ${local.admin_username} -c \"CREATE DATABASE ${each.value.database}\""
-    ]
   }
 }
 output "endpoints" {

@@ -15,15 +15,6 @@ resource "aws_kms_key" "db_key" {
     }
   )
 }
-resource "aws_kms_key" "master_key" {
-  description = "RDS ${var.instance_name} Master Account Key"
-  tags = merge(
-    try(var.application.application_tag, {}),
-    {
-      TerraformSecretType = "RDSMasterAccountKey"
-    }
-  )
-}
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier                  = local.sanitised_name
   engine_mode                         = "provisioned"
@@ -31,8 +22,7 @@ resource "aws_rds_cluster" "cluster" {
   engine_version                      = data.aws_rds_engine_version.latest.version
   database_name                       = local.admin_username
   master_username                     = local.admin_username
-  manage_master_user_password         = true
-  master_user_secret_kms_key_id       = aws_kms_key.master_key.arn
+  master_password                     = local.admin_password
   storage_encrypted                   = true
   enable_local_write_forwarding       = true
   backup_retention_period             = var.backup_retention_period_days
@@ -59,17 +49,6 @@ resource "aws_rds_cluster" "cluster" {
       Name = var.instance_name
     }
   )
-}
-
-data "aws_secretsmanager_secret" "admin" {
-  arn = join("", aws_rds_cluster.cluster.master_user_secret.*.secret_arn)
-}
-data "aws_secretsmanager_secret_version" "admin" {
-  secret_id     = data.aws_secretsmanager_secret.admin.id
-  version_stage = "AWSCURRENT"
-}
-locals {
-  admin = nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.admin.secret_string))
 }
 
 resource "aws_rds_cluster_instance" "instance" {

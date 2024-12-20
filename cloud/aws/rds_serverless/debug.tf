@@ -13,8 +13,8 @@ resource "local_file" "debug" {
         read  = aws_rds_cluster_endpoint.endpoint["read"].endpoint
       }
       admin = {
-        username = local.admin.username
-        password = local.admin.password
+        username = local.admin_username
+        password = local.admin_password
       }
     }
     tenants = {

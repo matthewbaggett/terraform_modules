@@ -13,6 +13,16 @@ variable "username" {
   type        = string
   description = "The username for the tenant"
 }
+variable "password" {
+  type        = string
+  description = "The password for the tenant"
+  default     = null
+}
+resource "random_password" "password" {
+  count   = var.password == null ? 1 : 0
+  special = false
+  length  = 32
+}
 variable "database" {
   type        = string
   description = "The database for the tenant"
@@ -20,6 +30,7 @@ variable "database" {
 locals {
   username = lower(var.username)
   database = lower(var.database)
+  password = try(random_password.password[0].result, var.password)
 }
 variable "app_name" {
   type        = string

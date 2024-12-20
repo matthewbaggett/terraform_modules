@@ -4,8 +4,8 @@ locals {
     host = data.aws_rds_cluster.cluster.endpoint
     port = local.is_mysql ? 3306 : 5432
   }
-  mysql_command    = "${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_username}"
-  postgres_command = "${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${var.admin_username} -d ${var.admin_username}"
+  mysql_command    = try("${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_username}", "")
+  postgres_command = try("${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${var.admin_username} -d ${var.admin_username}", "")
   database_environment_variables = {
     PGPASSWORD = !local.is_mysql ? var.admin_password : null,
     MYSQL_PWD  = local.is_mysql ? var.admin_password : null,
@@ -40,32 +40,39 @@ resource "terraform_data" "db" {
     )
     environment = local.database_environment_variables
   }
+  #provisioner "local-exec" {
+  #  command = (local.is_mysql
+  #    ? "echo \"CREATE USER IF NOT EXISTS '${var.username}' IDENTIFIED WITH AWSAuthenticationPlugin AS 'RDS' | ${local.mysql_command}"
+  #    : "echo \"CREATE USER ${var.username}; GRANT rds_iam TO ${var.username}\" | ${local.postgres_command}"
+  #  )
+  #  environment = local.database_environment_variables
+  #}
   provisioner "local-exec" {
     command = (local.is_mysql
-      ? "echo \"CREATE USER IF NOT EXISTS '${var.username}' IDENTIFIED WITH AWSAuthenticationPlugin AS 'RDS' | ${local.mysql_command}"
-      : "echo \"CREATE USER ${var.username}; GRANT rds_iam TO ${var.username}\" | ${local.postgres_command}"
+      ? "echo \"CREATE USER IF NOT EXISTS '${local.username}' IDENTIFIED BY '${local.password}'\" | ${local.mysql_command}"
+      : "echo \"CREATE USER ${local.username} WITH PASSWORD '${local.password}; \" | ${local.postgres_command}"
     )
     environment = local.database_environment_variables
   }
   provisioner "local-exec" {
     command = (local.is_mysql
-      ? "GRANT ALL PRIVILEGES ON ${var.database}.* TO '${var.username}'@'%'\""
-      : ""
+      ? "echo \"GRANT ALL PRIVILEGES ON ${local.database}.* TO '${local.username}'@'%'\" | ${local.mysql_command}"
+      : "echo \"ALTER DATABASE ${local.database} OWNER TO ${local.username}\" | ${local.postgres_command}"
     )
     environment = local.database_environment_variables
   }
   #provisioner "local-exec" {
   #  when = destroy
   #  command = (local.is_mysql
-  #    ? "DROP USER '${var.username}'@'%';"
-  #    : "DROP USER ${var.username};"
+  #    ? "DROP USER '${local.username}'@'%';"
+  #    : "DROP USER ${local.username};"
   #  )
   #}
   #provisioner "local-exec" {
   #  when = destroy
   #  command = (local.is_mysql
-  #    ? "echo 'DROP DATABASE ${var.database}' | ${local.mysql_command}"
-  #    : "echo 'DROP DATABASE ${var.database}' | ${local.postgres_command}"
+  #    ? "echo 'DROP DATABASE ${local.database}' | ${local.mysql_command}"
+  #    : "echo 'DROP DATABASE ${local.database}' | ${local.postgres_command}"
   #  )
   #}
 }

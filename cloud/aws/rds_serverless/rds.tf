@@ -109,36 +109,6 @@ resource "aws_rds_cluster_endpoint" "endpoint" {
   )
 }
 
-locals {
-  db_tunnel_remote = {
-    host = aws_rds_cluster_endpoint.endpoint["write"].endpoint
-    port = var.engine == "aurora-postgres" ? 5432 : (var.engine == "aurora-mysql" ? 3306 : null)
-  }
-}
-data "ssh_tunnel" "db" {
-  connection_name = "db-${var.engine}"
-  remote          = local.db_tunnel_remote
-}
-resource "null_resource" "db" {
-  for_each   = var.tenants
-  depends_on = [aws_rds_cluster_instance.instance]
-  provisioner "local-exec" {
-    command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${local.admin.username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
-  }
-  provisioner "local-exec" {
-    command = (var.engine == "aurora-mysql"
-      ? "echo 'CREATE DATABASE ${each.value.database}' | ${var.mysql_binary}    -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${local.admin.username}    ${local.admin.username}"
-      : "echo 'CREATE DATABASE ${each.value.database}' | ${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${local.admin.username} -d ${local.admin.username}"
-    )
-    environment = {
-      PGPASSWORD = var.engine == "aurora-postgres" ? local.admin.password : null,
-      MYSQL_PWD  = var.engine == "aurora-mysql" ? local.admin.password : null,
-    }
-  }
-  triggers = {
-    cluster_id = aws_rds_cluster.cluster.id
-  }
-}
 output "endpoints" {
   value = {
     for key, endpoint in aws_rds_cluster_endpoint.endpoint : key => endpoint.endpoint

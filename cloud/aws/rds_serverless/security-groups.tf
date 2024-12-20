@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "sgr" {
   security_group_id        = aws_security_group.rds.id
   type                     = "ingress"
   protocol                 = "tcp"
-  from_port                = local.db_tunnel_remote.port
-  to_port                  = local.db_tunnel_remote.port
+  from_port                = var.engine == "aurora-postgres" ? 5432 : 3306
+  to_port                  = var.engine == "aurora-postgres" ? 5432 : 3306
   source_security_group_id = var.source_security_group_id
 }

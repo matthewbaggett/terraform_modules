@@ -12,9 +12,9 @@ resource "local_file" "debug" {
         write = aws_rds_cluster_endpoint.endpoint["write"].endpoint,
         read  = aws_rds_cluster_endpoint.endpoint["read"].endpoint
       }
-      tunnel = {
-        remote = local.db_tunnel_remote
-        local  = data.ssh_tunnel.db.local
+      admin = {
+        username = local.admin.username
+        password = local.admin.password
       }
     }
     tenants = {

@@ -65,10 +65,10 @@ resource "docker_service" "instance" {
       # Apply the healthcheck settings
       healthcheck {
         test         = var.healthcheck != null ? var.healthcheck : []
-        interval     = var.healthcheck != null ? "10s" : "0s"
-        timeout      = var.healthcheck != null ? "3s" : "0s"
-        retries      = 0
-        start_period = "0s"
+        interval     = var.healthcheck != null ? var.healthcheck_interval : "0s"
+        timeout      = var.healthcheck != null ? var.healthcheck_timeout : "0s"
+        retries      = var.healthcheck_retries
+        start_period = var.healthcheck_start_period
       }
 
       # Apply the list of Container Labels

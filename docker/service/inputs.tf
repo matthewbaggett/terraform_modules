@@ -67,6 +67,26 @@ variable "healthcheck" {
   default     = null
   description = "Healthcheck command to run, in the docker style."
 }
+variable "healthcheck_interval" {
+  type        = string
+  default     = "10s"
+  description = "The interval to run the healthcheck."
+}
+variable "healthcheck_timeout" {
+  type        = string
+  default     = "3s"
+  description = "The timeout for the healthcheck."
+}
+variable "healthcheck_retries" {
+  type        = number
+  default     = 0
+  description = "The number of retries for the healthcheck."
+}
+variable "healthcheck_start_period" {
+  type        = string
+  default     = "0s"
+  description = "The start period for the healthcheck."
+}
 variable "volumes" {
   type        = map(string)
   default     = {}

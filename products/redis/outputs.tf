@@ -10,3 +10,6 @@ output "ports" {
 output "docker_service" {
   value = module.service.docker_service
 }
+output "endpoint" {
+  value = "redis://${module.service.service_name}:6379"
+}

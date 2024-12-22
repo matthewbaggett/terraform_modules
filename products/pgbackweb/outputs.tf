@@ -5,3 +5,7 @@ output "docker_service" {
 output "postgres" {
   value = module.postgres
 }
+
+output "network" {
+  value = module.network.network
+}

@@ -17,3 +17,6 @@ output "endpoint" {
 output "postgres" {
   value = module.postgres
 }
+output "network" {
+  value = module.network.network
+}

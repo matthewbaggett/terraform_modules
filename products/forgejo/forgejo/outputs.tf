@@ -8,3 +8,6 @@ output "postgres" {
 output "endpoint" {
   value = module.forgejo.endpoint
 }
+output "network" {
+  value = module.forgejo_network.network
+}

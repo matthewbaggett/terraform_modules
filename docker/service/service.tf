@@ -188,5 +188,6 @@ resource "docker_service" "instance" {
   lifecycle {
     # Help prevent "this service already exists" irritations
     create_before_destroy = false
+    replace_triggered_by  = [docker_image.build[0].id]
   }
 }

@@ -41,7 +41,8 @@ resource "docker_image" "build" {
     ignore_changes = [
       build,
     ]
-    replace_triggered_by = [random_pet.build, ]
+    replace_triggered_by  = [random_pet.build, ]
+    create_before_destroy = true
   }
 }
 

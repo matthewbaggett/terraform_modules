@@ -1,7 +1,7 @@
 resource "local_file" "debug" {
-  filename        = "${path.root}/.debug/docker/services/${local.service_name}.json"
+  filename        = "${path.root}/.debug/docker/${var.service_name}/service.json"
   file_permission = "0600"
-  content = jsonencode({
+  content = nonsensitive(jsonencode({
     name  = local.service_name
     stack = var.stack_name
     #image = local.image
@@ -12,5 +12,5 @@ resource "local_file" "debug" {
     traefik               = var.traefik
     placement_constraints = var.placement_constraints
     build_tags            = local.is_build ? local.tags : []
-  })
+  }))
 }

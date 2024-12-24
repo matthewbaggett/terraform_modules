@@ -3,11 +3,16 @@ variable "instance_name" {
   description = "The name of the RDS serverless instance"
   default     = "serverless-multitennant"
 }
-variable "tennants" {
+locals {
+  sanitised_name = lower(replace(var.instance_name, "[^a-zA-Z0-9]", "-"))
+  titled_name    = replace(title(join(" ", split("-", local.sanitised_name))), " ", "")
+  app_name       = try(var.application.name, local.titled_name)
+}
+variable "tenants" {
   type = map(object({
     username = string
-    password = string
     database = string
+    active   = optional(bool, true)
   }))
   default = null
 }
@@ -20,6 +25,11 @@ variable "application" {
     application_tag = map(string)
   })
   default = null
+}
+variable "aws_profile" {
+  type        = string
+  description = "AWS profile to use for generating RDS auth token"
+  default     = null
 }
 
 variable "engine" {
@@ -72,5 +82,10 @@ variable "skip_final_snapshot" {
   type        = bool
   description = "Determines whether a final DB snapshot is created before the DB cluster is deleted."
   default     = false
+}
+
+variable "enable_performance_insights" {
+  type    = bool
+  default = false
 }
 

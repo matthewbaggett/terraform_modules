@@ -45,3 +45,10 @@ variable "cors_domains" {
   description = "A list of domains to allow CORS requests from"
   default     = []
 }
+variable "networks" {
+    type        = list(object({
+        name = string
+        id   = string
+    }))
+    description = "A list of networks to attach the service to"
+}

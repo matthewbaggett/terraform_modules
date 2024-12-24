@@ -44,31 +44,18 @@ locals {
     }
   }
 }
-
-module "docker_registry_config" {
-  source     = "../../docker/config"
-  name       = "docker-registry-config"
-  stack_name = var.stack_name
-  value      = yamlencode(local.registry_config_yaml)
-}
-resource "local_file" "docker_registry_config_yml" {
-  content         = yamlencode(local.registry_config_yaml)
-  filename        = "${path.root}/.debug/docker-registry/config.yml"
-  file_permission = "0600"
-}
-
 module "docker_registry" {
   source       = "../../docker/service"
   stack_name   = var.stack_name
   service_name = "registry"
   image        = "registry:2"
+  restart_policy        = "on-failure"
+  placement_constraints = var.placement_constraints
+  ports                 = [{ container = 5000 }]
+  networks              = concat([module.registry_network, var.traefik.network, ], var.networks)
+  traefik               = merge(var.traefik, { port = 5000, rule = "Host(`${var.domain}`) && PathPrefix(`/v2`)" })
   configs = {
     "/etc/docker/registry/config.yml" = yamlencode(local.registry_config_yaml)
     "/etc/docker/registry/htpasswd"   = local.registry_htpasswd
   }
-  restart_policy        = "on-failure"
-  placement_constraints = var.placement_constraints
-  ports                 = [{ container = 5000 }]
-  networks              = [module.registry_network, var.traefik.network, ]
-  traefik               = merge(var.traefik, { port = 5000, rule = "Host(`${var.domain}`) && PathPrefix(`/v2`)" })
 }

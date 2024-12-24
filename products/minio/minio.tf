@@ -7,9 +7,14 @@ resource "random_password" "minio_admin_password" {
   special = false
 }
 
+module "network" {
+  source = "../../docker/network"
+  stack_name   = var.stack_name
+}
+
 module "minio" {
   source       = "../../docker/service"
-  stack_name   = "minio"
+  stack_name   = var.stack_name
   service_name = "minio"
   image        = "quay.io/minio/minio:latest"
   command      = ["minio", "server", "/data", ]
@@ -25,7 +30,7 @@ module "minio" {
   }
   ports                 = var.ports
   mounts                = var.mounts
-  networks              = var.networks
+  networks              = concat(var.networks, [module.network])
   placement_constraints = var.placement_constraints
   labels = {
     "traefik.enable" = "true"

@@ -9,3 +9,7 @@ output "endpoint" {
     null
   )
 }
+
+output "network" {
+  value = module.network.network
+}

@@ -1,1 +1,1 @@
-../subnets.tf
+../classic/subnets.tf

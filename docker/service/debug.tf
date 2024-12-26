@@ -1,4 +1,3 @@
-
 variable "debug_path" {
   type        = string
   description = "Path to write debug files to"

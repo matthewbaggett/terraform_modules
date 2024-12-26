@@ -2,13 +2,6 @@ variable "vpc_id" {
   type        = string
   description = "VPC ID"
 }
-variable "cluster_id" {
-  type        = string
-  description = "The cluster identifier"
-}
-data "aws_rds_cluster" "cluster" {
-  cluster_identifier = var.cluster_id
-}
 variable "username" {
   type        = string
   description = "The username for the tenant"
@@ -35,14 +28,14 @@ locals {
 variable "engine" {
   type        = string
   description = "The engine type of the RDS cluster or instance"
-  validation {
-    error_message = "Engine must be one of 'aurora-postgres' or 'aurora-mysql'"
-    condition     = var.engine == "aurora-postgres" || var.engine == "aurora-mysql"
-  }
 }
 locals {
-  is_mysql    = var.engine == "aurora-mysql"
-  is_postgres = var.engine == "aurora-postgres"
+  supported_engines = {
+    mysql    = ["mysql", "aurora-mysql", "mariadb", ]
+    postgres = ["postgresql", "aurora-postgres", ]
+  }
+  is_mysql    = contains(local.supported_engines.mysql, var.engine)
+  is_postgres = contains(local.supported_engines.postgres, var.engine)
 }
 variable "mysql_binary" {
   type        = string
@@ -60,4 +53,12 @@ variable "admin_identity" {
     password = string
   })
   description = "The admin identity for the database"
+}
+variable "debug_path" {
+  type        = string
+  description = "Path to write debug files to"
+  default     = null
+}
+locals {
+  debug_path = var.debug_path != null ? var.debug_path : "${path.root}/.debug/aws/rds/serverless/identities/${local.username}.json"
 }

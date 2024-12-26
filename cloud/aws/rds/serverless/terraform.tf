@@ -1,1 +1,1 @@
-../terraform.tf
+../classic/terraform.tf

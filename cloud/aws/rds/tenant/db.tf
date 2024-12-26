@@ -1,6 +1,13 @@
+variable "endpoint" {
+  type = object({
+    host = string
+    port = number
+  })
+  description = "The endpoint of the RDS cluster or instance"
+}
 locals {
   db_tunnel_remote = {
-    host = data.aws_rds_cluster.cluster.endpoint
+    host = var.endpoint.host
     port = local.is_mysql ? 3306 : 5432
   }
   mysql_command    = try("${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_identity.username}", "")
@@ -11,7 +18,7 @@ locals {
   }
 }
 resource "local_file" "debug" {
-  filename = "${path.root}/.debug/aws/rds/serverless/${data.aws_rds_cluster.cluster.cluster_identifier}/${local.username}.json"
+  filename = "${local.debug_path}/${local.username}.json"
   content = jsonencode({
     db_tunnel_remote               = local.db_tunnel_remote,
     mysql_command                  = local.mysql_command,
@@ -25,10 +32,6 @@ data "ssh_tunnel" "db" {
   remote          = local.db_tunnel_remote
 }
 resource "terraform_data" "db" {
-  triggers_replace = {
-    engine     = data.aws_rds_cluster.cluster.engine,
-    cluster_id = data.aws_rds_cluster.cluster.id
-  }
   provisioner "local-exec" {
     command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${var.admin_identity.username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
   }

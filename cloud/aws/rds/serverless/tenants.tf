@@ -1,11 +1,1 @@
-module "tenants" {
-  depends_on     = [aws_rds_cluster.cluster, aws_rds_cluster_instance.instance]
-  for_each       = var.tenants
-  source         = "../tenant"
-  username       = each.value.username
-  database       = each.value.database
-  vpc_id         = data.aws_vpc.current.id
-  cluster_id     = aws_rds_cluster.cluster.id
-  engine         = aws_rds_cluster.cluster.engine
-  admin_identity = module.admin_identity
-}
+../classic/tenants.tf

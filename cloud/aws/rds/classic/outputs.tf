@@ -14,3 +14,6 @@ output "tenants" {
 output "admin" {
   value = module.admin_identity
 }
+output "endpoints" {
+  value = local.endpoints
+}

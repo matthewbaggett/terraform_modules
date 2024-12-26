@@ -26,10 +26,9 @@ variable "application" {
 }
 variable "engine" {
   type        = string
-  description = "The database engine to use. This must be either mysql or postgresql"
-  default     = "mysql"
+  description = "The database engine to use"
   validation {
-    error_message = "Must be either ${join(" or ", local.supported_engines)}."
+    error_message = "Must be one of: ${join(", ", local.supported_engines)}."
     condition     = contains(local.supported_engines, var.engine)
   }
 }
@@ -37,7 +36,7 @@ locals {
   is_mysql    = var.engine == "mysql"
   is_postgres = var.engine == "postgresql"
   is_mariadb  = var.engine == "mariadb"
-
+  port        = local.is_mysql ? 3306 : local.is_postgres ? 5432 : local.is_mariadb ? 3306 : 0
 }
 variable "engine_version" {
   type    = string

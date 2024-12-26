@@ -10,7 +10,3 @@ resource "aws_rds_cluster_endpoint" "endpoint" {
     {}
   )
 }
-
-output "endpoints" {
-  value = aws_rds_cluster_endpoint.endpoint
-}

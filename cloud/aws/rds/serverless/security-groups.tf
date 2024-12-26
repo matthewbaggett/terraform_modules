@@ -1,1 +1,1 @@
-../security-groups.tf
+../classic/security-groups.tf

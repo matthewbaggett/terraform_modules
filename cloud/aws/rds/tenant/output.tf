@@ -11,8 +11,8 @@ output "database" {
 output "connection_string" {
   value = join(" ", [
     "mysql",
-    "-h", data.aws_rds_cluster.cluster.endpoint,
-    "-P", data.aws_rds_cluster.cluster.port,
+    "-h", var.endpoint.host,
+    "-P", var.endpoint.port,
     "-D", local.database,
     "-u", local.username,
     "-p'${local.password}'",

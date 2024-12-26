@@ -1,5 +1,5 @@
 data "aws_rds_certificate" "default" {
-  id                = aws_db_instance.instance.ca_cert_identifier
+  id                = local.ca_cert_identifier
   latest_valid_till = true
 }
 data "http" "cert_data" {

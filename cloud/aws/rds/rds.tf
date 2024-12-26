@@ -1,26 +1,3 @@
-data "aws_rds_engine_version" "latest" {
-  engine  = var.engine
-  version = var.engine_version
-  latest  = true
-}
-resource "aws_kms_key" "db_key" {
-  description = "RDS ${var.instance_name} Encryption Key"
-  tags = merge(
-    try(var.application.application_tag, {}),
-    {
-      TerraformSecretType = "RDSMasterEncryptionKey"
-    }
-  )
-}
-variable "instance_class" {
-  type        = string
-  description = "The instance class to use for the RDS instance"
-  default     = "db.t4g.small"
-}
-module "admin_identity" {
-  source         = "../../../utils/identity"
-  username_words = 2
-}
 variable "allocated_storage_gb" {
   type        = number
   default     = 5
@@ -62,7 +39,4 @@ resource "aws_db_instance" "instance" {
     try(var.application.application_tag, {}),
     {}
   )
-}
-output "endpoints" {
-  value = aws_db_instance.instance.endpoint
 }

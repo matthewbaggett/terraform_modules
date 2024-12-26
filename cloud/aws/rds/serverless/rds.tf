@@ -1,30 +1,8 @@
-data "aws_rds_engine_version" "latest" {
-  for_each = toset([var.engine_version])
-  engine   = var.engine
-  version  = local.engine_version
-  latest   = true
-  filter {
-    name   = "engine-mode"
-    values = ["provisioned"]
-  }
-}
-resource "aws_kms_key" "db_key" {
-  description = "RDS ${var.instance_name} Encryption Key"
-  tags = merge(
-    try(var.application.application_tag, {}),
-    {
-      TerraformSecretType = "RDSMasterEncryptionKey"
-    }
-  )
-}
-module "admin_identity" {
-  source = "../../../../utils/identity"
-}
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier                  = local.sanitised_name
   engine_mode                         = "provisioned"
-  engine                              = data.aws_rds_engine_version.latest[var.engine_version].engine
-  engine_version                      = data.aws_rds_engine_version.latest[var.engine_version].version
+  engine                              = data.aws_rds_engine_version.latest.engine
+  engine_version                      = data.aws_rds_engine_version.latest.version
   database_name                       = module.admin_identity.username
   master_username                     = module.admin_identity.username
   master_password                     = module.admin_identity.password
@@ -83,19 +61,4 @@ resource "aws_rds_cluster_instance" "instance" {
   )
 }
 
-resource "aws_rds_cluster_endpoint" "endpoint" {
-  depends_on                  = [aws_rds_cluster_instance.instance]
-  for_each                    = { "write" = "ANY", "read" = "READER" }
-  cluster_endpoint_identifier = join("-", [local.sanitised_name, each.key, "endpoint"])
-  cluster_identifier          = aws_rds_cluster.cluster.id
-  custom_endpoint_type        = each.value
 
-  tags = merge(
-    try(var.application.application_tag, {}),
-    {}
-  )
-}
-
-output "endpoints" {
-  value = aws_rds_cluster_endpoint.endpoint
-}

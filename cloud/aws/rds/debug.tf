@@ -21,14 +21,11 @@ resource "local_file" "debug" {
       #  write = aws_rds_cluster_endpoint.endpoint["write"].endpoint,
       #  read  = aws_rds_cluster_endpoint.endpoint["read"].endpoint
       #}
-      admin = {
-        username = module.admin_identity.username
-        password = nonsensitive(module.admin_identity.password)
-      }
+      admin = module.admin_identity
     }
     tenants = var.tenants
   }))
-  filename        = "${path.root}/.debug/aws/rds/${var.instance_name}.provided.json"
+  filename        = "${local.debug_path}/${var.instance_name}.provided.json"
   file_permission = "0600"
 }
 resource "local_file" "debug_result" {
@@ -56,6 +53,6 @@ resource "local_file" "debug_result" {
       password = nonsensitive(module.admin_identity.password)
     } }, local.output_tenants)
   }))
-  filename        = "${path.root}/.debug/aws/rds/${var.instance_name}.result.json"
+  filename        = "${local.debug_path}/${var.instance_name}.result.json"
   file_permission = "0600"
 }

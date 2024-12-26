@@ -26,7 +26,7 @@ variable "application" {
 }
 variable "engine" {
   type        = string
-  description = "The database engine to use. This must be either aurora-mysql or aurora-postgresql"
+  description = "The database engine to use. This must be either mysql or postgresql"
   default     = "mysql"
   validation {
     error_message = "Must be either ${join(" or ", local.supported_engines)}."
@@ -34,14 +34,22 @@ variable "engine" {
   }
 }
 locals {
-  supported_engines = ["mysql", "postgresql", "mariadb", ]
-  is_mysql          = var.engine == "mysql"
-  is_postgres       = var.engine == "postgresql"
-  is_mariadb        = var.engine == "mariadb"
+  is_mysql    = var.engine == "mysql"
+  is_postgres = var.engine == "postgresql"
+  is_mariadb  = var.engine == "mariadb"
+
 }
 variable "engine_version" {
   type    = string
   default = null
+  validation {
+    error_message = "If the engine is mysql_aurora, the engine_version must be one of ${join(", ", local.supported_mysql)}."
+    condition     = var.engine_version == null ? true : (local.is_mysql ? contains(local.supported_mysql, var.engine_version) : true)
+  }
+  validation {
+    error_message = "If the engine is aurora-postgresql, the engine_version must be one of ${join(", ", local.supported_postgres)}."
+    condition     = var.engine_version == null ? true : (local.is_postgres ? contains(local.supported_postgres, var.engine_version) : true)
+  }
 }
 variable "backup_window" {
   type        = string

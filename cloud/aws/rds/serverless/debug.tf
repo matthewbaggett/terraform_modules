@@ -2,6 +2,7 @@ resource "local_file" "debug" {
   content = nonsensitive(jsonencode({
     rds = {
       instance_name    = var.instance_name,
+      sanitised_name   = local.sanitised_name
       tennants         = var.tenants,
       application_arn  = try(var.application.arn, null),
       application_name = try(var.application.name, null),
@@ -11,8 +12,8 @@ resource "local_file" "debug" {
           version = var.engine_version
         }
         resolved = {
-          engine  = data.aws_rds_engine_version.latest[var.engine_version].engine,
-          version = data.aws_rds_engine_version.latest[var.engine_version].version,
+          engine  = data.aws_rds_engine_version.latest.engine,
+          version = data.aws_rds_engine_version.latest.version,
           match   = data.aws_rds_engine_version.latest,
         }
       }
@@ -24,7 +25,7 @@ resource "local_file" "debug" {
     }
     tenants = var.tenants
   }))
-  filename        = "${path.root}/.debug/aws/rds/serverless/${var.instance_name}.provided.json"
+  filename        = "${local.debug_path}/${var.instance_name}.provided.json"
   file_permission = "0600"
 }
 resource "local_file" "debug_result" {
@@ -40,9 +41,9 @@ resource "local_file" "debug_result" {
           version = var.engine_version
         }
         resolved = {
-          engine  = data.aws_rds_engine_version.latest[var.engine_version].engine,
-          version = data.aws_rds_engine_version.latest[var.engine_version].version,
-          match   = data.aws_rds_engine_version.latest[var.engine_version],
+          engine  = data.aws_rds_engine_version.latest.engine,
+          version = data.aws_rds_engine_version.latest.version,
+          match   = data.aws_rds_engine_version.latest,
         }
       }
       endpoints = {
@@ -54,8 +55,7 @@ resource "local_file" "debug_result" {
       username = module.admin_identity.username
       password = nonsensitive(module.admin_identity.password)
     } }, local.output_tenants)
-
   }))
-  filename        = "${path.root}/.debug/aws/rds/serverless/${var.instance_name}.result.json"
+  filename        = "${local.debug_path}/${var.instance_name}.result.json"
   file_permission = "0600"
 }

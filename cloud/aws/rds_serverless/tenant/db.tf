@@ -1,5 +1,4 @@
 locals {
-  is_mysql = var.engine == "aurora-mysql"
   db_tunnel_remote = {
     host = data.aws_rds_cluster.cluster.endpoint
     port = local.is_mysql ? 3306 : 5432

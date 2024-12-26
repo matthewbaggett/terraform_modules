@@ -30,7 +30,7 @@ resource "aws_rds_cluster" "cluster" {
   master_username                     = local.admin_username
   master_password                     = local.admin_password
   storage_encrypted                   = true
-  enable_local_write_forwarding       = true
+  enable_local_write_forwarding       = local.supports_local_write_forwarding
   backup_retention_period             = var.backup_retention_period_days
   skip_final_snapshot                 = var.skip_final_snapshot
   preferred_backup_window             = var.backup_window
@@ -41,13 +41,16 @@ resource "aws_rds_cluster" "cluster" {
   vpc_security_group_ids              = [aws_security_group.rds.id]
 
   serverlessv2_scaling_configuration {
-    max_capacity = var.scaling.max_capacity
-    min_capacity = var.scaling.min_capacity
+    max_capacity = local.scaling.max_capacity
+    min_capacity = local.scaling.min_capacity
   }
 
   lifecycle {
     create_before_destroy = false
-    replace_triggered_by  = [data.aws_rds_engine_version.latest]
+    precondition {
+      error_message = "If you're using mysql 5.7, min_capacity must be greater or equal to 1, because it doesn't support auto-pause."
+      condition     = local.is_mysql && var.engine_version == "5.7" ? local.scaling.min_capacity >= 1 : true
+    }
   }
 
   tags = merge(
@@ -56,7 +59,6 @@ resource "aws_rds_cluster" "cluster" {
       Name = var.instance_name
     }
   )
-
 }
 
 data "aws_rds_certificate" "default" {

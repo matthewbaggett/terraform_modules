@@ -59,11 +59,10 @@ variable "postgres_binary" {
   description = "The path to the postgres binary"
   default     = "psql"
 }
-variable "admin_username" {
-  type        = string
-  description = "The admin user for the database"
-}
-variable "admin_password" {
-  type        = string
-  description = "The admin password for the database"
+variable "admin_identity" {
+  type = object({
+    username = string
+    password = string
+  })
+  description = "The admin identity for the database"
 }

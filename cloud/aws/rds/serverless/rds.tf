@@ -17,14 +17,17 @@ resource "aws_kms_key" "db_key" {
     }
   )
 }
+module "admin_identity" {
+  source = "../../../../utils/identity"
+}
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier                  = local.sanitised_name
   engine_mode                         = "provisioned"
   engine                              = data.aws_rds_engine_version.latest[var.engine_version].engine
   engine_version                      = data.aws_rds_engine_version.latest[var.engine_version].version
-  database_name                       = local.admin_username
-  master_username                     = local.admin_username
-  master_password                     = local.admin_password
+  database_name                       = module.admin_identity.username
+  master_username                     = module.admin_identity.username
+  master_password                     = module.admin_identity.password
   storage_encrypted                   = true
   enable_local_write_forwarding       = local.supports_local_write_forwarding
   backup_retention_period             = var.backup_retention_period_days
@@ -92,7 +95,6 @@ resource "aws_rds_cluster_endpoint" "endpoint" {
     {}
   )
 }
-
 
 output "endpoints" {
   value = aws_rds_cluster_endpoint.endpoint

@@ -12,8 +12,5 @@ output "tenants" {
   value = local.output_tenants
 }
 output "admin" {
-  value = {
-    username = local.admin_username
-    password = local.admin_password
-  }
+  value = module.admin_identity
 }

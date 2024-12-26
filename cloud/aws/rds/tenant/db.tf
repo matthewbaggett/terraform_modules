@@ -3,11 +3,11 @@ locals {
     host = data.aws_rds_cluster.cluster.endpoint
     port = local.is_mysql ? 3306 : 5432
   }
-  mysql_command    = try("${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_username}", "")
-  postgres_command = try("${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${var.admin_username} -d ${var.admin_username}", "")
+  mysql_command    = try("${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_identity.username}", "")
+  postgres_command = try("${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${var.admin_identity.username} -d ${var.admin_identity.username}", "")
   database_environment_variables = {
-    PGPASSWORD = !local.is_mysql ? var.admin_password : null,
-    MYSQL_PWD  = local.is_mysql ? var.admin_password : null,
+    PGPASSWORD = !local.is_mysql ? nonsensitive(var.admin_identity.password) : null,
+    MYSQL_PWD  = local.is_mysql ? nonsensitive(var.admin_identity.password) : null,
   }
 }
 resource "local_file" "debug" {
@@ -30,7 +30,7 @@ resource "terraform_data" "db" {
     cluster_id = data.aws_rds_cluster.cluster.id
   }
   provisioner "local-exec" {
-    command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${var.admin_username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
+    command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${var.admin_identity.username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
   }
   provisioner "local-exec" {
     command = (local.is_mysql

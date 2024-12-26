@@ -20,10 +20,7 @@ resource "local_file" "debug" {
       #  write = aws_rds_cluster_endpoint.endpoint["write"].endpoint,
       #  read  = aws_rds_cluster_endpoint.endpoint["read"].endpoint
       #}
-      admin = {
-        username = local.admin_username
-        password = local.admin_password
-      }
+      admin = module.admin_identity
     }
     tenants = var.tenants
   }))
@@ -54,8 +51,8 @@ resource "local_file" "debug_result" {
       }
     }
     tenants = merge({ admin = {
-      username = local.admin_username
-      password = local.admin_password
+      username = module.admin_identity.username
+      password = nonsensitive(module.admin_identity.password)
     } }, local.output_tenants)
 
   }))

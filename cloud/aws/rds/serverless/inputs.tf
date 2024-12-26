@@ -4,7 +4,7 @@ variable "instance_name" {
   default     = "serverless-multitennant"
 }
 locals {
-  sanitised_name = lower(replace(var.instance_name, "[^a-zA-Z0-9]", "-"))
+  sanitised_name = lower(replace(var.instance_name, "[^a-zA-Z0-9_ ]", "-"))
 }
 variable "tenants" {
   type = map(object({
@@ -75,9 +75,9 @@ variable "engine_version" {
 locals {
   engine_version = (
     local.is_mysql
-    ? (var.engine_version != null ? element(local.supported_mysql, length(local.supported_mysql)-1) : false)
+    ? (var.engine_version != null ? element(local.supported_mysql, length(local.supported_mysql) - 1) : false)
     : (local.is_postgres
-      ? (var.engine_version != null ? element(local.supported_postgres, length(local.supported_postgres)-1) : false)
+      ? (var.engine_version != null ? element(local.supported_postgres, length(local.supported_postgres) - 1) : false)
       : false
     )
   )

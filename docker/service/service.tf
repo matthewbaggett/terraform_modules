@@ -2,6 +2,8 @@ resource "docker_service" "instance" {
   # The name of the service is the stack name and the service name combined
   name = local.service_name
 
+  #depends_on = [terraform_data.conditional_build_hack["build"]]
+
   # Define the task spec
   task_spec {
     container_spec {
@@ -188,6 +190,6 @@ resource "docker_service" "instance" {
   lifecycle {
     # Help prevent "this service already exists" irritations
     create_before_destroy = false
-    replace_triggered_by  = [docker_image.build[0].id]
+    #replace_triggered_by  = [terraform_data.conditional_build_hack["build"]]
   }
 }

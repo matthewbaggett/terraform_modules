@@ -1,6 +1,6 @@
 data "docker_registry_image" "image" {
-  count = local.is_build == false ? 1 : 0
-  name  = var.image
+  for_each = !local.is_build ? { "default" = {} } : {}
+  name     = var.image
 }
 locals {
   // Name can be 64 bytes long, including a null byte seemingly, limiting the length to 63.
@@ -11,20 +11,20 @@ locals {
   # Calculate the docker image to use
   image = (
     local.is_build
-    ? docker_image.build[0].name
+    ? docker_image.build["build"].name
     : (
       local.is_mirror
-      ? docker_registry_image.mirror[0].name
-      : data.docker_registry_image.image[0].name
+      ? docker_registry_image.mirror["mirror"].name
+      : data.docker_registry_image.image["default"].name
     )
   )
   image_fully_qualified = (
     local.is_build
-    ? docker_image.build[0].name
+    ? "${docker_registry_image.build["build"].name}@${docker_registry_image.build["build"].sha256_digest}"
     : (
       local.is_mirror
-      ? "${docker_registry_image.mirror[0].name}@${docker_registry_image.mirror[0].sha256_digest}"
-      : "${data.docker_registry_image.image[0].name}@${data.docker_registry_image.image[0].sha256_digest}"
+      ? "${docker_registry_image.mirror["mirror"].name}@${docker_registry_image.mirror["mirror"].sha256_digest}"
+      : "${data.docker_registry_image.image["default"].name}@${data.docker_registry_image.image["default"].sha256_digest}"
     )
   )
 }

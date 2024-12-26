@@ -1,6 +1,5 @@
 locals {
-  is_build = var.build != null
-  // strip off the tag
+  is_build   = var.build != null
   image_name = split(":", var.image)[0]
 
   source_files             = local.is_build ? fileset(var.build.context, "**") : []
@@ -14,7 +13,7 @@ locals {
   ]
 }
 resource "random_pet" "build" {
-  count = local.is_build ? 1 : 0
+  for_each = local.is_build ? { "build" = {} } : {}
   keepers = {
     image_name    = local.image_name
     build_context = var.build.context
@@ -22,26 +21,31 @@ resource "random_pet" "build" {
     target        = var.build.target
     tags          = jsonencode(local.tags)
     hash          = local.image_context_hash
+    args          = jsonencode(var.build.args)
+    dockerfile    = var.build.dockerfile
   }
+}
+# MB: This is a hack to allow replace_triggered_by on a resource that may or may not exist.
+resource "terraform_data" "conditional_build" {
+  input = try(jsonencode(random_pet.build["build"].keepers), null)
 }
 // Do the build
 resource "docker_image" "build" {
-  count = local.is_build ? 1 : 0
-  name  = var.image
-
+  for_each     = local.is_build ? { "build" = {} } : {}
+  name         = var.image
   force_remove = false
   build {
     # We are reading these variables via the random_pet entity to ensure that the build is triggered when changes happen
-    context = random_pet.build[0].keepers.build_context
-    tag     = jsondecode(random_pet.build[0].keepers.tags)
-    target  = random_pet.build[0].keepers.target
-    remove  = false
+    context         = random_pet.build["build"].keepers.build_context
+    tag             = jsondecode(random_pet.build["build"].keepers.tags)
+    target          = random_pet.build["build"].keepers.target
+    build_args      = jsondecode(random_pet.build["build"].keepers.args)
+    dockerfile      = random_pet.build["build"].keepers.dockerfile
+    remove          = false
+    suppress_output = false
   }
   lifecycle {
-    ignore_changes = [
-      build,
-    ]
-    replace_triggered_by  = [random_pet.build, ]
+    replace_triggered_by  = [terraform_data.conditional_build, ]
     create_before_destroy = true
   }
 }
@@ -49,11 +53,11 @@ resource "docker_image" "build" {
 // Push it to the registry
 resource "docker_registry_image" "build" {
   depends_on    = [docker_image.build]
-  count         = local.is_build ? 1 : 0
-  name          = docker_image.build[0].name
+  for_each      = local.is_build ? { "build" = {} } : {}
+  name          = docker_image.build["build"].name
   keep_remotely = true
   lifecycle {
-    replace_triggered_by = [random_pet.build]
+    replace_triggered_by = [terraform_data.conditional_build]
   }
 }
 resource "docker_registry_image" "tags" {
@@ -62,7 +66,7 @@ resource "docker_registry_image" "tags" {
   name          = each.value
   keep_remotely = true
   lifecycle {
-    replace_triggered_by = [random_pet.build]
+    replace_triggered_by = [terraform_data.conditional_build]
     ignore_changes = [
       name,
     ]

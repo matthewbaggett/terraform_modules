@@ -6,8 +6,8 @@ resource "local_file" "debug" {
       application_arn       = try(var.application.arn, null),
       application_name      = try(var.application.name, null),
       engine_user           = var.engine,
-      engine_actual         = data.aws_rds_engine_version.latest.engine
-      engine_version_actual = data.aws_rds_engine_version.latest.version,
+      engine_actual         = data.aws_rds_engine_version.latest[var.engine_version].engine
+      engine_version_actual = data.aws_rds_engine_version.latest[var.engine_version].version,
       endpoints = {
         write = aws_rds_cluster_endpoint.endpoint["write"].endpoint,
         read  = aws_rds_cluster_endpoint.endpoint["read"].endpoint

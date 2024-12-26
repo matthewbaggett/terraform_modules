@@ -1,7 +1,8 @@
 data "aws_rds_engine_version" "latest" {
-  engine  = var.engine
-  version = var.engine_version
-  latest  = true
+  for_each = toset([var.engine_version])
+  engine   = var.engine
+  version  = var.engine_version
+  latest   = true
   filter {
     name   = "engine-version"
     values = [var.engine_version]
@@ -23,8 +24,8 @@ resource "aws_kms_key" "db_key" {
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier                  = local.sanitised_name
   engine_mode                         = "provisioned"
-  engine                              = data.aws_rds_engine_version.latest.engine
-  engine_version                      = data.aws_rds_engine_version.latest.version
+  engine                              = data.aws_rds_engine_version.latest[var.engine_version].engine
+  engine_version                      = data.aws_rds_engine_version.latest[var.engine_version].version
   database_name                       = local.admin_username
   master_username                     = local.admin_username
   master_password                     = local.admin_password
@@ -46,6 +47,7 @@ resource "aws_rds_cluster" "cluster" {
 
   lifecycle {
     create_before_destroy = false
+    replace_triggered_by  = [data.aws_rds_engine_version.latest]
   }
 
   tags = merge(
@@ -54,6 +56,7 @@ resource "aws_rds_cluster" "cluster" {
       Name = var.instance_name
     }
   )
+
 }
 
 data "aws_rds_certificate" "default" {

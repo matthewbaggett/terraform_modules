@@ -56,12 +56,6 @@ resource "aws_rds_cluster" "cluster" {
     }
   )
 }
-
-data "aws_rds_certificate" "default" {
-  id                = aws_rds_cluster_instance.instance.ca_cert_identifier
-  latest_valid_till = true
-}
-
 resource "aws_rds_cluster_instance" "instance" {
   cluster_identifier   = aws_rds_cluster.cluster.id
   identifier_prefix    = "${local.sanitised_name}-"
@@ -99,16 +93,7 @@ resource "aws_rds_cluster_endpoint" "endpoint" {
   )
 }
 
-data "http" "cert_data" {
-  url = "https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem"
-}
 
 output "endpoints" {
   value = aws_rds_cluster_endpoint.endpoint
-}
-output "cert" {
-  value = data.aws_rds_certificate.default
-}
-output "cert_data" {
-  value = data.http.cert_data.response_body
 }

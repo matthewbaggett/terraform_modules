@@ -7,7 +7,7 @@ variable "traefik" {
   default = null
   type = object({
     domain = string
-    port   = optional(number,80)
+    port   = optional(number, 80)
     ssl    = optional(bool, false)
     rule   = optional(string)
   })

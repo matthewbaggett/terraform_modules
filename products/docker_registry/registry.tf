@@ -45,10 +45,10 @@ locals {
   }
 }
 module "docker_registry" {
-  source       = "../../docker/service"
-  stack_name   = var.stack_name
-  service_name = "registry"
-  image        = "registry:2"
+  source                = "../../docker/service"
+  stack_name            = var.stack_name
+  service_name          = "registry"
+  image                 = "registry:2"
   restart_policy        = "on-failure"
   placement_constraints = var.placement_constraints
   ports                 = [{ container = 5000 }]

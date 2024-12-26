@@ -8,8 +8,8 @@ resource "random_password" "minio_admin_password" {
 }
 
 module "network" {
-  source = "../../docker/network"
-  stack_name   = var.stack_name
+  source     = "../../docker/network"
+  stack_name = var.stack_name
 }
 
 module "minio" {

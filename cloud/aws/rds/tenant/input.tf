@@ -32,14 +32,9 @@ locals {
   database = lower(var.database)
   password = try(random_password.password[0].result, var.password)
 }
-variable "tags" {
-  type        = map(string)
-  description = "Tags to apply to resources"
-  default     = {}
-}
 variable "engine" {
   type        = string
-  description = "The engine type of the RDS cluster"
+  description = "The engine type of the RDS cluster or instance"
   validation {
     error_message = "Engine must be one of 'aurora-postgres' or 'aurora-mysql'"
     condition     = var.engine == "aurora-postgres" || var.engine == "aurora-mysql"

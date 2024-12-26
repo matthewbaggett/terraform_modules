@@ -5,12 +5,12 @@ locals {
   endpoints = {
     write = {
       # Host should be the same as the cluster endpoint, sans the port
-      host = split(":",aws_rds_cluster_endpoint.endpoint["write"].endpoint)[0]
-      port = split(":",aws_rds_cluster_endpoint.endpoint["write"].endpoint)[1]
+      host = split(":", aws_rds_cluster_endpoint.endpoint["write"].endpoint)[0]
+      port = split(":", aws_rds_cluster_endpoint.endpoint["write"].endpoint)[1]
     }
     read = {
-      host = split(":",aws_rds_cluster_endpoint.endpoint["read"].endpoint)[0]
-        port = split(":",aws_rds_cluster_endpoint.endpoint["read"].endpoint)[1]
+      host = split(":", aws_rds_cluster_endpoint.endpoint["read"].endpoint)[0]
+      port = split(":", aws_rds_cluster_endpoint.endpoint["read"].endpoint)[1]
     }
   }
 }

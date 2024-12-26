@@ -1,7 +1,7 @@
 module "tenants" {
   depends_on     = [aws_rds_cluster.cluster, aws_rds_cluster_instance.instance]
   for_each       = var.tenants
-  source         = "./tenant"
+  source         = "../tenant"
   username       = each.value.username
   database       = each.value.database
   vpc_id         = data.aws_vpc.current.id

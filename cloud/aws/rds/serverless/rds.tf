@@ -1,12 +1,8 @@
 data "aws_rds_engine_version" "latest" {
   for_each = toset([var.engine_version])
   engine   = var.engine
-  version  = var.engine_version
+  version  = local.engine_version
   latest   = true
-  filter {
-    name   = "engine-version"
-    values = [var.engine_version]
-  }
   filter {
     name   = "engine-mode"
     values = ["provisioned"]

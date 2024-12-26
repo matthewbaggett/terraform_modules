@@ -73,7 +73,14 @@ variable "engine_version" {
   }
 }
 locals {
-  engine_version = var.engine_version != null ? var.engine_version : "8.0"
+  engine_version = (
+    local.is_mysql
+    ? (var.engine_version != null ? element(local.supported_mysql, length(local.supported_mysql)-1) : false)
+    : (local.is_postgres
+      ? (var.engine_version != null ? element(local.supported_postgres, length(local.supported_postgres)-1) : false)
+      : false
+    )
+  )
 }
 
 variable "scaling" {

@@ -41,6 +41,10 @@ variable "engine" {
     condition     = contains(["aurora-mysql", "aurora-postgresql"], var.engine)
   }
 }
+variable "engine_version" {
+  type    = string
+  default = "8.0"
+}
 
 variable "scaling" {
   type = object({

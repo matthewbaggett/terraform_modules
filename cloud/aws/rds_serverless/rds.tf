@@ -1,6 +1,11 @@
 data "aws_rds_engine_version" "latest" {
-  engine = var.engine
-  latest = true
+  engine  = var.engine
+  version = var.engine_version
+  latest  = true
+  filter {
+    name   = "engine-version"
+    values = [var.engine_version]
+  }
   filter {
     name   = "engine-mode"
     values = ["provisioned"]

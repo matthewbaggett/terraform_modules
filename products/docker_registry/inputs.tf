@@ -46,9 +46,10 @@ variable "cors_domains" {
   default     = []
 }
 variable "networks" {
-    type        = list(object({
-        name = string
-        id   = string
-    }))
-    description = "A list of networks to attach the service to"
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  description = "A list of networks to attach the service to"
+  default     = []
 }

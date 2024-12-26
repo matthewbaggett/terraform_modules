@@ -46,9 +46,9 @@ locals {
     "15.2", "15.3", "15.4", "15.5", "15.6", "15.7", "15.8", "15.10",
     "16.1", "16.2", "16.3", "16.4", "16.6",
   ]
-  engines_supporting_local_write_forwarding ={
-    "aurora-mysql"        = ["8.0"]
-    "aurora-postgresql"   = [
+  engines_supporting_local_write_forwarding = {
+    "aurora-mysql" = ["8.0"]
+    "aurora-postgresql" = [
       "14.13", "14.15",
       "15.8", "15.10",
       "16.4", "16.6",
@@ -56,7 +56,7 @@ locals {
   }
   # MB: This is a hack until I get my patch into terraform's aws provider: https://github.com/hashicorp/terraform-provider-aws/pull/40700
   supports_local_write_forwarding = (
-    local.is_mysql && contains(local.engines_supporting_local_write_forwarding.aurora-mysql, local.engine_version)||
+    local.is_mysql && contains(local.engines_supporting_local_write_forwarding.aurora-mysql, local.engine_version) ||
     local.is_postgres && contains(local.engines_supporting_local_write_forwarding.aurora-postgresql, local.engine_version)
   )
 }

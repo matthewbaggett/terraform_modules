@@ -1,7 +1,3 @@
-data "docker_registry_image" "image" {
-  for_each = !local.is_build ? { "default" = {} } : {}
-  name     = var.image
-}
 locals {
   // Name can be 64 bytes long, including a null byte seemingly, limiting the length to 63.
   service_name = join("-", [
@@ -27,4 +23,7 @@ locals {
       : "${data.docker_registry_image.image["default"].name}@${data.docker_registry_image.image["default"].sha256_digest}"
     )
   )
+
+  networks = [for network in concat(var.networks, data.docker_network.traefik) : network if network != null]
+
 }

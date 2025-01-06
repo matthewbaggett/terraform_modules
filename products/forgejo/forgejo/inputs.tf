@@ -64,10 +64,15 @@ variable "database_storage_path" {
 variable "traefik" {
   default = null
   type = object({
-    domain = string
-    port   = optional(number)
-    ssl    = optional(bool, false)
-    rule   = optional(string)
+    domain  = string
+    port    = optional(number)
+    non-ssl = optional(bool, true)
+    ssl     = optional(bool, false)
+    rule    = optional(string)
+    network = optional(object({
+      name = string
+      id   = string
+    }))
   })
   description = "Whether to enable traefik for the service."
 }

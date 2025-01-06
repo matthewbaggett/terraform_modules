@@ -1,6 +1,9 @@
 resource "docker_volume" "volume" {
   name = local.volume_name
 
+  driver      = local.driver
+  driver_opts = local.driver_opts
+
   # Attach labels
   dynamic "labels" {
     for_each = local.labels

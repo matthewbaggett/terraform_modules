@@ -53,6 +53,14 @@ resource "docker_service" "instance" {
           file_name   = configs.key
         }
       }
+      dynamic "configs" {
+        for_each = var.remote_configs
+        content {
+          config_id   = configs.value.id
+          config_name = configs.value.name
+          file_name   = configs.key
+        }
+      }
 
       # Allow overriding DNS server in use
       dynamic "dns_config" {
@@ -74,7 +82,7 @@ resource "docker_service" "instance" {
       # Apply the list of Container Labels
       dynamic "labels" {
         # Filter out null values
-        for_each = { for key, value in local.labels : key => value if value != null }
+        for_each = { for key, value in merge(local.labels, local.traefik_labels, var.labels) : key => value if value != null }
         content {
           label = labels.key
           value = labels.value
@@ -84,7 +92,7 @@ resource "docker_service" "instance" {
 
     # Apply the networks
     dynamic "networks_advanced" {
-      for_each = var.networks
+      for_each = local.networks
       content {
         name = networks_advanced.value.id
       }
@@ -180,7 +188,7 @@ resource "docker_service" "instance" {
 
   # Service Labels
   dynamic "labels" {
-    for_each = { for key, value in local.labels : key => value if value != null }
+    for_each = { for key, value in merge(local.labels, local.traefik_labels, var.labels) : key => value if value != null }
     content {
       label = labels.key
       value = labels.value

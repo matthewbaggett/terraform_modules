@@ -6,10 +6,17 @@ locals {
     formatdate("hhmmss", plantimestamp()),
   ]), 0, 63)
 
+  is_bind = var.bind_path != null
+  driver  = local.is_bind ? "local" : null
+  driver_opts = local.is_bind ? {
+    "type"   = "none"
+    "device" = var.bind_path
+    "o"      = "bind"
+  } : null
+
   labels = merge(var.labels, {
     "com.docker.stack.namespace" = var.stack_name
     "ooo.grey.volume.stack"      = var.stack_name
     "ooo.grey.volume.name"       = var.volume_name
-    #"ooo.grey.volume.created"    = plantimestamp()
   })
 }

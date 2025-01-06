@@ -72,14 +72,25 @@ variable "ports" {
 variable "traefik" {
   default = null
   type = object({
-    domain = string
-    port   = optional(number, 5000)
+    domain  = string
+    port    = optional(number, 5000)
+    non-ssl = optional(bool, true)
+    ssl     = optional(bool, false)
+    rule    = optional(string)
+    network = optional(object({
+      name = string
+      id   = string
+    }))
   })
   description = "Whether to enable traefik for the service."
 }
-
 variable "labels" {
   type        = map(string)
   default     = {}
   description = "A map of labels to apply to the service"
+}
+variable "placement_constraints" {
+  type        = list(string)
+  default     = []
+  description = "Docker Swarm placement constraints"
 }

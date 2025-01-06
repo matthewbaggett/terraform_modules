@@ -11,3 +11,8 @@ variable "labels" {
   default     = {}
   description = "A map of labels to apply to the service"
 }
+variable "bind_path" {
+  type        = string
+  default     = null
+  description = "The path to bind the volume to, optionally."
+}

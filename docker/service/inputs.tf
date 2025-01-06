@@ -60,7 +60,7 @@ variable "networks" {
     id   = string
   }))
   default     = []
-  description = "A list of network names to attach the service to."
+  description = "A list of network objects to attach the service to."
 }
 variable "healthcheck" {
   type        = list(string)
@@ -109,6 +109,14 @@ variable "configs" {
   type        = map(string)
   default     = {}
   description = "A map of config files to create. Key being the path to the file, and the value being the content. The config will be created using the truncated file name and a timestamp."
+}
+variable "remote_configs" {
+  type = map(object({
+    id   = string
+    name = string
+  }))
+  default     = {}
+  description = "A remote config is a config created explicitly and not implicitly by this Service. This is a map of remote configs to mount into the container. The key is the source, and the value is the target."
 }
 variable "ports" {
   type = list(object({
@@ -195,16 +203,6 @@ variable "converge_timeout" {
   default     = "2m"
   type        = string
   description = "The timeout for the service to converge."
-}
-variable "traefik" {
-  default = null
-  type = object({
-    domain = string
-    port   = optional(number)
-    ssl    = optional(bool, false)
-    rule   = optional(string)
-  })
-  description = "Whether to enable traefik for the service."
 }
 variable "limit_cpu" {
   default     = null

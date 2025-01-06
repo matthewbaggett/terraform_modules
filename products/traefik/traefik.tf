@@ -8,7 +8,7 @@ module "traefik" {
   depends_on            = [module.docker_socket_proxy]
   stack_name            = var.stack_name
   service_name          = "traefik"
-  image                 = "traefik:v3.2"
+  image                 = var.traefik_image
   networks              = [module.traefik_network, module.docker_socket_proxy.network, ]
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
@@ -61,9 +61,10 @@ module "traefik" {
     (var.enable_ssl ? "--certificatesresolvers.default.acme.storage=/certs/acme.json" : null),
   ]))
   traefik = var.traefik_service_domain != null ? {
-    domain = var.traefik_service_domain
-    port   = var.dashboard_port
-    ssl    = var.enable_ssl
+    domain  = var.traefik_service_domain
+    port    = var.dashboard_port
+    ssl     = var.enable_ssl
+    non-ssl = var.enable_non_ssl
   } : null
   ports = [
     {

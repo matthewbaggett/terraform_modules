@@ -9,9 +9,10 @@ module "traefik_hello" {
   networks              = [module.traefik_network, ]
   ports                 = [{ container = 80 }]
   traefik = {
-    domain = var.hello_service_domain
-    port   = 80
-    ssl    = var.enable_ssl
+    domain         = var.hello_service_domain
+    port           = 80
+    ssl            = var.enable_ssl
+    enable_non_ssl = var.enable_non_ssl
   }
 }
 output "hello_service" {

@@ -3,7 +3,11 @@ variable "stack_name" {
   type        = string
   description = "The name of the stack to create."
 }
-
+variable "traefik_image" {
+  default     = "traefik:v3.2"
+  type        = string
+  description = "The image to use for the traefik service"
+}
 variable "placement_constraints" {
   default     = []
   type        = list(string)
@@ -13,6 +17,11 @@ variable "enable_ssl" {
   type        = bool
   default     = true
   description = "Whether to enable SSL & ACME certificate generation."
+}
+variable "enable_non_ssl" {
+  type        = bool
+  default     = true
+  description = "Whether to enable non-SSL."
 }
 variable "acme_use_staging" {
   type        = bool

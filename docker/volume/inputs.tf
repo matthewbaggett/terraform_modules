@@ -9,10 +9,18 @@ variable "volume_name" {
 variable "labels" {
   type        = map(string)
   default     = {}
-  description = "A map of labels to apply to the service"
+  description = "A map of labels to apply to the volume."
 }
 variable "bind_path" {
   type        = string
   default     = null
   description = "The path to bind the volume to, optionally."
+}
+variable "driver" {
+  type = string
+  default = null
+}
+variable "driver_opts" {
+  type = map(string)
+  default = {}
 }

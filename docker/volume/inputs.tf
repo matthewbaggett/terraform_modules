@@ -17,10 +17,10 @@ variable "bind_path" {
   description = "The path to bind the volume to, optionally."
 }
 variable "driver" {
-  type = string
+  type    = string
   default = null
 }
 variable "driver_opts" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }

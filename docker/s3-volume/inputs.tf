@@ -13,9 +13,9 @@ variable "bucket_name" {
   default     = null
 }
 variable "subdir" {
-  default = null
+  default     = ""
   description = "The subdirectory to mount in the S3 bucket"
-  type = string
+  type        = string
 }
 variable "tags" {
   type        = map(string)
@@ -23,15 +23,11 @@ variable "tags" {
   description = "AWS Resource Tags to apply to this bucket"
 }
 variable "image_s3_plugin" {
-  type = string
+  type        = string
   description = "The docker image to use for the service."
-  default = "mochoa/s3fs-volume-plugin"
+  default     = "mochoa/s3fs-volume-plugin"
 }
-variable "image_swarm_exec" {
-  type = string
-  description = "The docker image to use for the service."
-  default = "mavenugo/swarm-exec:17.03.0-ce"
-}
+
 variable "application" {
   description = "The AWS myApplication to be associated with this cluster"
   type = object({

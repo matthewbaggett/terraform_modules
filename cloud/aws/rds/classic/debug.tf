@@ -14,7 +14,6 @@ resource "local_file" "debug" {
         resolved = {
           engine  = data.aws_rds_engine_version.latest.engine,
           version = data.aws_rds_engine_version.latest.version,
-          match   = data.aws_rds_engine_version.latest,
         }
       }
       #endpoints = {
@@ -43,7 +42,6 @@ resource "local_file" "debug_result" {
         resolved = {
           engine  = data.aws_rds_engine_version.latest.engine,
           version = data.aws_rds_engine_version.latest.version,
-          match   = data.aws_rds_engine_version.latest,
         }
       }
       endpoints = aws_db_instance.instance.endpoint

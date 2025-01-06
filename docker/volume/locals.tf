@@ -1,5 +1,5 @@
 locals {
-  volume_name = substr(join("-", [
+  volume_name = var.volume_name_explicit ? var.volume_name : substr(join("-", [
     substr(var.stack_name, 0, 20),
     substr(var.volume_name, 0, 64 - 1 - 3 - 20 - 6 - 6),
     formatdate("YYMMDD", plantimestamp()),

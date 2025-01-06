@@ -6,6 +6,11 @@ variable "volume_name" {
   description = "The name of the volume"
   type        = string
 }
+variable "volume_name_explicit" {
+  description = "Disable the automatic volume name mangling."
+  type        = bool
+  default     = false
+}
 variable "labels" {
   type        = map(string)
   default     = {}

@@ -7,11 +7,34 @@ locals {
   access_key  = module.bucket.users[local.iam_user].access_key
   secret_key  = module.bucket.users[local.iam_user].secret_key
 }
-module "swarm_exec" {
-  source       = "../../docker/swarm-exec"
-  command      = "docker plugin install --alias ${local.alias} ${var.image_s3_plugin} --grant-all-permissions --disable AWSACCESSKEYID=${local.access_key} AWSSECRETACCESSKEY=${local.secret_key} DEFAULT_S3FSOPTS='allow_other,uid=1000,gid=1000,nomultipart'; docker plugin enable ${local.alias}"
-  stack_name   = var.stack_name
-  service_name = "s3fs-volume-plugin-installer"
+resource "docker_plugin" "s3fs" {
+  name    = var.image_s3_plugin
+  alias   = local.alias
+  enabled = true
+  grant_permissions {
+    name  = "network"
+    value = ["host"]
+  }
+  grant_permissions {
+    name  = "mount"
+    value = ["/dev"]
+  }
+  grant_permissions {
+    name  = "allow-all-devices"
+    value = ["true"]
+  }
+  grant_permissions {
+    name  = "capabilities"
+    value = ["CAP_SYS_ADMIN"]
+  }
+  env = [
+    "REXRAY_LOGLEVEL=warn",
+    "S3FS_ACCESSKEY=${local.access_key}",
+    "S3FS_SECRETKEY=${local.secret_key}",
+  ]
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 module "bucket" {
   source             = "../../cloud/aws/s3_bucket"
@@ -19,16 +42,13 @@ module "bucket" {
   users              = [local.iam_user]
   tags               = merge(var.tags, { Name = local.bucket_name }, coalesce(var.application.application_tag, {}))
 }
-
 module "volume" {
-  depends_on  = [module.bucket, module.swarm_exec]
-  source      = "../../docker/volume"
-  stack_name  = var.stack_name
-  volume_name = "${module.bucket.bucket}/${var.subdir}"
-  driver      = local.alias
-  driver_opts = {
-    "s3fsopts" = "nomultipart,use_path_request_style"
-  }
+  depends_on           = [docker_plugin.s3fs, module.bucket]
+  source               = "../../docker/volume"
+  stack_name           = var.stack_name
+  volume_name          = module.bucket.bucket
+  volume_name_explicit = true
+  driver               = local.alias
 }
 output "volume" {
   value = module.volume.volume

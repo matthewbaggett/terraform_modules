@@ -25,7 +25,7 @@ variable "tags" {
 variable "image_s3_plugin" {
   type        = string
   description = "The docker image to use for the service."
-  default     = "mochoa/s3fs-volume-plugin"
+  default     = "rexray/s3fs:0.11.4"
 }
 
 variable "application" {

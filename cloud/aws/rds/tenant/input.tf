@@ -1,7 +1,3 @@
-variable "vpc_id" {
-  type        = string
-  description = "VPC ID"
-}
 variable "username" {
   type        = string
   description = "The username for the tenant"

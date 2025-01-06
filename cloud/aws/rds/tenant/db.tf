@@ -4,13 +4,17 @@ variable "endpoint" {
     port = number
   })
   description = "The endpoint of the RDS cluster or instance"
+  validation {
+    error_message = "Host isn't supposed to contain a port!"
+    condition     = can(regex("^[^:]+$", var.endpoint.host))
+  }
 }
 locals {
   db_tunnel_remote = {
     host = var.endpoint.host
-    port = local.is_mysql ? 3306 : 5432
+    port = local.is_mysql ? 3306 : (local.is_postgres ? 5432 : null)
   }
-  mysql_command    = try("${var.mysql_binary} -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_identity.username}", "")
+  mysql_command    = try("${var.mysql_binary} --ssl-verify-server-cert=false -h ${data.ssh_tunnel.db.local.host} -P ${data.ssh_tunnel.db.local.port} -u ${var.admin_identity.username}", "")
   postgres_command = try("${var.postgres_binary} -h ${data.ssh_tunnel.db.local.host} -p ${data.ssh_tunnel.db.local.port} -U ${var.admin_identity.username} -d ${var.admin_identity.username}", "")
   database_environment_variables = {
     PGPASSWORD = !local.is_mysql ? nonsensitive(var.admin_identity.password) : null,
@@ -32,8 +36,12 @@ data "ssh_tunnel" "db" {
   remote          = local.db_tunnel_remote
 }
 resource "terraform_data" "db" {
+  connection {
+    host = data.ssh_tunnel.db.remote.host
+    port = data.ssh_tunnel.db.remote.port
+  }
   provisioner "local-exec" {
-    command = "echo 'Connecting to \"${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port}\" as \"${var.admin_identity.username}\" via \"${data.ssh_tunnel.db.connection_name}\"'"
+    command = "echo 'Connecting to ${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port} as ${var.admin_identity.username} via ${data.ssh_tunnel.db.connection_name}'"
   }
   provisioner "local-exec" {
     command = (local.is_mysql

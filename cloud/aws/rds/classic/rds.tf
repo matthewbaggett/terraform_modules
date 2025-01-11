@@ -39,4 +39,5 @@ resource "aws_db_instance" "instance" {
     try(var.application.application_tag, {}),
     {}
   )
+  copy_tags_to_snapshot = true
 }

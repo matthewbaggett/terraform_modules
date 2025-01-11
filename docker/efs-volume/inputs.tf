@@ -6,7 +6,6 @@ variable "volume_name" {
   description = "The name of the volume"
   type        = string
 }
-
 variable "bucket_name" {
   description = "Override the generated name of the S3 bucket to create"
   type        = string
@@ -42,8 +41,17 @@ variable "ia_lifecycle_policy" {
     condition     = can(regex("AFTER_(1|7|14|30|60|90|180|270|365)_DAY[S]?", var.ia_lifecycle_policy))
   }
 }
-
 variable "security_group_ids" {
   type        = list(string)
   description = "The security group ids to apply to the task"
+}
+variable "origin_security_group_id" {
+  description = "The security group ID to allow NFS traffic from"
+}
+variable "vpc_id" {
+  description = "The VPC ID to create the EFS security group in"
+}
+variable "subnet_ids" {
+  type        = list(string)
+  description = "The subnet IDs in which the EFS file system will be available."
 }

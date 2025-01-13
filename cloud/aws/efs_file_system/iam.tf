@@ -1,6 +1,6 @@
 resource "aws_iam_user" "db_storage" {
   count = length(var.users)
-  name  = trimspace(replace(var.users[count.index], "/\\W|_|\\s/", ""))
+  name  = var.users[count.index]
   tags  = var.tags
 }
 data "aws_iam_policy_document" "db_storage" {
@@ -30,7 +30,7 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 resource "aws_iam_user_policy" "db_storage" {
   count  = length(var.users)
-  name   = "efs_policy_${var.users[count.index]}_to_${var.volume_name}"
+  name   = "EFS-Policy-${var.users[count.index]}-To-${var.volume_name}"
   user   = aws_iam_user.db_storage[count.index].name
   policy = data.aws_iam_policy_document.db_storage[count.index].json
 }

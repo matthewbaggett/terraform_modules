@@ -15,7 +15,8 @@ resource "aws_efs_access_point" "access_point" {
   tags = local.efs_ap_tags
 }
 resource "aws_efs_mount_target" "mount_target" {
-  for_each       = { for subnet in distinct(var.subnet_ids) : subnet => subnet }
-  file_system_id = aws_efs_file_system.volume.id
-  subnet_id      = each.value
+  for_each        = { for subnet in distinct(var.subnet_ids) : subnet => subnet }
+  file_system_id  = aws_efs_file_system.volume.id
+  subnet_id       = each.value
+  security_groups = local.security_group_ids
 }

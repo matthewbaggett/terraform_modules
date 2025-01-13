@@ -5,7 +5,7 @@ data "aws_security_group" "origin" {
   id = var.origin_security_group_id
 }
 resource "aws_security_group" "efs" {
-  name        = "${local.volume_name}-efs"
+  name        = "${local.volume_name}-EFS"
   description = "EFS file system for ${local.display_name_ascii}"
   vpc_id      = data.aws_vpc.vpc.id
   tags = merge(local.tags, {

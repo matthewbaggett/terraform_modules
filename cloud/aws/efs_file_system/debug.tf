@@ -7,6 +7,7 @@ resource "local_file" "debug" {
     efs_ap_tags        = local.efs_ap_tags
     security_group_ids = local.security_group_ids
     dns_name           = aws_efs_file_system.volume.dns_name
+    users              = var.users
   })
   file_permission = "0600"
 }

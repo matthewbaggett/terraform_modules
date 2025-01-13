@@ -30,11 +30,6 @@ variable "users" {
     error_message = "At least one user must be specified!"
   }
 }
-variable "security_group_ids" {
-  type        = list(string)
-  description = "The security group ids to apply to the task"
-  default     = []
-}
 variable "origin_security_group_id" {
   type        = string
   description = "The security group id of the origin security group. This is the security group that contains devices that will be allowed to access the EFS file system."

@@ -1,16 +1,13 @@
 locals {
   is_build   = var.build != null
   image_name = split(":", var.image)[0]
-
   source_files             = local.is_build ? fileset(var.build.context, "**") : []
   source_file_hashes       = [for f in local.source_files : filesha1("${var.build.context}/${f}")]
   image_context_hash       = sha1(join("", local.source_file_hashes))
   image_context_hash_short = substr(local.image_context_hash, 0, 8)
-  image_build_date         = formatdate("YYMMDD", plantimestamp())
   tags = compact([
     var.image,
     "${local.image_name}:hash-${local.image_context_hash_short}",
-    "${local.image_name}:built-${local.image_build_date}",
   ])
 }
 resource "random_pet" "build" {

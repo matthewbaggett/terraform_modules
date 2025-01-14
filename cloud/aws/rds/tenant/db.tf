@@ -25,8 +25,8 @@ resource "local_file" "debug" {
   filename = "${local.debug_path}/${local.username}.json"
   content = jsonencode({
     db_tunnel_remote               = local.db_tunnel_remote,
-    mysql_command                  = local.mysql_command,
-    postgres_command               = local.postgres_command,
+    #mysql_command                  = local.mysql_command,
+    #postgres_command               = local.postgres_command,
     database_environment_variables = local.database_environment_variables,
   })
   file_permission = "0600"

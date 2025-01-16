@@ -9,10 +9,10 @@ module "admin" {
   networks        = [module.network]
   converge_enable = false
   traefik = {
-    domain      = var.domain
-    ssl         = true
-    rule        = "Host(`${var.domain}`) && PathPrefix(`/admin`)"
-    port        = 80
+    domain = var.domain
+    ssl    = true
+    rule   = "Host(`${var.domain}`) && PathPrefix(`/admin`)"
+    port   = 80
   }
   placement_constraints = var.placement_constraints
 }

@@ -1,11 +1,11 @@
 locals {
   config = {
-    server_url = var.domain
-    listen_addr = "0.0.0.0:8080"
+    server_url          = var.domain
+    listen_addr         = "0.0.0.0:8080"
     metrics_listen_addr = "0.0.0.0:9090"
-    grpc_listen_addr = "0.0.0.0:50443"
+    grpc_listen_addr    = "0.0.0.0:50443"
     grpc_allow_insecure = false
-    private_key_path = "/var/lib/headscale/private.key"
+    private_key_path    = "/var/lib/headscale/private.key"
     noise = {
       private_key_path = "/var/lib/headscale/noise_private.key"
     }
@@ -15,22 +15,22 @@ locals {
     ]
     derp = {
       server = {
-        enabled =  false
-        region_id = 999
-        region_code = "headscale"
-        region_name = "Headscale Embedded DERP"
+        enabled          = false
+        region_id        = 999
+        region_code      = "headscale"
+        region_name      = "Headscale Embedded DERP"
         stun_listen_addr = "0.0.0.0:3478"
       }
       urls = [
         "https://controlplane.tailscale.com/derpmap/default",
       ]
-      paths = []
+      paths               = []
       auto_update_enabled = true
-      update_frequency = "24h"
+      update_frequency    = "24h"
     }
-    disable_check_updates = false
+    disable_check_updates             = false
     ephemeral_node_inactivity_timeout = "30m"
-    node_update_check_interval= "10s"
+    node_update_check_interval        = "10s"
 
     # Database bits
     db_type = "postgres"
@@ -48,12 +48,12 @@ locals {
     #tls_letsencrypt_challenge_type = "HTTP-01"
     #tls_letsencrypt_listen = ":http"
     tls_cert_path = ""
-    tls_key_path = ""
+    tls_key_path  = ""
 
     # Logs
     log = {
-        level = "info"
-        format = "text"
+      level  = "info"
+      format = "text"
     }
 
     # ACL
@@ -62,12 +62,12 @@ locals {
     # DNS
     dns_config = {
       override_local_dns = true
-      nameservers = ["1.1.1.1"]
-      magic_dns = true
-      base_domain = var.domain
+      nameservers        = ["1.1.1.1"]
+      magic_dns          = true
+      base_domain        = var.domain
     }
 
-    unix_socket = "/var/run/headscale.sock"
+    unix_socket            = "/var/run/headscale.sock"
     unix_socket_permission = "0770"
 
     logtail = {

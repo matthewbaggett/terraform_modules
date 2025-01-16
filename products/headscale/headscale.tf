@@ -11,11 +11,11 @@ module "headscale" {
   }
   networks        = [module.network]
   converge_enable = false
-  command = ["headscale", "serve"]
+  command         = ["headscale", "serve"]
   traefik = {
-    domain      = var.domain
-    ssl         = true
-    port        = 8080
+    domain = var.domain
+    ssl    = true
+    port   = 8080
   }
   placement_constraints = var.placement_constraints
 }

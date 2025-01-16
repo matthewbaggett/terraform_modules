@@ -6,7 +6,7 @@ variable "traefik" {
     non-ssl          = optional(bool, true)
     ssl              = optional(bool, false)
     rule             = optional(string)
-    middlewares      = optional(list(string))
+    middlewares      = optional(list(string), [])
     network          = optional(object({ name = string, id = string }))
     basic-auth-users = optional(list(string), [])
   })
@@ -38,7 +38,7 @@ locals {
   traefik_basic_auth = (
     local.is_traefik
     ? (
-      var.traefik.basic-auth-users != null
+      length(var.traefik.basic-auth-users) > 0
       ? {
         "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.users" = join(",", [
           for user in var.traefik.basic-auth-users : "${user}:${htpasswd_password.htpasswd[user].bcrypt}"
@@ -47,9 +47,11 @@ locals {
       : {}
     ) : {}
   )
-  traefik_middlewares = concat(coalesce(try(var.traefik.middlewares, []), []), [
-    local.traefik_basic_auth != null ? "${local.traefik_service}-auth" : null
-  ])
+  has_auth = length(keys(local.traefik_basic_auth)) > 0
+
+  provided_middlewares = var.traefik != null ? var.traefik.middlewares : []
+  auth_middleware      = local.has_auth ? "${local.traefik_service}-auth" : null
+  traefik_middlewares  = compact(concat(local.provided_middlewares, [local.auth_middleware]))
   traefik_rule = (
     local.is_traefik
     ? (
@@ -82,8 +84,8 @@ locals {
       },
       (local.traefik_middlewares != null
         ? {
-          "traefik.http.routers.${local.traefik_service}.middlewares"     = var.traefik.non-ssl ? join(",", local.traefik_middlewares) : null
-          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = var.traefik.ssl ? join(",", local.traefik_middlewares) : null
+          "traefik.http.routers.${local.traefik_service}.middlewares"     = var.traefik.non-ssl ? (length(local.traefik_middlewares) > 0 ? join(",", local.traefik_middlewares) : null) : null
+          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = var.traefik.ssl ? (length(local.traefik_middlewares) > 0 ? join(",", local.traefik_middlewares) : null) : null
         } : {}
       ),
       local.traefik_basic_auth,

@@ -5,5 +5,5 @@ output "network" {
   value = module.network
 }
 output "endpoint" {
-  value = module.service.endpoint
+  value = "http://${module.service.name}"
 }

@@ -23,5 +23,11 @@ resource "local_file" "debug" {
     traefik               = var.traefik
     placement_constraints = var.placement_constraints
     build_tags            = local.is_build ? local.tags : []
+    labels = {
+      computed = local.labels,
+      traefik  = local.traefik_labels,
+      provided = var.labels,
+      final    = local.merged_labels
+    }
   }))
 }

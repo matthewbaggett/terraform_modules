@@ -1,18 +1,32 @@
 variable "traefik" {
   default = null
   type = object({
-    domain      = string
-    port        = optional(number)
-    non-ssl     = optional(bool, true)
-    ssl         = optional(bool, false)
-    rule        = optional(string)
-    middlewares = optional(list(string))
-    network = optional(object({
-      name = string
-      id   = string
-    }))
+    domain           = string
+    port             = optional(number)
+    non-ssl          = optional(bool, true)
+    ssl              = optional(bool, false)
+    rule             = optional(string)
+    middlewares      = optional(list(string))
+    network          = optional(object({ name = string, id = string }))
+    basic-auth-users = optional(list(string))
   })
   description = "Whether to enable traefik for the service."
+}
+resource "random_password" "password" {
+  for_each = toset(var.traefik.basic-auth-users)
+  length   = 16
+  special  = false
+}
+resource "random_password" "salt" {
+  for_each         = toset(var.traefik.basic-auth-users)
+  length           = 8
+  special          = true
+  override_special = "!@#%&*()-_=+[]{}<>:?"
+}
+resource "htpasswd_password" "htpasswd" {
+  for_each = toset(var.traefik.basic-auth-users)
+  password = random_password.password[each.key].result
+  salt     = random_password.salt[each.key].result
 }
 locals {
   is_traefik = var.traefik != null
@@ -20,6 +34,21 @@ locals {
   traefik_service = join("-", [
     substr(var.stack_name, 0, 20),
     substr(var.service_name, 0, 63 - 1 - 20),
+  ])
+  traefik_basic_auth = (
+    local.is_traefik
+    ? (
+      var.traefik.basic-auth-users != null
+      ? {
+        "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.users" = join(",", [
+          for user in var.traefik.basic-auth-users : "${user}:${htpasswd_password.htpasswd[user].bcrypt}"
+        ])
+      }
+      : {}
+    ) : {}
+  )
+  traefik_middlewares = concat(coalesce(var.traefik.middlewares, []), [
+    local.traefik_basic_auth != null ? "${local.traefik_service}-auth" : null
   ])
   traefik_rule = (
     local.is_traefik
@@ -51,12 +80,13 @@ locals {
       "traefik.http.services.${local.traefik_service}-ssl.loadbalancer.passhostheader" = var.traefik.ssl ? "true" : null
       "traefik.http.services.${local.traefik_service}-ssl.loadbalancer.server.port"    = var.traefik.ssl ? var.traefik.port : null
       },
-      (var.traefik.middlewares != null
+      (local.traefik_middlewares != null
         ? {
-          "traefik.http.routers.${local.traefik_service}.middlewares"     = join(",", var.traefik.middlewares)
-          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = join(",", var.traefik.middlewares)
+          "traefik.http.routers.${local.traefik_service}.middlewares"     = join(",", local.traefik_middlewares)
+          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = join(",", local.traefik_middlewares)
         } : {}
-      )
+      ),
+      local.traefik_basic_auth,
   ) : {})
 }
 

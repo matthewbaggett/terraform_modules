@@ -4,7 +4,7 @@ variable "docker_socket_proxy_image" {
   description = "The docker image to use for the docker-socket-proxy service."
 }
 variable "docker_socket_proxy_version" {
-  default     = "latest"
+  default     = "0.3"
   type        = string
   description = "The version of the docker image to use for the docker-socket-proxy service."
 }
@@ -24,3 +24,91 @@ variable "placement_constraints" {
   description = "Docker Swarm placement constraints"
 }
 
+variable "enable_swarm" {
+  type    = bool
+  default = true
+}
+variable "enable_services" {
+  type    = bool
+  default = true
+}
+variable "enable_containers" {
+  type    = bool
+  default = true
+}
+variable "enable_tasks" {
+  type    = bool
+  default = true
+}
+variable "enable_nodes" {
+  type    = bool
+  default = true
+}
+variable "enable_networks" {
+  type    = bool
+  default = true
+}
+variable "enable_auth" {
+  type    = bool
+  default = false
+}
+variable "enable_secrets" {
+  type    = bool
+  default = false
+}
+variable "enable_write" {
+  type    = bool
+  default = false
+}
+variable "enable_build" {
+  type    = bool
+  default = false
+}
+variable "enable_commit" {
+  type    = bool
+  default = false
+}
+variable "enable_configs" {
+  type    = bool
+  default = false
+}
+variable "enable_distribution" {
+  type    = bool
+  default = false
+}
+variable "enable_exec" {
+  type    = bool
+  default = false
+}
+variable "enable_grpc" {
+  type    = bool
+  default = false
+}
+variable "enable_images" {
+  type    = bool
+  default = false
+}
+variable "enable_info" {
+  type    = bool
+  default = false
+}
+variable "enable_plugins" {
+  type    = bool
+  default = false
+}
+variable "enable_session" {
+  type    = bool
+  default = false
+}
+variable "enable_system" {
+  type    = bool
+  default = false
+}
+variable "enable_volumes" {
+  type    = bool
+  default = false
+}
+variable "enable_all" {
+  type    = bool
+  default = false
+}

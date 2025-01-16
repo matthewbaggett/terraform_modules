@@ -7,4 +7,5 @@ locals {
     "ooo.grey.service.name"  = var.service_name
     "ooo.grey.service.image" = local.image
   }
+  merged_labels = { for key, value in merge(local.labels, local.traefik_labels, var.labels) : key => value if value != null }
 }

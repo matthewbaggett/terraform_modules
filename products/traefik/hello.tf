@@ -7,13 +7,15 @@ module "traefik_hello" {
   parallelism           = 3
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]
-  ports                 = [{ container = 80 }]
   traefik = {
     domain         = var.hello_service_domain
     port           = 80
     ssl            = var.enable_ssl
     enable_non_ssl = var.enable_non_ssl
   }
+  healthcheck_interval     = "5s"
+  healthcheck_timeout      = "2s"
+  healthcheck_start_period = "5s"
 }
 output "hello_service" {
   value = module.traefik_hello

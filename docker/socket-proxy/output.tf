@@ -4,3 +4,6 @@ output "docker_service" {
 output "network" {
   value = module.network
 }
+output "endpoint" {
+  value = "tcp://${module.service.service_name}:2375"
+}

@@ -12,6 +12,7 @@ module "traefik" {
   networks              = [module.traefik_network, module.docker_socket_proxy.network, ]
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
+  global                = true
   converge_enable       = false // @todo add healthcheck
   command = distinct(compact([
     "/usr/local/bin/traefik",

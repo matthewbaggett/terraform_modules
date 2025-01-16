@@ -9,12 +9,12 @@ resource "htpasswd_password" "hash" {
   salt     = random_password.salt.result
 }
 module "vol_portainer" {
-  source      = "../../../docker/volume"
+  source      = "github.com/matthewbaggett/terraform_modules//docker//volume"
   stack_name  = var.stack_name
   volume_name = "portainer"
 }
 module "portainer" {
-  source       = "../../../docker/service"
+  source       = "github.com/matthewbaggett/terraform_modules//docker//service"
   stack_name   = var.stack_name
   service_name = "portainer"
   image        = "portainer/portainer-ce:${var.portainer_version}"
@@ -29,7 +29,7 @@ module "portainer" {
   }
   traefik     = merge(var.traefik, { port = 9000 })
   mounts      = var.should_mount_local_docker_socket ? { "/var/run/docker.sock" = "/var/run/docker.sock" } : {}
-  networks    = var.networks
+  networks    = concat(var.networks, [module.docker_socket_proxy.network])
   start_first = false
   placement_constraints = concat([
     "node.role == manager",

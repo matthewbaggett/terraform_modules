@@ -8,23 +8,23 @@ variable "traefik" {
     rule             = optional(string)
     middlewares      = optional(list(string))
     network          = optional(object({ name = string, id = string }))
-    basic-auth-users = optional(list(string))
+    basic-auth-users = optional(list(string), [])
   })
   description = "Whether to enable traefik for the service."
 }
 resource "random_password" "password" {
-  for_each = toset(var.traefik.basic-auth-users)
+  for_each = toset(try(var.traefik.basic-auth-users, []))
   length   = 16
   special  = false
 }
 resource "random_password" "salt" {
-  for_each         = toset(var.traefik.basic-auth-users)
+  for_each         = toset(try(var.traefik.basic-auth-users, []))
   length           = 8
   special          = true
   override_special = "!@#%&*()-_=+[]{}<>:?"
 }
 resource "htpasswd_password" "htpasswd" {
-  for_each = toset(var.traefik.basic-auth-users)
+  for_each = toset(try(var.traefik.basic-auth-users, []))
   password = random_password.password[each.key].result
   salt     = random_password.salt[each.key].result
 }
@@ -47,7 +47,7 @@ locals {
       : {}
     ) : {}
   )
-  traefik_middlewares = concat(coalesce(var.traefik.middlewares, []), [
+  traefik_middlewares = concat(coalesce(try(var.traefik.middlewares, []), []), [
     local.traefik_basic_auth != null ? "${local.traefik_service}-auth" : null
   ])
   traefik_rule = (
@@ -82,8 +82,8 @@ locals {
       },
       (local.traefik_middlewares != null
         ? {
-          "traefik.http.routers.${local.traefik_service}.middlewares"     = join(",", local.traefik_middlewares)
-          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = join(",", local.traefik_middlewares)
+          "traefik.http.routers.${local.traefik_service}.middlewares"     = var.traefik.non-ssl ? join(",", local.traefik_middlewares) : null
+          "traefik.http.routers.${local.traefik_service}-ssl.middlewares" = var.traefik.ssl ? join(",", local.traefik_middlewares) : null
         } : {}
       ),
       local.traefik_basic_auth,

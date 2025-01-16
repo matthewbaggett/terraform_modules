@@ -14,7 +14,14 @@ output "docker_service" {
   value = docker_service.instance
 }
 locals {
-  first_auth = var.traefik.basic-auth-users != null ? "${try(var.traefik.basic-auth-users[0], null)}:${try(nonsensitive(random_password.password[var.traefik.basic-auth-users[0]].result), null)}@" : null
+  first_auth = (var.traefik != null
+    ? (
+      length(var.traefik.basic-auth-users) > 0
+      ?
+      "${try(var.traefik.basic-auth-users[0], null)}:${try(nonsensitive(random_password.password[var.traefik.basic-auth-users[0]].result), null)}@"
+      : null
+    ) : null
+  )
 }
 output "endpoint" {
   value = try(
@@ -25,7 +32,7 @@ output "endpoint" {
 }
 
 output "basic_auth_users" {
-  value = {
+  value = var.traefik != null ? {
     for user in var.traefik.basic-auth-users : user => nonsensitive(htpasswd_password.htpasswd[user].bcrypt)
-  }
+  } : {}
 }

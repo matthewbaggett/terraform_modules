@@ -1,10 +1,10 @@
 module "network" {
-  source       = "../network"
+  source       = "github.com/matthewbaggett/terraform_modules//docker/network"
   network_name = "docker-socket-proxy"
   stack_name   = var.stack_name
 }
 module "service" {
-  source                = "../service"
+  source                = "github.com/matthewbaggett/terraform_modules//docker/service"
   image                 = "${var.docker_socket_proxy_image}:${var.docker_socket_proxy_version}"
   stack_name            = var.stack_name
   service_name          = var.service_name

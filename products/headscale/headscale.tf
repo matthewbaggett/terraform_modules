@@ -6,6 +6,9 @@ module "headscale" {
   volumes = {
     "headscale-config" = "/var/lib/headscale"
   }
+  configs = {
+    "/etc/headscale/config.yaml" = yamlencode(local.config)
+  }
   networks        = [module.network]
   converge_enable = false
   command = ["headscale", "serve"]

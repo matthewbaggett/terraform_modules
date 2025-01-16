@@ -11,7 +11,7 @@ module "admin" {
   traefik = {
     domain      = var.domain
     ssl         = true
-    rule =
+    rule        = "Host(`${var.domain}`) && PathPrefix(`/admin`)"
     port        = 80
   }
   placement_constraints = var.placement_constraints

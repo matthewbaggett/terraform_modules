@@ -38,15 +38,15 @@ variable "networks" {
 }
 variable "ports" {
   type = list(object({
-    host      = number
+    host      = optional(number)
     container = number
     protocol  = optional(string, "tcp")
   }))
   default     = []
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
   validation {
-    error_message = "Host Ports must be between 1024 and 65535."
-    condition     = alltrue([for port in var.ports : port.host >= 1024 && port.host <= 65535])
+    error_message = "Host Ports must be between 1024 and 65535 or null."
+    condition     = alltrue([for port in var.ports : port.host == null ? true : (port.host >= 1024 && port.host <= 65535)])
   }
   validation {
     error_message = "Container Ports must be between 1 and 65535."

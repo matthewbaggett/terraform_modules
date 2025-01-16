@@ -1,6 +1,6 @@
 locals {
   config = {
-    server_url          = var.domain
+    server_url          = "https://${var.domain}"
     listen_addr         = "0.0.0.0:8080"
     metrics_listen_addr = "0.0.0.0:9090"
     grpc_listen_addr    = "0.0.0.0:50443"

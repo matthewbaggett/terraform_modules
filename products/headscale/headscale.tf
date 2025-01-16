@@ -15,6 +15,7 @@ module "headscale" {
   traefik = {
     domain = var.domain
     ssl    = true
+    rule   = "Host(`${var.domain}`) && !PathPrefix(`/admin`)"
     port   = 8080
   }
   placement_constraints = var.placement_constraints

@@ -1,6 +1,6 @@
 variable "image" {
   description = "The headscale image to deploy"
-  default     = "headscale/headscale:0.22.3"
+  default     = "headscale/headscale:stable"
 }
 variable "admin_image" {
   description = "The headscale admin image to deploy"

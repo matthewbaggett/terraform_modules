@@ -4,7 +4,7 @@ variable "postgres_image" {
   description = "The docker image to use for the postgres service."
 }
 variable "postgres_version" {
-  default     = "latest"
+  default     = "17"
   type        = string
   description = "The version of the docker image to use for the postgres service."
 }
@@ -53,7 +53,7 @@ variable "ports" {
     condition     = alltrue([for port in var.ports : port.container >= 1 && port.container <= 65535])
   }
   validation {
-    error_message = "protocol must be either 'tcp' or 'udp'."
+    error_message = "Protocol must be either 'tcp' or 'udp'."
     condition     = alltrue([for port in var.ports : port.protocol == "tcp" || port.protocol == "udp"])
   }
 }

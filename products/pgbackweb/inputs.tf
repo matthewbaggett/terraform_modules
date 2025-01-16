@@ -35,15 +35,14 @@ variable "networks" {
 variable "traefik" {
   default = null
   type = object({
-    domain  = string
-    port    = optional(number)
-    non-ssl = optional(bool, true)
-    ssl     = optional(bool, false)
-    rule    = optional(string)
-    network = optional(object({
-      name = string
-      id   = string
-    }))
+    domain           = string
+    port             = optional(number)
+    non-ssl          = optional(bool, true)
+    ssl              = optional(bool, false)
+    rule             = optional(string)
+    middlewares      = optional(list(string))
+    network          = optional(object({ name = string, id = string }))
+    basic-auth-users = optional(list(string))
   })
   description = "Whether to enable traefik for the service."
 }

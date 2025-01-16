@@ -1,17 +1,3 @@
-resource "random_pet" "minio_admin_user" {
-  length    = 2
-  separator = ""
-}
-resource "random_password" "minio_admin_password" {
-  length  = 32
-  special = false
-}
-
-module "network" {
-  source     = "../../docker/network"
-  stack_name = var.stack_name
-}
-
 module "minio" {
   source       = "../../docker/service"
   stack_name   = var.stack_name
@@ -57,12 +43,3 @@ module "minio" {
   }
 }
 
-output "minio" {
-  value = {
-    endpoint = "https://${var.domain}/ui/"
-    auth = {
-      username = module.minio.docker_service.task_spec[0].container_spec[0].env.MINIO_ROOT_USER
-      password = nonsensitive(module.minio.docker_service.task_spec[0].container_spec[0].env.MINIO_ROOT_PASSWORD)
-    }
-  }
-}

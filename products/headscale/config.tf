@@ -1,6 +1,6 @@
 locals {
   config = {
-    server_url          = "https://${var.domain}"
+    server_url          = "http://${var.domain}"
     listen_addr         = "0.0.0.0:8080"
     metrics_listen_addr = "0.0.0.0:9090"
     grpc_listen_addr    = "0.0.0.0:50443"
@@ -9,10 +9,11 @@ locals {
     noise = {
       private_key_path = "/var/lib/headscale/noise_private.key"
     }
-    ip_prefixes = [
-      #"fd7a:115c:a1e0::/48",
-      "100.64.0.0/10",
-    ]
+    prefixes = {
+      #v6 = "fd7a:115c:a1e0::/48"
+      v4         = "100.64.0.0/10"
+      allocation = "sequential"
+    }
     derp = {
       server = {
         enabled          = false
@@ -33,12 +34,16 @@ locals {
     node_update_check_interval        = "10s"
 
     # Database bits
-    db_type = "postgres"
-    db_host = module.postgres.service_name
-    db_port = "5432"
-    db_name = module.postgres.database
-    db_user = module.postgres.username
-    db_pass = module.postgres.password
+    database = {
+      type = "postgres"
+      postgres = {
+        host = module.postgres.service_name
+        port = 5432
+        name = module.postgres.database
+        user = module.postgres.username
+        pass = module.postgres.password
+      }
+    }
 
     # Lets encrypt bits
     #acme_url = "https://acme-v02.api.letsencrypt.org/directory"
@@ -57,14 +62,15 @@ locals {
     }
 
     # ACL
-    acl_policy_path = ""
+    policy = {
+      path = ""
+    }
 
     # DNS
-    dns_config = {
-      override_local_dns = true
-      nameservers        = ["1.1.1.1"]
-      magic_dns          = true
-      base_domain        = var.domain
+    dns = {
+      nameservers = ["1.1.1.1"]
+      magic_dns   = true
+      base_domain = "ts.${var.domain}"
     }
 
     unix_socket            = "/var/run/headscale.sock"

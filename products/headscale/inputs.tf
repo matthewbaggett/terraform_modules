@@ -4,7 +4,7 @@ variable "image" {
 }
 variable "admin_image" {
   description = "The headscale admin image to deploy"
-  default     = "goodieshq/headscale-admin:0.1.7b"
+  default     = "simcu/headscale-ui"
 }
 variable "stack_name" {
   description = "The name of the stack"

@@ -13,6 +13,9 @@ module "traefik_hello" {
     ssl            = var.enable_ssl
     enable_non_ssl = var.enable_non_ssl
   }
+  healthcheck_interval     = "5s"
+  healthcheck_timeout      = "2s"
+  healthcheck_start_period = "5s"
 }
 output "hello_service" {
   value = module.traefik_hello

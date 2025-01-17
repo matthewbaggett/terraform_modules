@@ -27,6 +27,8 @@ output "endpoint" {
   value = try(
     "https://${local.first_auth}${var.traefik.domain}",
     "http://${local.first_auth}${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
+    "https://${var.traefik.domain}",
+    "http://${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
     null
   )
 }

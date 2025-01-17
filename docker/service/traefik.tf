@@ -101,7 +101,9 @@ locals {
       } : {},
       local.traefik_basic_auth,
       local.traefik_headers,
-  ) : {})
+      ) : {
+      "traefik.enable" = "false"
+  })
 }
 
 data "docker_network" "traefik" {

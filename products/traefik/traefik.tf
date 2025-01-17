@@ -83,7 +83,7 @@ locals {
     ] : [],
 
     # Configure UDP
-    flatten([for name, ports in var.udp_entrypoints : [for port in ports : "--entrypoints.${name}.address=:${port}/udp"]])
+    var.enable_udp ? flatten([for name, ports in var.udp_entrypoints : [for port in ports : "--entrypoints.${name}.address=:${port}/udp"]]) : []
   )))
 }
 module "traefik" {

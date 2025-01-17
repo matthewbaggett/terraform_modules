@@ -89,11 +89,6 @@ variable "https_port" {
   default     = 443
   description = "The port to listen on for HTTPS traffic."
 }
-variable "udp_port" {
-  type        = number
-  default     = 31337
-  description = "The port to listen on for UDP traffic."
-}
 variable "dashboard_port" {
   type        = number
   default     = 8080

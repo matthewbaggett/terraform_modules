@@ -20,8 +20,8 @@ variable "traefik" {
   type = object({
     domain           = string
     port             = optional(number)
-    non-ssl          = optional(bool, true)
-    ssl              = optional(bool, false)
+    non-ssl          = optional(bool)
+    ssl              = optional(bool)
     rule             = optional(string)
     middlewares      = optional(list(string), [])
     network          = optional(object({ name = string, id = string }))

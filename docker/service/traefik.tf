@@ -54,16 +54,14 @@ locals {
     ? { for key, value in var.traefik.headers : "traefik.http.middlewares.${local.traefik_service}-headers.headers.customrequestheaders.${key}" => value }
     : {}
   )
-  traefik_middlewares = concat(
+  has_auth = length(local.traefik_basic_auth) > 0
+  has_headers = length(local.traefik_headers) > 0
+  traefik_middlewares = distinct(compact(concat(
     try(var.traefik.middlewares, []),
-    length(local.traefik_basic_auth) > 0 ? ["${local.traefik_service}-auth"] : [],
-    length(local.traefik_headers) > 0 ? ["${local.traefik_service}-headers"] : []
-  )
-  has_auth = length(keys(local.traefik_basic_auth)) > 0
+    local.has_auth ? ["${local.traefik_service}-auth"] : [],
+    local.has_headers ? ["${local.traefik_service}-headers"] : []
+  )))
 
-  provided_middlewares = var.traefik != null ? var.traefik.middlewares : []
-  auth_middleware      = local.has_auth ? "${local.traefik_service}-auth" : null
-  traefik_middlewares  = compact(concat(local.provided_middlewares, [local.auth_middleware]))
   traefik_rule = (
     local.is_traefik
     ? (

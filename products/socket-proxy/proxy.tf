@@ -4,7 +4,7 @@ module "socat" {
   service_name          = var.service_name
   image                 = "alpine/socat:latest"
   command               = ["socat", "tcp-listen:${var.target.port},fork,reuseaddr", "tcp-connect:${var.target.host}:${var.target.port}"]
-  traefik               = merge({ port = var.target.port }, var.traefik)
+  traefik               = merge({ port = var.target.port }, { for k, v in var.traefik : k => v if v != null })
   converge_enable       = false
   placement_constraints = var.placement_constraints
 }

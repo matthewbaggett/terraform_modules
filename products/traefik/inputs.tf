@@ -23,6 +23,16 @@ variable "enable_non_ssl" {
   default     = true
   description = "Whether to enable non-SSL."
 }
+variable "enable_udp" {
+  type        = bool
+  default     = false
+  description = "Whether to enable UDP."
+}
+variable "udp_entrypoints" {
+  type        = map(list(number))
+  default     = {}
+  description = "Defined entrypoints to use for UDP traffic."
+}
 variable "acme_use_staging" {
   type        = bool
   default     = false
@@ -42,8 +52,12 @@ variable "hello_service_domain" {
 }
 variable "log_level" {
   type        = string
-  default     = "INFO"
+  default     = "WARN"
   description = "The log level to use for traefik."
+  validation {
+    error_message = "Must be one of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, and PANIC."
+    condition     = can(regex("^(TRACE|DEBUG|INFO|WARN|ERROR|FATAL|PANIC)$", var.log_level))
+  }
 }
 variable "access_log" {
   type        = bool
@@ -57,7 +71,7 @@ variable "access_log_format" {
 }
 variable "access_log_fields_default_mode" {
   type        = string
-  default     = "deny"
+  default     = "keep"
   description = "The default mode for access log fields."
 }
 variable "redirect_to_ssl" {
@@ -75,6 +89,11 @@ variable "https_port" {
   default     = 443
   description = "The port to listen on for HTTPS traffic."
 }
+variable "udp_port" {
+  type        = number
+  default     = 31337
+  description = "The port to listen on for UDP traffic."
+}
 variable "dashboard_port" {
   type        = number
   default     = 8080
@@ -83,7 +102,7 @@ variable "dashboard_port" {
 
 variable "enable_ping" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether to enable the ping endpoint."
 }
 variable "ping_entrypoint" {
@@ -93,7 +112,7 @@ variable "ping_entrypoint" {
 }
 variable "enable_docker_provider" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to enable the Docker provider."
 }
 variable "enable_swarm_provider" {
@@ -109,7 +128,7 @@ variable "enable_stats_collection" {
 variable "api_insecure" {
   type        = bool
   default     = false
-  description = "Whether to enable the insecure API."
+  description = "Whether to enable the insecure API. Implicitly turned on by enable_dashboard."
 }
 variable "api_debug" {
   type        = bool
@@ -118,6 +137,11 @@ variable "api_debug" {
 }
 variable "enable_dashboard" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether to enable the dashboard."
+}
+variable "enable_port_reuse" {
+  type        = bool
+  default     = true
+  description = "Whether to enable port reuse. This is a niche traefik feature that might create issues."
 }

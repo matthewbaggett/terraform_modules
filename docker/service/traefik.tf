@@ -3,13 +3,14 @@ variable "traefik" {
   type = object({
     domain           = string
     port             = optional(number)
-    non-ssl          = optional(bool, true)
+    non-ssl          = optional(bool, false)
     ssl              = optional(bool, false)
     rule             = optional(string)
     middlewares      = optional(list(string), [])
     network          = optional(object({ name = string, id = string }))
     basic-auth-users = optional(list(string), [])
     headers          = optional(map(string), {})
+    udp_entrypoints  = optional(list(string), []) # List of UDP entrypoints
   })
   description = "Whether to enable traefik for the service."
 }
@@ -31,7 +32,8 @@ resource "htpasswd_password" "htpasswd" {
 }
 locals {
   is_traefik = var.traefik != null
-  # Calculate the traefik labels to use if enabled
+  is_http    = try(var.traefik.non-ssl || var.traefik.ssl, false)
+  is_udp     = length(try(var.traefik.udp_entrypoints, [])) > 0
   traefik_service = join("-", [
     substr(var.stack_name, 0, 20),
     substr(var.service_name, 0, 63 - 1 - 20),
@@ -80,7 +82,9 @@ locals {
     local.is_traefik
     ? merge(
       {
-        "traefik.enable"                                                             = "true"
+        "traefik.enable" = "true"
+      },
+      local.is_http ? {
         "traefik.http.routers.${local.traefik_service}.rule"                         = local.traefik_rule
         "traefik.http.routers.${local.traefik_service}.service"                      = local.traefik_service
         "traefik.http.routers.${local.traefik_service}.entrypoints"                  = join(",", local.traefik_entrypoints)
@@ -89,7 +93,12 @@ locals {
         "traefik.http.routers.${local.traefik_service}.middlewares"                  = length(local.traefik_middlewares) > 0 ? join(",", local.traefik_middlewares) : null
         "traefik.http.services.${local.traefik_service}.loadbalancer.passhostheader" = "true"
         "traefik.http.services.${local.traefik_service}.loadbalancer.server.port"    = var.traefik.port
-      },
+      } : {},
+      local.is_udp ? {
+        "traefik.udp.routers.${local.traefik_service}.service"                   = local.traefik_service
+        "traefik.udp.routers.${local.traefik_service}.entrypoints"               = join(",", var.traefik.udp_entrypoints)
+        "traefik.udp.services.${local.traefik_service}.loadbalancer.server.port" = var.traefik.port
+      } : {},
       local.traefik_basic_auth,
       local.traefik_headers,
   ) : {})

@@ -54,7 +54,7 @@ locals {
     ? { for key, value in var.traefik.headers : "traefik.http.middlewares.${local.traefik_service}-headers.headers.customrequestheaders.${key}" => value }
     : {}
   )
-  has_auth = length(local.traefik_basic_auth) > 0
+  has_auth    = length(local.traefik_basic_auth) > 0
   has_headers = length(local.traefik_headers) > 0
   traefik_middlewares = distinct(compact(concat(
     try(var.traefik.middlewares, []),

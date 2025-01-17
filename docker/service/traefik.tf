@@ -84,7 +84,7 @@ locals {
         "traefik.http.routers.${local.traefik_service}.rule"                         = local.traefik_rule
         "traefik.http.routers.${local.traefik_service}.service"                      = local.traefik_service
         "traefik.http.routers.${local.traefik_service}.entrypoints"                  = join(",", local.traefik_entrypoints)
-        "traefik.http.routers.${local.traefik_service}.tls.certresolver"             = var.traefik.ssl ? "default" : null
+        "traefik.http.routers.${local.traefik_service}.tls.certresolver"             = "default"
         "traefik.http.routers.${local.traefik_service}.middlewares"                  = length(local.traefik_middlewares) > 0 ? join(",", local.traefik_middlewares) : null
         "traefik.http.services.${local.traefik_service}.loadbalancer.passhostheader" = "true"
         "traefik.http.services.${local.traefik_service}.loadbalancer.server.port"    = var.traefik.port

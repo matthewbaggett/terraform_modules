@@ -46,6 +46,7 @@ locals {
         "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.users" = join(",", [
           for user in var.traefik.basic-auth-users : "${user}:${htpasswd_password.htpasswd[user].bcrypt}"
         ])
+        "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.removeheader" = "true"
       }
       : {}
     )

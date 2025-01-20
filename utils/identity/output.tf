@@ -1,6 +1,6 @@
 output "username" {
-  value = local.username
+  value = nonsensitive(local.username)
 }
 output "password" {
-  value = local.password
+  value = nonsensitive(local.password)
 }

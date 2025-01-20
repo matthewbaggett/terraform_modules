@@ -19,7 +19,7 @@ variable "database" {
 locals {
   username = lower(var.username)
   database = lower(var.database)
-  password = try(random_password.password[0].result, var.password)
+  password = try(nonsensitive(random_password.password[0].result), var.password)
 }
 variable "engine" {
   type        = string

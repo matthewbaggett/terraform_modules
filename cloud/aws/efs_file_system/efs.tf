@@ -3,6 +3,9 @@ resource "aws_efs_file_system" "volume" {
   lifecycle_policy {
     transition_to_ia = var.ia_lifecycle_policy
   }
+  lifecycle_policy {
+    transition_to_archive = var.archive_lifecycle_policy
+  }
   tags            = local.efs_tags
   encrypted       = true
   throughput_mode = "elastic"

@@ -30,6 +30,15 @@ variable "ia_lifecycle_policy" {
     condition     = can(regex("AFTER_(1|7|14|30|60|90|180|270|365)_DAY[S]?", var.ia_lifecycle_policy))
   }
 }
+variable "archive_lifecycle_policy" {
+  default     = "AFTER_60_DAYS"
+  description = "The lifecycle policy for transitioning to Archive storage"
+  type        = string
+  validation {
+    error_message = "Must be one of AFTER_7_DAYS, AFTER_14_DAYS, AFTER_30_DAYS, AFTER_60_DAYS, AFTER_90_DAYS, AFTER_180_DAYS, AFTER_270_DAYS, AFTER_365_DAYS."
+    condition     = can(regex("AFTER_(7|14|30|60|90|180|270|365)_DAY[S]?", var.archive_lifecycle_policy))
+  }
+}
 variable "origin_security_group_id" {
   description = "The security group ID to allow NFS traffic from"
 }

@@ -4,12 +4,12 @@ module "efs_file_system" {
   users                    = local.users
   tags                     = merge(var.tags, { Name = local.display_name_ascii }, coalesce(var.application.application_tag, {}))
   ia_lifecycle_policy      = var.ia_lifecycle_policy
+  archive_lifecycle_policy = var.archive_lifecycle_policy
   application              = var.application
   origin_security_group_id = var.origin_security_group_id
   vpc_id                   = data.aws_vpc.vpc.id
   subnet_ids               = var.subnet_ids
 }
-
 data "aws_vpc" "vpc" {
   id = var.vpc_id
   lifecycle {

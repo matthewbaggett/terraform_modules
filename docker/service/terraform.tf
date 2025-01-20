@@ -15,7 +15,7 @@ terraform {
       version = "~> 1.0"
     }
     json-formatter = {
-      source = "TheNicholi/json-formatter"
+      source  = "TheNicholi/json-formatter"
       version = "~> 0.1"
     }
   }

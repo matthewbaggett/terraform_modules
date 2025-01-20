@@ -33,5 +33,5 @@ data "json-formatter_format_json" "debug" {
 resource "local_file" "debug" {
   filename        = "${local.debug_path}/${var.service_name}.json"
   file_permission = "0600"
-  content = data.json-formatter_format_json.debug.result
+  content         = data.json-formatter_format_json.debug.result
 }

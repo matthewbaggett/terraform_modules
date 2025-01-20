@@ -6,10 +6,9 @@ variable "debug_path" {
 locals {
   debug_path = var.debug_path != null ? var.debug_path : "${path.root}/.debug/docker/services/${var.stack_name}/${var.service_name}"
 }
-resource "local_file" "debug" {
-  filename        = "${local.debug_path}/${var.service_name}.json"
-  file_permission = "0600"
-  content = nonsensitive(jsonencode({
+
+data "json-formatter_format_json" "debug" {
+  json = nonsensitive(jsonencode({
     name                  = local.service_name
     stack                 = var.stack_name
     image                 = local.image_fully_qualified
@@ -30,4 +29,9 @@ resource "local_file" "debug" {
       final    = local.merged_labels
     }
   }))
+}
+resource "local_file" "debug" {
+  filename        = "${local.debug_path}/${var.service_name}.json"
+  file_permission = "0600"
+  content = data.json-formatter_format_json.debug.result
 }

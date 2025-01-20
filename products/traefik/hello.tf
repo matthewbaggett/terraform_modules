@@ -8,10 +8,11 @@ module "traefik_hello" {
   placement_constraints = var.placement_constraints
   networks              = [module.traefik_network, ]
   traefik = {
-    domain         = var.hello_service_domain
-    port           = 80
-    ssl            = var.enable_ssl
-    enable_non_ssl = var.enable_non_ssl
+    domain           = var.hello_service_domain
+    port             = 80
+    ssl              = var.enable_ssl
+    non-ssl          = var.enable_non_ssl
+    basic-auth-users = var.hello_service_enable_basic_auth ? ["hello"] : []
   }
   healthcheck_interval     = "5s"
   healthcheck_timeout      = "2s"

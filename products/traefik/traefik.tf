@@ -98,11 +98,12 @@ module "traefik" {
   global                = true
   converge_enable       = false // @todo add healthcheck
   command               = local.command
-  traefik = var.traefik_service_domain != null ? {
-    domain  = var.traefik_service_domain
-    port    = var.dashboard_port
-    ssl     = var.enable_ssl
-    non-ssl = var.enable_non_ssl
+  traefik = var.traefik_dashboard_service_domain != null ? {
+    domain           = var.traefik_dashboard_service_domain
+    port             = var.dashboard_port
+    ssl              = var.enable_ssl
+    non-ssl          = var.enable_non_ssl
+    basic-auth-users = var.traefik_dashboard_service_enable_basic_auth ? ["traefik"] : []
   } : null
   ports = [
     {

@@ -42,13 +42,23 @@ variable "acme_email" {
   description = "The email address to use for the ACME certificate."
   type        = string
 }
-variable "traefik_service_domain" {
+variable "traefik_dashboard_service_domain" {
   type    = string
   default = null
 }
 variable "hello_service_domain" {
   type    = string
   default = null
+}
+variable "traefik_dashboard_service_enable_basic_auth" {
+  type        = bool
+  default     = false
+  description = "Whether to enable basic auth for the traefik dashboard."
+}
+variable "hello_service_enable_basic_auth" {
+  type        = bool
+  default     = false
+  description = "Whether to enable basic auth for the hello service."
 }
 variable "log_level" {
   type        = string

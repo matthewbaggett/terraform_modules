@@ -58,4 +58,7 @@ module "docker_registry" {
     "/etc/docker/registry/config.yml" = yamlencode(local.registry_config_yaml)
     "/etc/docker/registry/htpasswd"   = local.registry_htpasswd
   }
+  healthcheck      = ["CMD", "wget", "-q", "http://localhost:5000/", "-O", "/dev/null"]
+  converge_enable  = true
+  converge_timeout = "2m"
 }

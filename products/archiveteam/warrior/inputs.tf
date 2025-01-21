@@ -37,21 +37,39 @@ variable "shared_rsync_threads" {
   description = "The number of rsync threads to use"
   default     = 2
 }
-
 resource "random_password" "warrior_password" {
   count   = var.http_password == null ? 1 : 0
   length  = 32
   special = false
 }
-
 variable "port" {
   type        = number
   description = "The port to expose the warrior on"
   default     = 8001
 }
-
 variable "service_name" {
   type        = string
   description = "The name of the service to create."
   default     = "warrior"
+}
+variable "stack_name" {
+  type        = string
+  description = "The name of the stack to deploy the service to."
+  default     = "archiveteam"
+}
+variable "traefik" {
+  default = null
+  type = object({
+    domain           = string
+    port             = optional(number)
+    non-ssl          = optional(bool)
+    ssl              = optional(bool)
+    rule             = optional(string)
+    middlewares      = optional(list(string))
+    network          = optional(object({ name = string, id = string }))
+    basic-auth-users = optional(list(string))
+    headers          = optional(map(string))
+    udp_entrypoints  = optional(list(string)) # List of UDP entrypoints
+  })
+  description = "Whether to enable traefik for the service."
 }

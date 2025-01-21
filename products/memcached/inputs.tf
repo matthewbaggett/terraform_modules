@@ -27,6 +27,11 @@ variable "threads" {
 variable "stack_name" {
   type = string
 }
+variable "service_name" {
+  default = "memcached"
+  type    = string
+  description = "The name of the service to create."
+}
 variable "networks" {
   type = list(object({
     name = string

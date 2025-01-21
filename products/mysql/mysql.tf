@@ -2,13 +2,12 @@ module "service" {
   source                   = "../../docker/service"
   image                    = "${var.mysql_image}:${var.mysql_version}"
   stack_name               = var.stack_name
-  service_name             = "mysql"
+  service_name             = var.service_name
   networks                 = var.networks
   healthcheck              = ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--mariadbupgrade", "--innodb_initialized"]
-  healthcheck_start_period = "10s"
+  healthcheck_start_period = "30s"
   healthcheck_interval     = "10s"
   healthcheck_timeout      = "5s"
-  healthcheck_retries      = 3
   environment_variables = {
     MARIADB_ROOT_PASSWORD = local.root_password
     MARIADB_USER          = local.username

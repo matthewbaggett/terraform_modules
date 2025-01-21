@@ -30,4 +30,5 @@ module "statping" {
   placement_constraints = var.placement_constraints
   dns_nameservers       = var.dns_nameservers
   traefik               = var.traefik
+  converge_enable       = false # @todo MB: add healthcheck and fix this.
 }

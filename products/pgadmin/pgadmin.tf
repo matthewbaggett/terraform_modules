@@ -37,9 +37,10 @@ module "pgadmin" {
       Servers = { for server in var.servers : index(var.servers, server) => server }
     })
   }
-  healthcheck              = ["CMD", "wget", "-q", "-O", "-", "http://localhost:80/misc/ping"]
-  healthcheck_start_period = "60s"
-  converge_timeout         = "5m"
+  #healthcheck              = ["CMD", "wget", "-q", "-O", "-", "http://localhost:80/misc/ping"]
+  #healthcheck_start_period = "60s"
+  #converge_timeout         = "5m"
+  converge_enable = false
 }
 output "credentials" {
   value = {

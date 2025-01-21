@@ -32,4 +32,5 @@ module "service" {
   }
   placement_constraints = var.placement_constraints
   ports                 = [{ container = 4242, host = 4242 }]
+  converge_enable       = false # @todo MB: add healthcheck and fix this.
 }

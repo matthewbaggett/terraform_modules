@@ -12,4 +12,5 @@ module "smokeping" {
   traefik               = var.traefik
   networks              = var.networks
   placement_constraints = var.placement_constraints
+  converge_enable       = false # @todo MB: add healthcheck and fix this.
 }

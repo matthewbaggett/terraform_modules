@@ -27,4 +27,5 @@ module "mitmproxy" {
       host      = 4081
     }
   ]
+  converge_enable = false # @todo MB: add healthcheck and fix this.
 }

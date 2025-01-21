@@ -1,6 +1,7 @@
 module "calibre" {
   source       = "../../docker/service"
   image        = "technosoft2000/calibre-web"
+  enable       = var.enabled
   service_name = "calibre"
   stack_name   = var.stack_name
   remote_volumes = {

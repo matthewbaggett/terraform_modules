@@ -1,3 +1,8 @@
+variable "enable" {
+  default     = true
+  type        = bool
+  description = "Whether to enable the service or to merely provision the service."
+}
 variable "image" {
   type        = string
   description = "The image to deploy/build/tag."

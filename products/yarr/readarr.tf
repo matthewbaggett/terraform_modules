@@ -1,6 +1,7 @@
 module "readarr" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/readarr:develop"
+  enable       = var.enabled
   service_name = "readarr"
   stack_name   = var.stack_name
   remote_volumes = {

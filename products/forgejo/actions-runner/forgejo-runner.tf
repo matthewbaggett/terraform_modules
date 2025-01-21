@@ -1,5 +1,6 @@
 module "forgejo_actions_runner" {
   source                = "../../../docker/service"
+  enable                = var.enable
   service_name          = var.service_name
   stack_name            = var.stack_name
   placement_constraints = var.placement_constraints

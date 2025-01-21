@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the services or merely provision them."
+  default     = true
+}
 variable "forgejo_actions_runner_image" {
   default     = "code.forgejo.org/forgejo/runner"
   type        = string

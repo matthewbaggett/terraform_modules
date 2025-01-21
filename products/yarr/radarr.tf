@@ -1,6 +1,7 @@
 module "radarr" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/radarr:latest"
+  enable       = var.enabled
   service_name = "radarr"
   stack_name   = var.stack_name
   remote_volumes = {

@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the services or merely provision them."
+  default     = true
+}
 variable "forgejo_image" {
   default     = "code.forgejo.org/forgejo/forgejo"
   type        = string

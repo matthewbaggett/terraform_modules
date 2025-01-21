@@ -1,6 +1,7 @@
 module "sonarr" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/sonarr:latest"
+  enable       = var.enabled
   service_name = "sonarr"
   stack_name   = var.stack_name
   remote_volumes = {

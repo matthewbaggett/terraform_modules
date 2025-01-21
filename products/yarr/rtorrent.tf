@@ -1,6 +1,7 @@
 module "rtorrent" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/rutorrent"
+  enable       = var.enabled
   service_name = "rtorrent"
   stack_name   = var.stack_name
   ports        = [{ container = 36258, host = 36258 }]

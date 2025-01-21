@@ -1,6 +1,7 @@
 module "lidarr" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/lidarr:latest"
+  enable       = var.enabled
   service_name = "lidarr"
   stack_name   = var.stack_name
   remote_volumes = {

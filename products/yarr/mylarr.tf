@@ -1,6 +1,7 @@
 module "mylar" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/mylar3:latest"
+  enable       = var.enabled
   service_name = "mylar"
   stack_name   = var.stack_name
   remote_volumes = {

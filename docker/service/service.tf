@@ -141,7 +141,7 @@ resource "docker_service" "instance" {
     for_each = !var.global ? [{}] : []
     content {
       replicated {
-        replicas = var.parallelism
+        replicas = var.enable ? var.parallelism : 0
       }
     }
   }

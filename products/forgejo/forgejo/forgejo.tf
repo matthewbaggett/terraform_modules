@@ -1,6 +1,6 @@
-
 module "forgejo" {
   source                = "../../../docker/service"
+  enable                = var.enable
   image                 = "${var.forgejo_image}:${var.forgejo_version}"
   stack_name            = var.stack_name
   service_name          = "forgejo"

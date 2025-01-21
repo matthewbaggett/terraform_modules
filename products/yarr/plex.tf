@@ -1,7 +1,7 @@
-
 module "plex" {
   source       = "../../docker/service"
   image        = "lscr.io/linuxserver/plex"
+  enable       = var.enabled
   service_name = "plex"
   stack_name   = var.stack_name
   remote_volumes = {

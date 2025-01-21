@@ -29,3 +29,8 @@ variable "traefik" {
   })
   description = "Whether to enable traefik for the service."
 }
+variable "enabled" {
+  description = "Whether to enable the services or merely provision them."
+  type        = bool
+  default     = true
+}

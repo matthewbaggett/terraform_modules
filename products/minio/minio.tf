@@ -1,9 +1,13 @@
 module "minio" {
-  source       = "../../docker/service"
-  stack_name   = var.stack_name
-  service_name = "minio"
-  image        = "quay.io/minio/minio:latest"
-  command      = ["minio", "server", "/data", ]
+  source                   = "../../docker/service"
+  stack_name               = var.stack_name
+  service_name             = "minio"
+  image                    = "quay.io/minio/minio:latest"
+  command                  = ["minio", "server", "/data", ]
+  healthcheck              = ["CMD", "mc", "ready", "local", ]
+  healthcheck_start_period = "20s"
+  converge_enable          = true
+  converge_timeout         = "2m"
   environment_variables = {
     MINIO_ADDRESS              = "0.0.0.0:9000"
     MINIO_CONSOLE_ADDRESS      = "0.0.0.0:9001"

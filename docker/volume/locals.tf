@@ -7,12 +7,11 @@ locals {
   ]), 0, 63)
 
   is_bind = var.bind_path != null
-  driver  = local.is_bind ? "local" : var.driver
-  driver_opts = local.is_bind ? {
+  driver_opts = coalesce(var.driver_opts, local.is_bind ? {
     "type"   = "none"
     "device" = var.bind_path
     "o"      = "bind"
-  } : var.driver_opts
+  } : {})
 
   labels = merge(var.labels, {
     "com.docker.stack.namespace" = var.stack_name

@@ -23,7 +23,7 @@ variable "bind_path" {
 }
 variable "driver" {
   type    = string
-  default = null
+  default = "local"
 }
 variable "driver_opts" {
   type    = map(string)

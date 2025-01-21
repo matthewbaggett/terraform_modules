@@ -33,8 +33,8 @@ variable "stack_name" {
   type = string
 }
 variable "service_name" {
-  default = "mysql"
-  type    = string
+  default     = "mysql"
+  type        = string
   description = "The name of the service to create."
 }
 variable "networks" {

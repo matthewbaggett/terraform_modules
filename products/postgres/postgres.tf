@@ -2,7 +2,7 @@ module "service" {
   source               = "../../docker/service"
   image                = "${var.postgres_image}:${var.postgres_version}"
   stack_name           = var.stack_name
-  service_name             = var.service_name
+  service_name         = var.service_name
   networks             = var.networks
   healthcheck          = ["CMD-SHELL", "pg_isready", "-U", local.username, "-d", local.database]
   healthcheck_interval = "10s"

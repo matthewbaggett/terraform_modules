@@ -28,8 +28,8 @@ variable "stack_name" {
   type = string
 }
 variable "service_name" {
-  default = "postgres"
-  type    = string
+  default     = "postgres"
+  type        = string
   description = "The name of the service to create."
 }
 variable "networks" {

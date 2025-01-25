@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service."
+  default     = true
+}
 variable "redis_image" {
   default     = "redis"
   type        = string

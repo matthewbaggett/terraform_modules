@@ -4,16 +4,17 @@ module "network" {
 }
 module "postgres" {
   source                = "../postgres"
+  enable = var.enable
   postgres_version      = "16"
   stack_name            = var.stack_name
   networks              = [module.network]
   username              = "postgres"
   database              = "postgres"
   placement_constraints = var.placement_constraints
-  ports                 = [{ container = 5432, host = 65432 }]
 }
 module "service" {
   source       = "../../docker/service"
+  enable = var.enable
   image        = "${var.quassel_image}:${var.quassel_version}"
   stack_name   = var.stack_name
   service_name = "quassel"

@@ -24,6 +24,7 @@ variable "append_only" {
 }
 module "service" {
   source       = "../../docker/service"
+  enable       = var.enable
   image        = "${var.redis_image}:${var.redis_version}"
   stack_name   = var.stack_name
   service_name = "redis"

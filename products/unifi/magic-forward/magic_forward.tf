@@ -4,4 +4,5 @@ module "port_forward" {
   label   = var.label
   port    = var.port != null ? var.port : var.docker_service.endpoint_spec[0].ports[0].published_port
   ip      = var.target.fixed_ip
+  protocol = var.protocol
 }

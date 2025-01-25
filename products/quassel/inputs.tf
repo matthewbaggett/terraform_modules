@@ -1,3 +1,8 @@
+variable "enable" {
+    type        = bool
+    description = "Whether to enable the service."
+    default     = true
+}
 variable "quassel_image" {
   default     = "lscr.io/linuxserver/quassel-core"
   type        = string

@@ -24,7 +24,7 @@ variable "placement_constraints" {
   description = "Docker Swarm placement constraints"
 }
 variable "ports" {
-  default = [{host=4242, container=4242}]
+  default = [{ host = 4242, container = 4242 }]
   type = list(object({
     host      = number
     container = number

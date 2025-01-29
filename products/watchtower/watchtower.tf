@@ -3,7 +3,7 @@ module "watchtower" {
   image                 = "containrrr/watchtower:latest"
   stack_name            = "watchtower"
   service_name          = "watchtower"
-  placement_constraints = var.placement_constraints + ["node.role == manager"]
+  placement_constraints = distinct(concat(var.placement_constraints, ["node.role == manager"]))
   command               = ["--cleanup", "--label-enable", "--interval", "3600"]
   labels = {
     "com.centurylinklabs.watchtower.enable" = "true"

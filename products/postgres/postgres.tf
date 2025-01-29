@@ -1,5 +1,6 @@
 module "service" {
   source               = "../../docker/service"
+  enable               = var.enable
   image                = "${var.postgres_image}:${var.postgres_version}"
   stack_name           = var.stack_name
   service_name         = var.service_name
@@ -16,13 +17,9 @@ module "service" {
   ports                 = var.ports
   placement_constraints = var.placement_constraints
 }
-
 locals {
   volumes = var.data_persist_path == null ? {
     "data" = "/var/lib/postgres/data"
   } : {}
-  mounts = var.data_persist_path != null ? {
-    "${var.data_persist_path}" = "/var/lib/postgres/data"
-  } : {}
-
+  mounts = var.data_persist_path != null ? zipmap([var.data_persist_path], ["/var/lib/postgres/data"]) : {}
 }

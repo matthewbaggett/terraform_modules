@@ -9,7 +9,7 @@ variable "networks" {
   }))
   default     = []
   description = "A list of network names to attach the service to."
-}
+} /*
 variable "ports" {
   type = list(object({
     host      = optional(number)
@@ -30,7 +30,7 @@ variable "ports" {
     error_message = "Protocol must be either 'tcp' or 'udp'."
     condition     = alltrue([for port in var.ports : port.protocol == "tcp" || port.protocol == "udp"])
   }
-}
+}*/
 variable "placement_constraints" {
   default     = []
   type        = list(string)

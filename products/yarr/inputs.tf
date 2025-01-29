@@ -1,3 +1,8 @@
+variable "enabled" {
+  description = "Whether to enable the services or merely provision them."
+  type        = bool
+  default     = true
+}
 variable "stack_name" {
   description = "The name of the stack"
   type        = string
@@ -16,7 +21,6 @@ variable "placement_constraints" {
   default     = []
 }
 variable "traefik" {
-  default = null
   type = object({
     domain           = string
     port             = optional(number)
@@ -28,9 +32,4 @@ variable "traefik" {
     basic-auth-users = optional(list(string))
   })
   description = "Whether to enable traefik for the service."
-}
-variable "enabled" {
-  description = "Whether to enable the services or merely provision them."
-  type        = bool
-  default     = true
 }

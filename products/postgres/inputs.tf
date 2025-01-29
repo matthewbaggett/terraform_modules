@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service."
+  default     = true
+}
 variable "postgres_image" {
   default     = "postgres"
   type        = string

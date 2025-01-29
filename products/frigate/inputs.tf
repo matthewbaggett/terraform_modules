@@ -20,20 +20,11 @@ variable "frigate_rtsp_password" {
   description = "The password to use for the RTSP streams"
   default     = ""
 }
-variable "devices" {
-  type = list(object({
-    host_path      = string
-    container_path = string
-    permissions    = optional(string, "rwm")
-  }))
-  description = "The devices to mount into the container"
-}
-variable "volumes" {
+variable "mounts" {
   type        = map(string)
   default     = {}
-  description = "A map of volume names to create and mount. The key is the volume name, and the value is the mount point."
+  description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
-
 variable "ports" {
   type = list(object({
     host      = number
@@ -72,15 +63,16 @@ variable "ports" {
 variable "traefik" {
   default = null
   type = object({
-    domain  = string
-    port    = optional(number, 5000)
-    non-ssl = optional(bool, true)
-    ssl     = optional(bool, false)
-    rule    = optional(string)
-    network = optional(object({
-      name = string
-      id   = string
-    }))
+    domain           = string
+    port             = optional(number)
+    non-ssl          = optional(bool, false)
+    ssl              = optional(bool, false)
+    rule             = optional(string)
+    middlewares      = optional(list(string), [])
+    network          = optional(object({ name = string, id = string }))
+    basic-auth-users = optional(list(string), [])
+    headers          = optional(map(string), {})
+    udp_entrypoints  = optional(list(string), []) # List of UDP entrypoints
   })
   description = "Whether to enable traefik for the service."
 }

@@ -15,7 +15,6 @@ module "anisette" {
     "anisette-v3-data" = "/home/Alcoholic/.config/anisette-v3/lib/"
   }
 }
-
 module "macless-haystack" {
   source                = "../../docker/service"
   stack_name            = var.stack_name

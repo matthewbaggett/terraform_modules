@@ -24,8 +24,5 @@ locals {
   volumes = var.data_persist_path == null ? {
     "data" = "/var/lib/mysql"
   } : {}
-  mounts = var.data_persist_path != null ? {
-    "${var.data_persist_path}" = "/var/lib/mysql"
-  } : {}
-
+  mounts = var.data_persist_path != null ? zipmap([var.data_persist_path], ["/var/lib/mysql"]) : {}
 }

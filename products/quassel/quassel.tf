@@ -4,17 +4,18 @@ module "network" {
 }
 module "postgres" {
   source                = "../postgres"
-  enable = var.enable
+  enable                = var.enable
   postgres_version      = "16"
   stack_name            = var.stack_name
   networks              = [module.network]
   username              = "postgres"
   database              = "postgres"
   placement_constraints = var.placement_constraints
+  ports                 = [{ container = 5432 }]
 }
 module "service" {
   source       = "../../docker/service"
-  enable = var.enable
+  enable       = var.enable
   image        = "${var.quassel_image}:${var.quassel_version}"
   stack_name   = var.stack_name
   service_name = "quassel"
@@ -32,6 +33,6 @@ module "service" {
     AUTH_AUTHENTICATOR = "Database"
   }
   placement_constraints = var.placement_constraints
-  ports                 = [{ container = 4242, host = 4242 }]
+  ports                 = var.ports
   converge_enable       = false # @todo MB: add healthcheck and fix this.
 }

@@ -1,3 +1,8 @@
+variable "enabled" {
+    type        = bool
+    description = "Whether to enable the service or merely provision it."
+    default     = true
+}
 variable "placement_constraints" {
   default     = []
   type        = list(string)

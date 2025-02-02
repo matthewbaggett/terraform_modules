@@ -2,7 +2,6 @@ resource "random_password" "default" {
   length  = 32
   special = false
 }
-
 variable "servers" {
   type = list(object({
     Name                 = string
@@ -22,6 +21,7 @@ variable "servers" {
 }
 module "pgadmin" {
   source                = "../../docker/service"
+  enable = var.enabled
   image                 = "dpage/pgadmin4:8"
   service_name          = "pgadmin"
   stack_name            = "pgadmin"

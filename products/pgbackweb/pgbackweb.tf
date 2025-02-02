@@ -8,6 +8,7 @@ resource "random_password" "encryption_key" {
 }
 module "pgbackweb" {
   source = "../../docker/service"
+  enable = var.enabled
   image  = "${var.pgbackweb_image}:${var.pgbackweb_version}"
   environment_variables = {
     PBW_ENCRYPTION_KEY       = nonsensitive(random_password.encryption_key.result)

@@ -60,6 +60,11 @@ variable "mounts" {
   description = "A map of host paths to container paths to mount. Key is Host path, Value is Container path"
 }
 
+variable "data_storage_path" {
+  type        = string
+  description = "Specify path to store the data."
+  default     = null
+}
 variable "database_storage_path" {
   type        = string
   description = "Specify path to store the database data."

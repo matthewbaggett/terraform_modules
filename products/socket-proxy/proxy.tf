@@ -4,7 +4,6 @@ locals {
   command = ["socat", local.listen, local.connect]
 }
 module "socat" {
-  #source               = "github.com/matthewbaggett/terraform_modules//docker/service"
   source                = "../../docker/service"
   stack_name            = var.stack_name
   service_name          = var.service_name

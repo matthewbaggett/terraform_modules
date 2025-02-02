@@ -21,8 +21,9 @@ module "forgejo" {
     }))
   }
   mounts = merge(var.mounts, {
-    "/etc/timezone"  = "/etc/timezone",
-    "/etc/localtime" = "/etc/localtime",
+    "${var.data_storage_path}" = "/data",
+    "/etc/timezone"            = "/etc/timezone",
+    "/etc/localtime"           = "/etc/localtime",
   })
   environment_variables = {
     USER_UID = 1000

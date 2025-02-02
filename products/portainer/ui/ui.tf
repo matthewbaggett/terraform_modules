@@ -9,12 +9,12 @@ resource "htpasswd_password" "hash" {
   salt     = random_password.salt.result
 }
 module "vol_portainer" {
-  source      = "github.com/matthewbaggett/terraform_modules//docker//volume"
+  source      = "../../../docker//volume"
   stack_name  = var.stack_name
   volume_name = "portainer"
 }
 module "portainer" {
-  source       = "github.com/matthewbaggett/terraform_modules//docker//service"
+  source       = "../../../docker//service"
   stack_name   = var.stack_name
   service_name = "portainer"
   image        = "portainer/portainer-ce:${var.portainer_version}"

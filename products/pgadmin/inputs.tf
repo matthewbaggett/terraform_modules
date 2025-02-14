@@ -16,7 +16,6 @@ variable "networks" {
   default     = []
   description = "A list of network names to attach the service to."
 }
-
 variable "traefik" {
   default = null
   type = object({

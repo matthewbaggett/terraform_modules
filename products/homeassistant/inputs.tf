@@ -3,13 +3,11 @@ variable "stack_name" {
   type        = string
   description = "The name of the stack to create."
 }
-
 variable "default_image" {
   default     = "ghcr.io/home-assistant/home-assistant:stable"
   type        = string
   description = "The image to use for the homeassistant service"
 }
-
 variable "environment_variables" {
   type        = map(string)
   default     = {}

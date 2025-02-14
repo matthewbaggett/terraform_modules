@@ -234,3 +234,8 @@ variable "reserved_ram_mb" {
   type        = number
   description = "The RAM reservation for the service, measured in megabytes."
 }
+variable "shm_size_mb" {
+  default     = null
+  type        = number
+  description = "The size of the shared memory segment in megabytes."
+}

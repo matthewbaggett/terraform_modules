@@ -11,6 +11,20 @@ resource "docker_service" "instance" {
       command = var.command
       env     = var.environment_variables
 
+      # Mount the shm if needed
+      dynamic "mounts" {
+        for_each = docker_volume.shm
+        content {
+          source = docker_volume.shm[mounts.key].id
+          target = "/dev/shm"
+          type   = "tmpfs"
+          tmpfs_options {
+            size_bytes = local.shm_bytes
+          }
+          read_only = false
+        }
+      }
+
       # Mount all the created volumes
       dynamic "mounts" {
         for_each = var.volumes

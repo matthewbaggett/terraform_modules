@@ -1,5 +1,6 @@
 # General Configuration
-daemon=300
+daemon=${interval}
+syslog=yes
 
 # Router
 usev4=${router}
@@ -10,4 +11,4 @@ protocol=${protocol}
 %{ if password != null }password=${password}%{ endif }
 %{ if apikey != null }apikey=${apikey}%{ endif }
 %{ if secretapikey != null }secretapikey=${secretapikey}%{ endif }
-${domain}
+%{ if onrootdomain == true }on-root-domain=yes %{ endif }${domain}

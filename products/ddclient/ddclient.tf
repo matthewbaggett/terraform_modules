@@ -15,6 +15,7 @@ module "service" {
   #}
   secrets = {
     "/defaults/ddclient.conf" = templatefile("${path.module}/ddclient.conf.tpl", {
+      interval     = var.interval_seconds
       protocol     = var.protocol
       router       = var.router
       login        = var.login
@@ -22,6 +23,7 @@ module "service" {
       apikey       = var.apikey
       secretapikey = var.secretapikey
       domain       = var.domain
+      onrootdomain = var.onrootdomain
     })
   }
   environment_variables = {

@@ -1,3 +1,7 @@
+variable "interval_seconds" {
+  default = 300
+  type    = number
+}
 variable "stack_name" {
   default     = "dns"
   type        = string
@@ -17,6 +21,10 @@ variable "router" {
 }
 variable "domain" {
   type = string
+}
+variable "onrootdomain" {
+  default = false
+  type    = bool
 }
 variable "login" {
   type    = string

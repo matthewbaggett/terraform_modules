@@ -1,4 +1,4 @@
-# General
+# General Configuration
 daemon=300
 
 # Router

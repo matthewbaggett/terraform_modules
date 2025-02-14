@@ -13,4 +13,5 @@ module "frigate" {
   networks        = var.networks
   labels          = var.labels
   converge_enable = false
+  shm_size_mb     = 256
 }

@@ -61,6 +61,15 @@ resource "docker_service" "instance" {
           file_name   = configs.key
         }
       }
+      # Same for secrets
+      dynamic "secrets" {
+        for_each = var.secrets
+        content {
+          secret_id   = module.secrets[secrets.key].id
+          secret_name = module.secrets[secrets.key].name
+          file_name   = secrets.key
+        }
+      }
 
       # Allow overriding DNS server in use
       dynamic "dns_config" {

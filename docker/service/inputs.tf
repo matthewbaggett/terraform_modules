@@ -110,6 +110,11 @@ variable "mounts" {
   default     = {}
   description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
+variable "secrets" {
+  type        = map(string)
+  default     = {}
+  description = "A map of secret files to create. Key being the path to the file, and the value being the content. The secret will be created using the truncated file name and a timestamp."
+}
 variable "configs" {
   type        = map(string)
   default     = {}

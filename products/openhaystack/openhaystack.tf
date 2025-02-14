@@ -5,6 +5,7 @@ module "network" {
 module "anisette" {
   source                = "../../docker/service"
   image                 = "dadoum/anisette-v3-server"
+  enable                = var.enable
   stack_name            = var.stack_name
   service_name          = "anisette"
   networks              = concat(var.networks, [module.network])
@@ -17,6 +18,7 @@ module "anisette" {
 }
 module "macless-haystack" {
   source                = "../../docker/service"
+  enable                = var.enable
   stack_name            = var.stack_name
   service_name          = "macless-haystack"
   image                 = "christld/macless-haystack"

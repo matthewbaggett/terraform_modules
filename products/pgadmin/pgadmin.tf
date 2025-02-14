@@ -21,7 +21,7 @@ variable "servers" {
 }
 module "pgadmin" {
   source                = "../../docker/service"
-  enable                = var.enabled
+  enable                = var.enable
   image                 = "dpage/pgadmin4:8"
   service_name          = "pgadmin"
   stack_name            = "pgadmin"

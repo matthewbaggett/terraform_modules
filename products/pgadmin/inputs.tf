@@ -1,4 +1,4 @@
-variable "enabled" {
+variable "enable" {
   type        = bool
   description = "Whether to enable the service or merely provision it."
   default     = true

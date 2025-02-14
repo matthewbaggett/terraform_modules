@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service or merely provision it."
+  default     = true
+}
 variable "stack_name" {
   type        = string
   description = "The name of the stack to deploy the service to."

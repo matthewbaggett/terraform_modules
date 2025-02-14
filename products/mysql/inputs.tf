@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service or merely provision it."
+  default     = true
+}
 variable "mysql_image" {
   default     = "mariadb"
   type        = string

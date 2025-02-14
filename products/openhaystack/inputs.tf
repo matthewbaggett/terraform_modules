@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service or merely provision it."
+  default     = true
+}
 # Pass-thru variables
 variable "stack_name" {
   type = string

@@ -8,7 +8,7 @@ resource "random_password" "encryption_key" {
 }
 module "pgbackweb" {
   source = "../../docker/service"
-  enable = var.enabled
+  enable = var.enable
   image  = "${var.pgbackweb_image}:${var.pgbackweb_version}"
   environment_variables = {
     PBW_ENCRYPTION_KEY       = nonsensitive(random_password.encryption_key.result)
@@ -22,7 +22,9 @@ module "pgbackweb" {
 }
 module "postgres" {
   source                = "../postgres"
-  postgres_version      = "16"
+  enable                = var.enable
+  postgres_version      = "17"
+  service_name          = "pgbackweb-postgres"
   stack_name            = var.stack_name
   networks              = [module.network]
   placement_constraints = var.placement_constraints

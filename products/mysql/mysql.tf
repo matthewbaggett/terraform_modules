@@ -1,5 +1,6 @@
 module "service" {
   source                   = "../../docker/service"
+  enable                   = var.enable
   image                    = "${var.mysql_image}:${var.mysql_version}"
   stack_name               = var.stack_name
   service_name             = var.service_name

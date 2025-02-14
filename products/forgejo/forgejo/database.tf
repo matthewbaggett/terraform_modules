@@ -2,8 +2,7 @@ module "postgres" {
   source                = "../../../products/postgres"
   stack_name            = var.stack_name
   placement_constraints = var.placement_constraints
-  postgres_version      = "15"
-  networks              = [module.forgejo_network]
+  networks              = [module.network]
   data_persist_path     = var.database_storage_path
   ports = [
     {

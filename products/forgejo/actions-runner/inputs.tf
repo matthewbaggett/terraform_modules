@@ -9,9 +9,17 @@ variable "forgejo_actions_runner_image" {
   description = "The docker image to use for the forgejo runner service."
 }
 variable "forgejo_actions_runner_version" {
-  default     = "latest"
+  default     = "6"
   type        = string
   description = "The version of the docker image to use for the forgejo runner service."
+}
+variable "networks" {
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "A list of network names to attach the service to."
 }
 variable "parallelism" {
   description = "The number of instances of the runner to run"
@@ -52,6 +60,7 @@ variable "service_name" {
 variable "stack_name" {
   type        = string
   description = "The name of the stack to deploy the service to."
+  default     = "forgejo"
 }
 variable "placement_constraints" {
   default     = []

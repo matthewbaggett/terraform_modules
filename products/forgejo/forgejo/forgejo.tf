@@ -5,7 +5,7 @@ module "forgejo" {
   stack_name            = var.stack_name
   service_name          = "forgejo"
   placement_constraints = var.placement_constraints
-  networks              = concat(var.networks, [module.forgejo_network])
+  networks              = concat(var.networks, [module.network])
   configs = {
     "/data/gitea/conf/app.ini" = templatefile("${path.module}/app.ini.tpl", merge({
       name              = var.forgejo_name

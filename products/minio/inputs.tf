@@ -11,7 +11,6 @@ variable "networks" {
   default     = []
   description = "A list of network names to attach the service to."
 }
-
 variable "traefik" {
   default = null
   type = object({
@@ -31,7 +30,6 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
-
 variable "domain" {
   type        = string
   description = "The domain to use for the service."
@@ -41,7 +39,14 @@ variable "mounts" {
   default     = {}
   description = "A map of host paths to container paths to mount. The key is the host path, and the value is the container path."
 }
-
+variable "remote_volumes" {
+  type = map(object({
+    id     = string
+    driver = string
+  }))
+  default     = {}
+  description = "A remote volume is a volume created explicitly and not implicitly by this Service. This is a map of remote volumes to mount into the container. The key is the source, and the value is the target."
+}
 variable "ports" {
   type = list(object({
     host      = optional(number, null)

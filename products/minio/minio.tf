@@ -20,6 +20,7 @@ module "minio" {
   }
   ports                 = var.ports
   mounts                = var.mounts
+  remote_volumes        = var.remote_volumes
   networks              = concat(var.networks, [module.network])
   placement_constraints = var.placement_constraints
   labels = {

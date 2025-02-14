@@ -18,10 +18,10 @@ module "anisette" {
 }
 module "macless-haystack" {
   source                = "../../docker/service"
+  image                 = "christld/macless-haystack"
   enable                = var.enable
   stack_name            = var.stack_name
   service_name          = "macless-haystack"
-  image                 = "christld/macless-haystack"
   networks              = concat(var.networks, [module.network])
   converge_enable       = false
   ports                 = [{ host = 6176, container = 6176, protocol = "tcp" }]

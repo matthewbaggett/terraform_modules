@@ -7,3 +7,6 @@ output "postgres" {
 output "network" {
   value = module.network.network
 }
+output "endpoint" {
+  value = module.pgbackweb.endpoint
+}

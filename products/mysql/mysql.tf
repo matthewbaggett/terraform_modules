@@ -19,6 +19,8 @@ module "service" {
   mounts                = local.mounts
   ports                 = var.ports
   placement_constraints = var.placement_constraints
+  parallelism           = 1
+  start_first           = false
 }
 locals {
   volumes = var.data_persist_path == null ? {

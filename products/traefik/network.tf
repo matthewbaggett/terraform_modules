@@ -1,4 +1,8 @@
-module "traefik_network" {
+moved {
+  from = module.traefik_network
+  to   = module.network
+}
+module "network" {
   source       = "../../docker/network"
   stack_name   = var.stack_name
   network_name = "traefik"

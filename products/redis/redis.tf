@@ -39,9 +39,9 @@ module "service" {
   healthcheck              = ["CMD", "redis-cli", "ping"]
   healthcheck_interval     = "10s"
   healthcheck_start_period = "10s"
-  volumes = {
-    "data" = "/data",
-  }
-  ports                 = var.ports
-  placement_constraints = var.placement_constraints
+  volumes                  = { "data" = "/data", }
+  ports                    = var.ports
+  placement_constraints    = var.placement_constraints
+  parallelism              = 1
+  start_first              = false
 }

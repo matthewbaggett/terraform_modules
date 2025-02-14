@@ -15,5 +15,5 @@ module "service" {
     "mqtt_data" = "/mosquitto/data"
     "mqtt_logs" = "/mosquitto/logs"
   }
-  converge_enable = false
+  converge_enable = false # @todo Add healthcheck and enable this.
 }

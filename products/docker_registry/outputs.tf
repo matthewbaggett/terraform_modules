@@ -9,3 +9,6 @@ output "registry_user_login" {
 output "domain" {
   value = var.domain
 }
+output "endpoint" {
+  value = "https://${var.domain}"
+}

@@ -40,7 +40,7 @@ locals {
     var.enable_docker_provider ? [
       "--providers.docker=true",
       "--providers.docker.exposedByDefault=false",
-      "--providers.docker.network=${module.traefik_network.name}",
+      "--providers.docker.network=${module.network.name}",
       "--providers.docker.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",
       ] : [
       "--providers.docker=false"
@@ -50,7 +50,7 @@ locals {
     var.enable_swarm_provider ? [
       "--providers.swarm=true",
       "--providers.swarm.exposedByDefault=false",
-      "--providers.swarm.network=${module.traefik_network.name}",
+      "--providers.swarm.network=${module.network.name}",
       "--providers.swarm.endpoint=http://${module.docker_socket_proxy.docker_service.name}:2375",
       ] : [
       "--providers.swarm=false"
@@ -88,16 +88,17 @@ locals {
 }
 module "traefik" {
   source                = "../../docker/service"
-  depends_on            = [module.docker_socket_proxy]
+  depends_on            = [module.docker_socket_proxy, module.network, ]
   stack_name            = var.stack_name
   service_name          = "traefik"
   image                 = var.traefik_image
-  networks              = [module.traefik_network, module.docker_socket_proxy.network, ]
+  networks              = [module.network, module.docker_socket_proxy.network, ]
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
   global                = true
   converge_enable       = false // @todo add healthcheck
   command               = local.command
+
   traefik = var.traefik_dashboard_service_domain != null ? {
     domain           = var.traefik_dashboard_service_domain
     port             = var.dashboard_port

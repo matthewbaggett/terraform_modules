@@ -32,7 +32,6 @@ variable "github_token" {
   type        = string
   description = "The github token to use to register the runner."
 }
-
 # Pass-thru variables
 variable "service_name" {
   type        = string

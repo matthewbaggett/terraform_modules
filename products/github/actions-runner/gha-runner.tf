@@ -15,5 +15,9 @@ module "github_actions_runner" {
     EPHEMERAL           = true
     DISABLE_AUTO_UPDATE = "disable_updates"
   }
-  mounts = { "/var/run/docker.sock" = "/var/run/docker.sock" }
+  mounts = {
+    "/goliath/github/runner" = "/github"
+    "/var/run/docker.sock"   = "/var/run/docker.sock"
+  }
+  restart_delay = "30s"
 }

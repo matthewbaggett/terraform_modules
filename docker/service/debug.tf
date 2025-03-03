@@ -6,7 +6,6 @@ variable "debug_path" {
 locals {
   debug_path = var.debug_path != null ? var.debug_path : "${path.root}/.debug/docker/services/${var.stack_name}/${var.service_name}"
 }
-
 data "json-formatter_format_json" "debug" {
   json = nonsensitive(jsonencode({
     name                  = local.service_name
@@ -28,6 +27,7 @@ data "json-formatter_format_json" "debug" {
       provided = var.labels,
       final    = local.merged_labels
     }
+    environment_variables = var.environment_variables
   }))
 }
 resource "local_file" "debug" {

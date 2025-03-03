@@ -44,9 +44,10 @@ variable "target" {
 }
 variable "ports" {
   type = list(object({
-    host      = optional(number, null)
-    container = number
-    protocol  = optional(string, "tcp")
+    host         = optional(number, null)
+    container    = number
+    protocol     = optional(string, "tcp")
+    publish_mode = optional(string, "ingress")
   }))
   default = []
 }

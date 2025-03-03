@@ -5,8 +5,12 @@ variable "enable" {
 }
 variable "seafile_version" {
   type        = string
-  default     = "11.0.13"
+  default     = "12.0-latest"
   description = "The version of the docker image to use for the Seafile service."
+}
+variable "domain" {
+  type        = string
+  description = "The domain to use for the traefik configuration."
 }
 # Pass-thru variables
 variable "stack_name" {
@@ -33,7 +37,9 @@ variable "ports" {
     protocol     = optional(string, "tcp")
     publish_mode = optional(string, "ingress")
   }))
-  default     = []
+  default = [
+    { container = 80 },
+  ]
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
 }
 variable "mysql_ports" {
@@ -43,7 +49,9 @@ variable "mysql_ports" {
     protocol     = optional(string, "tcp")
     publish_mode = optional(string, "ingress")
   }))
-  default     = []
+  default = [
+    { container = 3306 },
+  ]
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
 }
 variable "mounts" {

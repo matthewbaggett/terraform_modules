@@ -53,3 +53,12 @@ variable "networks" {
   description = "A list of networks to attach the service to"
   default     = []
 }
+variable "ports" {
+  type = list(object({
+    host      = optional(number, null)
+    container = number
+    protocol  = optional(string, "tcp")
+  }))
+  default     = [{ container = 5000 }]
+  description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
+}

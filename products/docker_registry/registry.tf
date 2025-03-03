@@ -51,7 +51,7 @@ module "docker_registry" {
   image                 = "registry:2"
   restart_policy        = "on-failure"
   placement_constraints = var.placement_constraints
-  ports                 = [{ container = 5000 }]
+  ports                 = var.ports
   networks              = concat([module.registry_network, var.traefik.network, ], var.networks)
   traefik               = merge(var.traefik, { port = 5000, rule = "Host(`${var.domain}`) && PathPrefix(`/v2`)" })
   configs = {

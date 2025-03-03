@@ -1,3 +1,8 @@
+variable "enable" {
+  type        = bool
+  description = "Whether to enable the service."
+  default     = true
+}
 variable "memcached_image" {
   default     = "memcached"
   type        = string

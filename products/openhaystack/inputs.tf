@@ -16,10 +16,11 @@ variable "networks" {
   description = "A list of network names to attach the service to."
 } /*
 variable "ports" {
-  type = list(object({
-    host      = optional(number)
-    container = number
-    protocol  = optional(string, "tcp")
+    type = list(object({
+    host         = optional(number, null)
+    container    = number
+    protocol     = optional(string, "tcp")
+    publish_mode = optional(string, "ingress")
   }))
   default     = []
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."

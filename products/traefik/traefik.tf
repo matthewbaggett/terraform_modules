@@ -96,7 +96,8 @@ module "traefik" {
   remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
   placement_constraints = var.placement_constraints
   global                = true
-  converge_enable       = false // @todo add healthcheck
+  healthcheck           = ["CMD", "wget", "--no-verbose", "--tries", 1, "--spider", "http://localhost:8080"]
+  converge_enable       = true
   command               = local.command
 
   traefik = var.traefik_dashboard_service_domain != null ? {
@@ -110,12 +111,10 @@ module "traefik" {
     {
       host      = var.http_port
       container = var.http_port
-    },
-    {
+      }, {
       host      = var.https_port
       container = var.https_port
-    },
-    {
+      }, {
       host      = var.dashboard_port
       container = var.dashboard_port
     },

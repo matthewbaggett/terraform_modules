@@ -54,3 +54,8 @@ variable "service_account_public_ssh_keys" {
   type        = list(string)
   default     = []
 }
+variable "service_account_password" {
+  description = "The password of the service account to create"
+  type        = string
+  default     = null
+}

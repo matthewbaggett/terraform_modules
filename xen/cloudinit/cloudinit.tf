@@ -1,6 +1,17 @@
 data "http" "docker_asc" {
   url = "https://download.docker.com/linux/ubuntu/gpg"
 }
+resource "random_password" "salt" {
+  count            = var.service_account_password == null ? 0 : 1
+  length           = 8
+  special          = true
+  override_special = "!@#%&*()-_=+[]{}<>:?"
+}
+resource "htpasswd_password" "hash" {
+  count    = var.service_account_password == null ? 0 : 1
+  password = var.service_account_password
+  salt     = random_password.salt[0].result
+}
 locals {
   advertise_address = var.advertise_address != null ? "--advertise-addr ${var.advertise_address}" : ""
   manager_address   = var.manager_address
@@ -24,27 +35,26 @@ locals {
   }
   cloud_config = {
     hostname = var.hostname
+    groups   = ["sudo", "docker"]
     users = [
       {
         name                = var.service_account_username,
         ssh_authorized_keys = var.service_account_public_ssh_keys,
+        hashed_passwd       = var.service_account_password != null ? htpasswd_password.hash[0].sha512 : null
+        lock_passwd         = var.service_account_password == null ? true : false
         sudo                = "ALL=(ALL) NOPASSWD:ALL"
-        lock_passwd         = true
         shell               = "/bin/bash"
         groups              = ["sudo", "docker"]
       }
     ]
-    apt = {
-      sources = {
-        docker = [
-          {
-            source = "deb [arch=${local.ubuntu_arch} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${local.ubuntu_codename} stable",
-          }
-        ]
-      }
-    }
     write_files = [
       {
+        path        = "/etc/apt/sources.list.d/docker.list"
+        owner       = "root:root"
+        permissions = "0o644"
+        encoding    = "base64"
+        content     = base64encode("deb [arch=${local.ubuntu_arch} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${local.ubuntu_codename} stable\n")
+        }, {
         path        = "/etc/apt/keyrings/docker.asc"
         owner       = "root:root"
         permissions = "0o600"
@@ -59,6 +69,14 @@ locals {
         path    = "/etc/sysctl.d/50-docker-tuning.conf"
         owner   = "root:root"
         content = file("${path.module}/docker-tuning.conf")
+        }, {
+        path    = "/etc/sysctl.d/50-disable-ipv6.conf"
+        owner   = "root:root"
+        content = <<EOF
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+EOF
         }, {
         path    = "/etc/security/limits.conf"
         owner   = "root:root"
@@ -146,6 +164,12 @@ locals {
       local.is_manager ? "docker swarm join --token ${trimspace(var.manager_token)} ${trimspace(local.manager_address)}" : null,
       # If this is a worker, join the swarm
       local.is_worker ? "docker swarm join --token ${trimspace(var.worker_token)} ${trimspace(local.manager_address)}" : null,
+
+      # Install Linux Guest Tools
+      "mkdir -p /tmp/linux-guest-tools",
+      "wget -O /tmp/linux-guest-tools/LGT.tar.gz https://downloads.xenserver.com/vm-tools-linux/8.4.0-1/LinuxGuestTools-8.4.0-1.tar.gz",
+      "cd /tmp/linux-guest-tools; tar -xzf LGT.tar.gz",
+      "sudo /tmp/linux-guest-tools/LinuxGuestTools-8.4.0-1/install.sh -n",
     ])
     final_message = "Cloud-init is complete! Up after $UPTIME seconds."
   }

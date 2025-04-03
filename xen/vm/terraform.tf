@@ -6,5 +6,9 @@ terraform {
       source  = "terra-farm/xenorchestra"
       version = "~> 0.26"
     }
+    macaddress = {
+      source  = "ivoronin/macaddress"
+      version = "~> 0.3"
+    }
   }
 }

@@ -12,7 +12,7 @@ module "service" {
     POSTGRES_USER     = local.username
     POSTGRES_PASSWORD = local.password
     POSTGRES_DB       = local.database
-    PGDATA            = "/var/lib/postgres/data"
+    PGDATA            = "/var/lib/postgres/data/pgdata"
   }
   volumes               = local.volumes
   mounts                = local.mounts

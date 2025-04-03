@@ -47,9 +47,10 @@ variable "networks" {
 }
 variable "ports" {
   type = list(object({
-    host      = optional(number)
-    container = number
-    protocol  = optional(string, "tcp")
+    host         = optional(number, null)
+    container    = number
+    protocol     = optional(string, "tcp")
+    publish_mode = optional(string, "ingress")
   }))
   default     = []
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."

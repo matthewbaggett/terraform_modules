@@ -204,7 +204,7 @@ resource "docker_service" "instance" {
         target_port    = ports.value.container
         published_port = ports.value.host
         protocol       = ports.value.protocol
-        publish_mode   = "ingress"
+        publish_mode   = ports.value.publish_mode
       }
     }
   }

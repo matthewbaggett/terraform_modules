@@ -1,3 +1,8 @@
+variable "debug" {
+  type        = bool
+  default     = false
+  description = "Enable debug mode"
+}
 variable "debug_path" {
   type        = string
   description = "Path to write debug files to"
@@ -7,6 +12,7 @@ locals {
   debug_path = var.debug_path != null ? var.debug_path : "${path.root}/.debug/docker/services/${var.stack_name}/${var.service_name}"
 }
 data "json-formatter_format_json" "debug" {
+  count = var.debug ? 1 : 0
   json = nonsensitive(jsonencode({
     name                  = local.service_name
     stack                 = var.stack_name
@@ -31,7 +37,8 @@ data "json-formatter_format_json" "debug" {
   }))
 }
 resource "local_file" "debug" {
+  count           = var.debug ? 1 : 0
   filename        = "${local.debug_path}/${var.service_name}.json"
   file_permission = "0600"
-  content         = data.json-formatter_format_json.debug.result
+  content         = data.json-formatter_format_json.debug[0].result
 }

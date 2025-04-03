@@ -15,8 +15,3 @@ variable "labels" {
   default     = {}
   description = "A map of labels to apply to the service"
 }
-variable "debug" {
-  type        = bool
-  default     = true
-  description = "Emit debug files in .debug directory"
-}

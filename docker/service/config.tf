@@ -5,4 +5,5 @@ module "config" {
   name       = each.key
   value      = each.value
   debug_path = "${local.debug_path}/configs"
+  debug      = var.debug
 }

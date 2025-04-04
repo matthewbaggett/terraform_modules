@@ -1,36 +1,15 @@
-//resource "random_uuid" "edge_id" {}
 data "docker_registry_image" "portainer_agent" {
-  name = "portainer/agent:${var.portainer.version}"
+  name = "portainer/agent:${var.portainer.portainer_version}"
 }
-resource "docker_network" "portainer_edge_network" {
-  name   = "portainer_edge_network"
-  driver = "overlay"
-  labels {
-    label = "com.docker.stack.namespace"
-    value = var.docker.stack_name
-  }
-  lifecycle {
-    ignore_changes = [
-      ipam_config,
-    ]
-  }
-}
-resource "docker_service" "portainer_edge_agent" {
-  name = var.docker.name_agent
-  mode {
-    global = true
-  }
+resource "docker_service" "portainer_agent" {
+  name = local.agent_service_name
+  mode { global = true }
   task_spec {
     container_spec {
       image   = "${data.docker_registry_image.portainer_agent.name}@${data.docker_registry_image.portainer_agent.sha256_digest}"
       command = concat(["./agent"], var.debug ? ["--log-level", "DEBUG"] : [])
       env = {
-        AGENT_CLUSTER_ADDR = "tasks.${var.docker.name_agent}"
-        EDGE               = 1
-        EDGE_ID            = var.edge_id
-        #EDGE_KEY           = local.edge_key
-        EDGE_KEY           = var.edge_key
-        EDGE_INSECURE_POLL = 1
+        AGENT_CLUSTER_ADDR = "tasks.${local.agent_service_name}"
       }
       mounts {
         target    = "/var/run/docker.sock"
@@ -53,11 +32,11 @@ resource "docker_service" "portainer_edge_agent" {
       // MB:Might need to add a portainer_agent_data volume (not bind) here mounting int /data
       labels {
         label = "com.docker.stack.namespace"
-        value = var.docker.stack_name
+        value = var.portainer.stack_name
       }
     }
     networks_advanced {
-      name = docker_network.portainer_edge_network.id
+      name = var.portainer.network.id
     }
     restart_policy {
       condition = "on-failure"
@@ -90,7 +69,7 @@ resource "docker_service" "portainer_edge_agent" {
   }
   labels {
     label = "com.docker.stack.namespace"
-    value = var.docker.stack_name
+    value = var.portainer.stack_name
   }
   labels {
     label = "com.docker.stack.image"

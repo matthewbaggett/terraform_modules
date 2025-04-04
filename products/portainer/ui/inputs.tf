@@ -30,7 +30,6 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
-
 variable "portainer_version" {
   default     = "sts"
   type        = string

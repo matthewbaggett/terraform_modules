@@ -7,7 +7,7 @@ module "traefik_hello" {
   image                 = "nginxdemos/hello:plain-text"
   parallelism           = 3
   placement_constraints = var.placement_constraints
-  networks              = [module.network, ]
+  networks              = [data.docker_network.traefik]
   traefik = {
     domain           = var.hello_service_domain
     port             = 80

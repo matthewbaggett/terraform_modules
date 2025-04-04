@@ -92,8 +92,8 @@ module "traefik" {
   stack_name            = var.stack_name
   service_name          = "traefik"
   image                 = var.traefik_image
-  networks              = [module.network, module.docker_socket_proxy.network, ]
-  remote_volumes        = { "/certs" = module.traefik_certs_volume.volume }
+  networks              = concat([module.network, module.docker_socket_proxy.network, ], var.extra_networks)
+  volumes               = { "certs" = "/certs" }
   placement_constraints = var.placement_constraints
   global                = true
   healthcheck           = ["CMD", "wget", "--no-verbose", "--tries", 1, "--spider", "http://localhost:8080"]

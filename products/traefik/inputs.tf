@@ -150,3 +150,11 @@ variable "enable_port_reuse" {
   default     = true
   description = "Whether to enable port reuse. This is a niche traefik feature that might create issues."
 }
+variable "extra_networks" {
+  type = list(object({
+    name = string
+    id   = string
+  }))
+  default     = []
+  description = "Additional networks to attach to the traefik service."
+}

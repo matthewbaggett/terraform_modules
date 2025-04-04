@@ -2,7 +2,7 @@ resource "random_id" "randomiser" {
   byte_length = 2
   keepers = {
     stack_name = var.stack_name
-    data       = var.value
+    data       = sha256(var.value)
   }
 }
 

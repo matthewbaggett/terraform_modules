@@ -38,3 +38,19 @@ output "basic_auth_users" {
     for user in var.traefik.basic-auth-users : user => nonsensitive(htpasswd_password.htpasswd[user].bcrypt)
   } : {}
 }
+
+output "checksum" {
+  value = sha512(jsonencode([
+    docker_service.instance.id,
+    docker_service.instance.name,
+    docker_service.instance.task_spec[0].container_spec[0].image,
+    coalesce(docker_service.instance.task_spec[0].container_spec[0].env, {}),
+    [for c in module.config : c.checksum],
+    var.ports,
+    var.mounts,
+    var.volumes,
+    var.remote_volumes,
+    var.networks,
+    var.healthcheck,
+  ]))
+}

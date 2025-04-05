@@ -1,6 +1,7 @@
 #!/bin/bash
+set -x
 SCRIPTPATH="$(
-	cd -- "$(dirname "$0")" >/dev/null 2>&1
+	cd -- "$(dirname $(realpath "$0"))" >/dev/null 2>&1
 	pwd -P
 )"
 
@@ -10,23 +11,28 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 function clean() {
-	echo -n "Cleaning..."
+	echo -n "Formatting ..."
 	terraform fmt -recursive . >/dev/null
 	echo " [DONE]"
 }
 function init() {
-	echo -n "Initializing..."
+	echo -n "Initializing ..."
 	terraform init >/dev/null
 	echo " [DONE]"
 }
 reset
 clean
-init
+#init
 # capture exit code of terraform apply
-terraform apply -target=null_resource.$1
+echo "Running terraform apply for group $1"
+
+# Append all other args other than $0 and $1 to the command
+# shellcheck disable=SC2068
+terraform apply -target=null_resource.$1 ${@:2}
 if [ $? -ne 0 ]; then
 	${SCRIPTPATH}/beep fail "Terraform", "Apply failed!"
 	exit 1
 else
 	${SCRIPTPATH}/beep okay "Terraform", "Apply successful!"
+	exit 0
 fi

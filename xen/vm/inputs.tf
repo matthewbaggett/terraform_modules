@@ -29,9 +29,9 @@ variable "timeout" {
   default     = 5
 }
 variable "debug" {
-  type = bool
-    description = "Enable debug mode"
-    default     = false
+  type        = bool
+  description = "Enable debug mode"
+  default     = false
 }
 
 variable "name" {
@@ -49,16 +49,13 @@ variable "description" {
 }
 variable "user" {
   type = object({
-    name     = string
-    password = optional(string, null)
-    ssh_keys = optional(list(string), [])
+    name        = string
+    password    = optional(string, null)
+    private_key = optional(string, null)
+    public_key  = optional(string, null)
   })
   description = "The user to create in the cloud config."
-  default = {
-    name     = "ubuntu"
-    password = null
-    ssh_keys = []
-  }
+  default     = null
 }
 variable "storage" {
   type = object({

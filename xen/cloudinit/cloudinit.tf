@@ -173,7 +173,7 @@ EOF
       "wget -O /tmp/linux-guest-tools/LGT.tar.gz https://downloads.xenserver.com/vm-tools-linux/8.4.0-1/LinuxGuestTools-8.4.0-1.tar.gz",
       "cd /tmp/linux-guest-tools; tar -xzf LGT.tar.gz",
       "sudo /tmp/linux-guest-tools/LinuxGuestTools-8.4.0-1/install.sh -n",
-    ],var.startup_scripts))
+    ], var.startup_scripts))
     final_message = "Cloud-init is complete! Up after $UPTIME seconds."
   }
 

@@ -1,13 +1,13 @@
 locals {
-  hostname = var.hostname != null ? var.hostname : lower(replace(var.name, " ", "-"))
+  hostname = var.hostname != null ? var.hostname : lower(replace(replace(var.name, " ", "-"),"/[^A-z0-9 ]/",""))
 }
 module "cloudinit" {
   source                          = "../cloudinit"
   hostname                        = local.hostname
   service_account_username        = var.user.name
   service_account_password        = var.user.password
-  service_account_public_ssh_keys = var.user.ssh_keys
-  startup_scripts                  = var.startup_scripts
+  service_account_public_ssh_keys = [var.user.public_key]
+  startup_scripts                 = var.startup_scripts
 }
 resource "xenorchestra_cloud_config" "cloudinit" {
   name     = "${var.name} Cloud Config"

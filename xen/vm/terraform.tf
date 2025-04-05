@@ -3,12 +3,16 @@ terraform {
 
   required_providers {
     xenorchestra = {
-      source  = "terra-farm/xenorchestra"
-      version = "~> 0.26"
+      source  = "vatesfr/xenorchestra"
+      version = "~> 0.31.1"
     }
     macaddress = {
       source  = "ivoronin/macaddress"
       version = "~> 0.3"
+    }
+    remote = {
+      source  = "tenstad/remote"
+      version = "~> 0.1"
     }
   }
 }

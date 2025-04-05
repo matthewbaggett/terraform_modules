@@ -1,33 +1,3 @@
-variable "template" {
-  type        = string
-  description = "Xen Orchestra template to use for VM creation."
-  default     = "Ubuntu Noble Numbat 24.04"
-}
-variable "network" {
-  type        = string
-  default     = "Pool-wide network associated with eth0"
-  description = "Network to attach to the VM"
-}
-variable "memory_max_gb" {
-  type        = number
-  description = "The maximum memory for the VM in gigabytes"
-  default     = 2
-}
-variable "cpus" {
-  type        = number
-  description = "The number of CPUs for the VM"
-  default     = 1
-}
-variable "tags" {
-  type        = list(string)
-  description = "Tags to apply to the VM"
-  default     = []
-}
-variable "timeout" {
-  type        = number
-  description = "Timeout for the VM creation in minutes"
-  default     = 5
-}
 locals {
   network_config = {
     network = {
@@ -49,11 +19,11 @@ resource "xenorchestra_vm" "vm" {
   name_description     = var.description
   template             = data.xenorchestra_template.template.id
   tags                 = concat(var.tags, ["terraform"])
-  wait_for_ip          = true
 
   network {
     network_id  = data.xenorchestra_network.net.id
     mac_address = macaddress.vm.address
+    expected_ip_cidr = "0.0.0.0/0"
   }
 
   disk {
@@ -70,9 +40,86 @@ resource "xenorchestra_vm" "vm" {
 
   lifecycle {
     replace_triggered_by = [
+      random_pet.pet_name.id,
       data.xenorchestra_template.template.id,
       data.xenorchestra_network.net.id,
       data.xenorchestra_sr.local_storage.id,
     ]
+  }
+}
+resource "null_resource" "post_startup" {
+  depends_on = [xenorchestra_vm.vm]
+  connection {
+    host = xenorchestra_vm.vm.ipv4_addresses
+    type = "ssh"
+    user = var.user.name
+    password = var.user.password
+    private_key = one(var.user.ssh_keys)
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Post-setup SSH: Connected! That means we are waiting for cloud-init to complete.'",
+      "while ! sudo grep -q 'Cloud-init is complete!' /var/log/cloud-init-output.log; do sleep 1; done",
+      "echo 'Post-setup SSH: Cloud-init is complete!'",
+    ]
+  }
+}
+variable "docker" {
+  type = object({
+    enable     = optional(bool, false)
+    is_manager = optional(bool, false)
+  })
+  description = "Configure Docker on the VM."
+  default     = {
+    enable     = false
+    is_manager = false
+  }
+}
+resource "null_resource" "tokens" {
+  depends_on = [xenorchestra_vm.vm]
+  count = var.docker.enable && var.docker.is_manager ? 1 : 0
+  connection {
+    host = xenorchestra_vm.vm.ipv4_addresses
+    type = "ssh"
+    user = var.user.name
+    password = var.user.password
+    private_key = one(var.user.ssh_keys)
+  }
+  provisioner "remote-exec" {
+    inline = [
+      # Generate the worker and manager tokens
+      "echo 'Post-setup SSH: Generating tokens'",
+      "sudo mkdir /swarm",
+      "docker swarm join-token -q manager | sudo tee /swarm/manager_token",
+      "docker swarm join-token -q worker | sudo tee /swarm/worker_token",
+      "echo 'Post-setup SSH: Tokens are ready!'"
+    ]
+  }
+}
+data "remote_file" "tokens" {
+  depends_on = [xenorchestra_vm.vm, null_resource.tokens]
+  conn {
+    host = xenorchestra_vm.vm.ipv4_addresses
+    user = var.user.name
+    private_key = one(var.user.ssh_keys)
+    sudo        = true
+  }
+  for_each   = toset(var.docker.enable && var.docker.is_manager ? ["worker", "manager"]:[])
+  path       = "/swarm/${each.key}_token"
+}
+
+locals {
+  tokens = {
+    manager = nonsensitive(trimspace(data.remote_file.tokens["manager"].content)),
+    worker  = nonsensitive(trimspace(data.remote_file.tokens["worker"].content)),
+  }
+}
+
+output "docker" {
+  value = {
+    enable     = var.docker.enable
+    manager_endpoint = var.docker.is_manager ? "${xenorchestra_vm.vm.ipv4_addresses}:2377" : null
+    worker_token = local.tokens.worker
+    manager_token = local.tokens.manager
   }
 }

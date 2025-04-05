@@ -59,3 +59,8 @@ variable "service_account_password" {
   type        = string
   default     = null
 }
+variable "startup_scripts" {
+  description = "Extra startup scripts to run on the VM during init."
+  type        = list(string)
+  default     = []
+}

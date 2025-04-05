@@ -109,7 +109,7 @@ EOF
     ], var.extra_apt_packages))
     package_update  = true
     package_upgrade = true
-    runcmd = compact([
+    runcmd = compact(concat([
       # OpenSSH Port in UFW
       "ufw allow ssh",
       # Jostle NTPd to do its thing
@@ -158,6 +158,9 @@ EOF
       # Remove ingress network
       "yes | docker network rm ingress",
 
+      # Create ingress network with a wider CIDR
+      local.is_first_manager ? "docker network create --driver overlay --ingress --subnet=${local.docker_ingress_cidr} --gateway=${cidrhost(local.docker_ingress_cidr, 1)} ingress" : null,
+
       # If this is our first manager, create our swarm and then generate our worker and manager tokens
       local.is_first_manager ? "docker swarm init ${local.init_args}" : null,
       # If this is a manager, join the swarm
@@ -165,12 +168,12 @@ EOF
       # If this is a worker, join the swarm
       local.is_worker ? "docker swarm join --token ${trimspace(var.worker_token)} ${trimspace(local.manager_address)}" : null,
 
-      # Install Linux Guest Tools
+      # Install Xen Orchestra Linux Guest Tools
       "mkdir -p /tmp/linux-guest-tools",
       "wget -O /tmp/linux-guest-tools/LGT.tar.gz https://downloads.xenserver.com/vm-tools-linux/8.4.0-1/LinuxGuestTools-8.4.0-1.tar.gz",
       "cd /tmp/linux-guest-tools; tar -xzf LGT.tar.gz",
       "sudo /tmp/linux-guest-tools/LinuxGuestTools-8.4.0-1/install.sh -n",
-    ])
+    ],var.startup_scripts))
     final_message = "Cloud-init is complete! Up after $UPTIME seconds."
   }
 

@@ -1,4 +1,4 @@
-output "portainer" {
+output "agent" {
   value = {
     credentials = {
       username = "admin" # Sorry, this is hardcoded in the portainer image

@@ -1,0 +1,32 @@
+#!/bin/bash
+SCRIPTPATH="$(
+	cd -- "$(dirname "$0")" >/dev/null 2>&1
+	pwd -P
+)"
+
+# Take the first argument as the group to run, if its not provided, exit
+if [ -z "$1" ]; then
+	echo "Usage: $0 <group>"
+	exit 1
+fi
+function clean() {
+	echo -n "Cleaning..."
+	terraform fmt -recursive . >/dev/null
+	echo " [DONE]"
+}
+function init() {
+	echo -n "Initializing..."
+	terraform init >/dev/null
+	echo " [DONE]"
+}
+reset
+clean
+init
+# capture exit code of terraform apply
+terraform apply -target=null_resource.$1
+if [ $? -ne 0 ]; then
+	${SCRIPTPATH}/beep fail "Terraform", "Apply failed!"
+	exit 1
+else
+	${SCRIPTPATH}/beep okay "Terraform", "Apply successful!"
+fi

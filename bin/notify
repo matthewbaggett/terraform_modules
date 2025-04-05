@@ -1,0 +1,18 @@
+#!/bin/bash
+function usage() {
+	echo "Usage: $0 <subject> <message>"
+	exit 1
+}
+# Take the first argument as the notification to send
+if [ -z "$1" ] || [ -z "$2" ]; then
+	usage
+fi
+
+# if notify-send is present
+if command -v notify-send &>/dev/null; then
+	notify-send "$1" "$2"
+	exit 0
+fi
+
+echo "Could not send notification"
+exit 1

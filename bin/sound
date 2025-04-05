@@ -1,0 +1,51 @@
+#!/bin/bash
+SCRIPTPATH="$(
+	cd -- "$(dirname "$0")" >/dev/null 2>&1
+	pwd -P
+)"
+SOUNDFILE=$1
+SOUNDFILE_PATH="${SCRIPTPATH}/../${SOUNDFILE}"
+
+if [ -z "$SOUNDFILE" ]; then
+	echo "No sound file provided. Please provide a sound file as an argument."
+	exit 1
+fi
+if [ ! -f "$SOUNDFILE_PATH" ]; then
+	echo "Sound file not found: $SOUNDFILE_PATH"
+	exit 1
+fi
+
+#if paplay is present
+if command -v paplay &>/dev/null; then
+	paplay $SOUNDFILE_PATH
+	exit 0
+fi
+
+if mpg321 is present; then
+	mpg321 $SOUNDFILE_PATH >/dev/null 2>&1
+	exit 0
+fi
+#if mpg123 is present
+if command -v mpg123 &>/dev/null; then
+	mpg123 $SOUNDFILE_PATH >/dev/null 2>&1
+	exit 0
+fi
+#if aplay is present
+if command -v aplay &>/dev/null; then
+	aplay $SCRIPTPATH/../lib/beep/elevator.wav >/dev/null 2>&1
+	exit 0
+fi
+#if sox is present
+if command -v play &>/dev/null; then
+	play $SCRIPTPATH/../lib/beep/elevator.wav >/dev/null 2>&1
+	exit 0
+fi
+#if ffplay is present
+if command -v ffplay &>/dev/null; then
+	ffplay -nodisp -autoexit $SOUNDFILE_PATH >/dev/null 2>&1
+	exit 0
+fi
+
+echo "Could not play sound"
+echo "Please install paplay, mpg321, mpg123, aplay, sox or ffplay"
+exit 1

@@ -1,0 +1,51 @@
+#!/bin/bash
+SCRIPTPATH="$(
+	cd -- "$(dirname "$0")" >/dev/null 2>&1
+	pwd -P
+)"
+
+function usage() {
+	echo "Usage: $0 <type> <subject> <message>"
+	echo "type: success|okay|failure|fail"
+	echo "subject: Subject of the notification"
+	echo "message: Message of the notification"
+
+	exit 1
+}
+TYPE=$1
+SUBJECT=$2
+MESSAGE=$3
+
+# if SUBJECT is not set, set it to "Notification"
+if [ -z "$SUBJECT" ]; then
+	echo -e "No subject provided. Please provide a subject.\n" >&2
+	usage
+fi
+# if MESSAGE is not set, set it to "No message provided"
+if [ -z "$MESSAGE" ]; then
+	echo -e "No message provided. Please provide a message.\n" >&2
+	usage
+fi
+# if TYPE is not set, set it to "success"
+if [ -z "$TYPE" ]; then
+	echo -e "No type provided. Please provide a type.\n" >&2
+	usage
+else
+	case "$TYPE" in
+
+	okay | success)
+		SOUNDFILE="lib/beep/elevator.mp3"
+		;;
+	fail | failure)
+		SOUNDFILE="lib/beep/broken.mp3"
+		;;
+	*)
+		echo "Invalid type: $TYPE. Must be 'success|okay' or 'failure|fail'."
+		usage
+		;;
+	esac
+fi
+
+$SCRIPTPATH/notify "$SUBJECT" "$MESSAGE"
+
+$SCRIPTPATH/sound "$SOUNDFILE"

@@ -1,8 +1,3 @@
-module "traefik_certs_volume" {
-  source      = "../../docker/volume"
-  stack_name  = var.stack_name
-  volume_name = "traefik_certs"
-}
 locals {
   command = distinct(compact(concat(
     [

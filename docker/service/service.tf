@@ -7,9 +7,10 @@ resource "docker_service" "instance" {
   # Define the task spec
   task_spec {
     container_spec {
-      image   = local.image_fully_qualified
-      command = var.command
-      env     = var.environment_variables
+      image    = local.image_fully_qualified
+      command  = var.command
+      env      = var.environment_variables
+      hostname = var.hostname
 
       # Mount the shm if needed
       dynamic "mounts" {

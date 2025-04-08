@@ -54,6 +54,11 @@ variable "service_name" {
   type        = string
   description = "The name of the service to deploy. Will be appended with the stack name."
 }
+variable "hostname" {
+  description = "The hostname to set for the service. If not set, the service name will be used."
+  type        = string
+  default     = null
+}
 variable "environment_variables" {
   type        = map(string)
   default     = {}

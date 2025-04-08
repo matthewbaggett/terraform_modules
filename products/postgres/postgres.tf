@@ -4,6 +4,7 @@ module "service" {
   image                = "${var.postgres_image}:${var.postgres_version}"
   stack_name           = var.stack_name
   service_name         = var.service_name
+  hostname             = "${var.stack_name}-${var.service_name}"
   networks             = var.networks
   healthcheck          = ["CMD-SHELL", "pg_isready", "-d $${POSTGRES_DB}", "--host=${var.stack_name}-${var.service_name}", "-U $${POSTGRES_USER}", ]
   healthcheck_interval = "10s"

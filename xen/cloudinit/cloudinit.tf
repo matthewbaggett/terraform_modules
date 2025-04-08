@@ -158,13 +158,22 @@ EOF
       # Remove ingress network
       "yes | docker network rm ingress",
 
-      # Create ingress network with a wider CIDR
-      local.is_first_manager ? "docker network create --driver overlay --ingress --subnet=${local.docker_ingress_cidr} --gateway=${cidrhost(local.docker_ingress_cidr, 1)} ingress" : null,
+
 
       # If this is our first manager, create our swarm and then generate our worker and manager tokens
       local.is_first_manager ? "docker swarm init ${local.init_args}" : null,
-      # If this is a manager, join the swarm
-      local.is_manager ? "docker swarm join --token ${trimspace(var.manager_token)} ${trimspace(local.manager_address)}" : null,
+
+      # Token handling:
+      "mkdir /swarm",
+      # If this is a manager, generate the worker token
+      # Create ingress network with a wider CIDR
+      local.is_manager && local.is_first_manager ? "docker network create --driver overlay --ingress --subnet=${local.docker_ingress_cidr} --gateway=${cidrhost(local.docker_ingress_cidr, 1)} ingress" : null,
+      local.is_manager && local.is_first_manager ? "docker swarm join-token worker > /swarm/worker_token" : null,
+      local.is_manager && local.is_first_manager ? "docker swarm join-token manager > /swarm/manager_token" : null,
+      # If we're not first manager, just create the files so reading them doesn't error out.
+      !(local.is_manager && local.is_first_manager) ? "touch /swarm/worker_token /swarm/manager_token" : null,
+      # If this is a manager, but not the first one, join the swarm
+      local.is_manager && !local.is_first_manager ? "docker swarm join --token ${trimspace(var.manager_token)} ${trimspace(local.manager_address)}" : null,
       # If this is a worker, join the swarm
       local.is_worker ? "docker swarm join --token ${trimspace(var.worker_token)} ${trimspace(local.manager_address)}" : null,
 

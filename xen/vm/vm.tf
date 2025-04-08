@@ -66,16 +66,16 @@ resource "null_resource" "post_startup" {
 }
 variable "docker" {
   type = object({
-    enable     = optional(bool, false)
-    is_manager = optional(bool, false)
-    worker_token = optional(string, false)
+    enable           = optional(bool, false)
+    is_manager       = optional(bool, false)
+    worker_token     = optional(string, false)
     manager_endpoint = optional(string, false)
   })
   description = "Configure Docker on the VM."
   default = {
-    enable     = false
-    is_manager = false
-    worker_token = false
+    enable           = false
+    is_manager       = false
+    worker_token     = false
     manager_endpoint = false
   }
 }
@@ -100,8 +100,8 @@ resource "null_resource" "tokens" {
       ] : [
       "set -x",
       # Leave the swarm if already joined
-      #"docker swarm leave -f || true",
-      #"sleep 2",
+      "docker swarm leave -f || true",
+      "sleep 2",
       # Join the swarm as a worker
       "docker swarm join --token ${var.docker.worker_token} --advertise-addr ${one(xenorchestra_vm.vm.ipv4_addresses)} ${var.docker.manager_endpoint}",
     ]
@@ -172,6 +172,6 @@ output "worker" {
     enable           = var.docker.enable
     is_manager       = false
     manager_endpoint = var.docker.is_manager ? "${one(xenorchestra_vm.vm.ipv4_addresses)}:2377" : null
-    worker_token = local.tokens.worker
+    worker_token     = local.tokens.worker
   }
 }

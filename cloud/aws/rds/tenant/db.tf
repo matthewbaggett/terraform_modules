@@ -33,7 +33,7 @@ resource "local_file" "debug" {
 }
 data "ssh_tunnel" "db" {
   #connection_name = "db-${var.engine}"
-  remote          = local.db_tunnel_remote
+  remote = local.db_tunnel_remote
 }
 resource "terraform_data" "db" {
   connection {

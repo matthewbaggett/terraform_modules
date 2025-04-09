@@ -19,7 +19,7 @@ terraform {
       version = "~> 3.0"
     }
     ssh = {
-      source  = "AndrewChubatiuk/ssh"
+      source = "AndrewChubatiuk/ssh"
     }
   }
 }

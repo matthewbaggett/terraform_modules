@@ -32,7 +32,7 @@ resource "local_file" "debug" {
   file_permission = "0600"
 }
 data "ssh_tunnel" "db" {
-  connection_name = "db-${var.engine}"
+  #connection_name = "db-${var.engine}"
   remote          = local.db_tunnel_remote
 }
 resource "terraform_data" "db" {
@@ -41,7 +41,7 @@ resource "terraform_data" "db" {
     port = data.ssh_tunnel.db.remote.port
   }
   provisioner "local-exec" {
-    command = "echo 'Connecting to ${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port} as ${var.admin_identity.username} via ${data.ssh_tunnel.db.connection_name}'"
+    command = "echo 'Connecting to ${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port} as ${var.admin_identity.username}"
   }
   provisioner "local-exec" {
     command = (local.is_mysql

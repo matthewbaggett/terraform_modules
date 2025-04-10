@@ -1,13 +1,11 @@
-variable "aws_subnets" {
+variable "aws_subnets_ids" {
   description = "Pass an aws_subnets data object to the module"
-  type = object({
-    ids = list(string)
-  })
+  type =  list(string)
 }
 data "aws_subnets" "subnets" {
   filter {
     name   = "subnet-id"
-    values = var.aws_subnets.ids
+    values = var.aws_subnets_ids
   }
 }
 resource "aws_db_subnet_group" "sg" {

@@ -41,7 +41,7 @@ resource "terraform_data" "db" {
     port = data.ssh_tunnel.db.remote.port
   }
   provisioner "local-exec" {
-    command = "echo 'Connecting to ${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port} as ${var.admin_identity.username}"
+    command = "echo 'Connecting to ${local.db_tunnel_remote.host}:${local.db_tunnel_remote.port} as ${var.admin_identity.username}'"
   }
   provisioner "local-exec" {
     command = (local.is_mysql

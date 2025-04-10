@@ -26,10 +26,10 @@ variable "image_s3_plugin" {
 variable "application" {
   description = "The AWS myApplication to be associated with this cluster"
   type = object({
+    id = string
     arn             = string
     name            = string
     description     = string
     application_tag = map(string)
   })
-  default = null
 }

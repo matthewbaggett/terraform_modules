@@ -14,12 +14,12 @@ variable "tags" {
 variable "application" {
   description = "The AWS myApplication to be associated with this cluster"
   type = object({
+    id = string
     arn             = string
     name            = string
     description     = string
     application_tag = map(string)
   })
-  default = null
 }
 variable "ia_lifecycle_policy" {
   default     = "AFTER_30_DAYS"

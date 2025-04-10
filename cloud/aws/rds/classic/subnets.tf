@@ -1,6 +1,6 @@
 variable "aws_subnets_ids" {
   description = "Pass an aws_subnets data object to the module"
-  type =  list(string)
+  type        = list(string)
 }
 data "aws_subnets" "subnets" {
   filter {

@@ -11,7 +11,7 @@ locals {
     : (
       local.is_mirror
       ? docker_registry_image.mirror["mirror"].name
-      : data.docker_registry_image.image["default"].name
+      : try(data.docker_registry_image.image["default"].name, null)
     )
   )
   image_fully_qualified = (
@@ -20,7 +20,7 @@ locals {
     : (
       local.is_mirror
       ? "${docker_registry_image.mirror["mirror"].name}@${docker_registry_image.mirror["mirror"].sha256_digest}"
-      : "${data.docker_registry_image.image["default"].name}@${data.docker_registry_image.image["default"].sha256_digest}"
+      : try("${data.docker_registry_image.image["default"].name}@${data.docker_registry_image.image["default"].sha256_digest}", null)
     )
   )
 

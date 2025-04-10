@@ -17,7 +17,7 @@ variable "tenants" {
 variable "application" {
   description = "The AWS myApplication to be associated with this cluster"
   type = object({
-    id = string
+    id              = string
     arn             = string
     name            = string
     description     = string

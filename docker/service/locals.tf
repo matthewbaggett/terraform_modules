@@ -24,6 +24,5 @@ locals {
     )
   )
 
-  networks = [for network in concat(var.networks, data.docker_network.traefik) : network if network != null]
-
+  network_ids = distinct([for network in concat(var.networks, [try(data.docker_network.traefik[0], null)]) : network.id if network != null])
 }

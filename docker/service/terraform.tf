@@ -18,6 +18,10 @@ terraform {
       source  = "TheNicholi/json-formatter"
       version = "~> 0.1"
     }
+    scratch = {
+      source  = "BrendanThompson/scratch"
+      version = "~> 0.4"
+    }
   }
 }
 

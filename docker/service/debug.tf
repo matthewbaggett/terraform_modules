@@ -18,7 +18,7 @@ data "json-formatter_format_json" "debug" {
     stack                 = var.stack_name
     image                 = local.image_fully_qualified
     build                 = var.build
-    networks              = local.networks
+    networks              = local.network_ids
     ports                 = var.ports
     configs               = var.configs
     remote_configs        = var.remote_configs

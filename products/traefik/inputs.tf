@@ -158,3 +158,12 @@ variable "extra_networks" {
   default     = []
   description = "Additional networks to attach to the traefik service."
 }
+variable "port_publish_mode" {
+  default     = "ingress"
+  type        = string
+  description = "The publish mode for the ports. Can be 'ingress' or 'host'."
+  validation {
+    condition     = var.port_publish_mode == "ingress" || var.port_publish_mode == "host"
+    error_message = "The publish mode must be either 'ingress' or 'host'."
+  }
+}

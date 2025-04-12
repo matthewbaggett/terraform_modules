@@ -104,14 +104,17 @@ module "traefik" {
   } : null
   ports = [
     {
-      host      = var.http_port
-      container = var.http_port
+      host         = var.http_port
+      container    = var.http_port
+      publish_mode = var.port_publish_mode
       }, {
-      host      = var.https_port
-      container = var.https_port
+      host         = var.https_port
+      container    = var.https_port
+      publish_mode = var.port_publish_mode
       }, {
-      host      = var.dashboard_port
-      container = var.dashboard_port
+      host         = var.dashboard_port
+      container    = var.dashboard_port
+      publish_mode = var.port_publish_mode
     },
   ]
 }

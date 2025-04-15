@@ -28,6 +28,8 @@ data "aws_iam_policy_document" "db_storage" {
 }
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
+# trivy:ignore:AVD-AWS-0143 - One or more policies are attached directly to a user
+# Yes, I know, I don't want to complicate this single-purpose user account.
 resource "aws_iam_user_policy" "db_storage" {
   count  = length(var.users)
   name   = "EFS-Policy-${var.users[count.index]}-To-${var.volume_name}"

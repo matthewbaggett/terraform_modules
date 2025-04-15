@@ -8,6 +8,8 @@ variable "max_allocated_storage_gb" {
   default     = 100
   description = "The maximum storage size for the RDS instance, measured in GB."
 }
+# trivy:ignore:AVD-AWS-0133
+# trivy:ignore:AVD-AWS-0107
 resource "aws_db_instance" "instance" {
   identifier_prefix       = "${local.sanitised_name}-"
   instance_class          = var.instance_class

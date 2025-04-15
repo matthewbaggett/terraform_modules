@@ -15,7 +15,8 @@ data "aws_iam_policy_document" "db_storage" {
     effect    = "Allow"
   }
 }
-
+# trivy:ignore:AVD-AWS-0143 - One or more policies are attached directly to a user
+# Yes, I know, I don't want to complicate this single-purpose user account.
 resource "aws_iam_user_policy" "db_storage" {
   for_each = toset(var.users)
   name     = "s3_policy_${each.value}_to_${aws_s3_bucket.bucket.bucket}"

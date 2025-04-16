@@ -22,6 +22,7 @@ module "portainer" {
   traefik     = merge(var.traefik, { port = 9000 })
   mounts      = var.should_mount_local_docker_socket ? { "/var/run/docker.sock" = "/var/run/docker.sock" } : {}
   networks    = concat(var.networks, [module.network, module.docker_socket_proxy.network])
+  ports       = var.ports
   start_first = false
   placement_constraints = concat([
     "node.role == manager",

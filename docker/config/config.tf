@@ -5,7 +5,6 @@ resource "random_id" "randomiser" {
     data       = sha256(var.value)
   }
 }
-
 resource "docker_config" "config" {
   name = local.config_name
   data = base64encode(var.value)

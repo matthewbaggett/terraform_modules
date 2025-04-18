@@ -18,13 +18,16 @@ module "service" {
   volumes               = local.volumes
   mounts                = local.mounts
   ports                 = var.ports
-  placement_constraints = var.placement_constraints
+  placement_constraints = ["node.role == \"manager\""]
   parallelism           = 1
   start_first           = false
+  configs = {
+    for k, v in var.init_scripts : "/docker-entrypoint-initdb.d/${k}" => sensitive(v)
+  }
 }
 locals {
   volumes = var.data_persist_path == null ? {
-    "data" = "/var/lib/postgres/data"
+    "data" = "/var/lib/postgres"
   } : {}
-  mounts = var.data_persist_path != null ? zipmap([var.data_persist_path], ["/var/lib/postgres/data"]) : {}
+  mounts = var.data_persist_path != null ? zipmap([var.data_persist_path], ["/var/lib/postgres"]) : {}
 }

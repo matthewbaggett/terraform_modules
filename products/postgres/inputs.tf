@@ -78,11 +78,11 @@ variable "data_persist_path" {
   type        = string
 }
 variable "init_scripts" {
-    default     = {}
-    description = "A map of init scripts to run on startup. The key is the script name, and the value is the script content."
-    type        = map(string)
-    validation {
-        error_message = "Init scripts must be a map of script names to script content."
-        condition     = can(var.init_scripts)
-    }
+  default     = {}
+  description = "A map of init scripts to run on startup. The key is the script name, and the value is the script content."
+  type        = map(string)
+  validation {
+    error_message = "Init scripts must be a map of script names to script content."
+    condition     = can(var.init_scripts)
+  }
 }

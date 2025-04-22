@@ -18,7 +18,7 @@ module "service" {
   volumes               = local.volumes
   mounts                = local.mounts
   ports                 = var.ports
-  placement_constraints = ["node.role == \"manager\""]
+  placement_constraints = var.placement_constraints
   parallelism           = 1
   start_first           = false
   configs = {

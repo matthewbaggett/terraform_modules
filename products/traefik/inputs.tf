@@ -13,6 +13,21 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
+variable "traefik_instance_count" {
+  default     = null
+  type        = number
+  description = "The number of traefik instances to run. If set to null, the service will GLOBAL and run on every node with appropriate placement constraints."
+}
+variable "hello_instance_count" {
+  default     = null
+  type        = number
+  description = "The number of hello world test instances to run. If set to null, the service will GLOBAL and run on every node with appropriate placement constraints."
+}
+variable "docker_socket_instance_count" {
+  default     = null
+  type        = number
+  description = "The number of docker socket instances to run. If set to null, the service will GLOBAL and run on every node with appropriate placement constraints."
+}
 variable "enable_ssl" {
   type        = bool
   default     = true
@@ -103,6 +118,15 @@ variable "dashboard_port" {
   type        = number
   default     = 8080
   description = "The port to listen on for the dashboard."
+}
+variable "publish_mode" {
+  type        = string
+  default     = "ingress"
+  description = "The publish mode for the service. Can be either ingress or host."
+  validation {
+    error_message = "Publish mode must be either 'ingress' or 'host'."
+    condition     = can(regex("^(ingress|host)$", var.publish_mode))
+  }
 }
 
 variable "enable_ping" {

@@ -23,6 +23,16 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
+variable "global" {
+  default     = false
+  type        = bool
+  description = "Whether to run the service globally (or replicated if false)."
+}
+variable "parallelism" {
+  default     = 1
+  type        = number
+  description = "The number of instances to run."
+}
 
 variable "enable_swarm" {
   type    = bool

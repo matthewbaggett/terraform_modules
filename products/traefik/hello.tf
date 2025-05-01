@@ -1,3 +1,7 @@
+locals {
+  hello_parallelism = var.hello_instance_count != null ? var.hello_instance_count : 1
+  hello_global      = var.hello_instance_count == null ? true : false
+}
 module "traefik_hello" {
   depends_on            = [module.traefik, module.network]
   count                 = var.hello_service_domain != null ? 1 : 0
@@ -5,7 +9,8 @@ module "traefik_hello" {
   stack_name            = var.stack_name
   service_name          = "hello"
   image                 = "nginxdemos/hello:plain-text"
-  parallelism           = 3
+  parallelism           = local.hello_parallelism
+  global                = local.hello_global
   placement_constraints = var.placement_constraints
   networks              = [data.docker_network.traefik]
   traefik = {

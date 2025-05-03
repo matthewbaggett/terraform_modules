@@ -196,7 +196,7 @@ variable "placement_constraints" {
   description = "Docker Swarm placement constraints"
 }
 variable "processor_architecture" {
-  default     = "amd64"
+  default     = null
   type        = string
   description = "The processor architecture to use for the service."
 }

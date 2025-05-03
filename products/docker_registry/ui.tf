@@ -26,23 +26,8 @@ module "docker_registry_ui" {
   service_name          = "ui"
   image                 = "joxit/docker-registry-ui:main"
   environment_variables = local.docker_registry_ui_conf
-  networks              = [module.registry_network, var.traefik.network, ]
+  networks              = [module.registry_network]
   placement_constraints = var.placement_constraints
   traefik               = merge(var.traefik, { port = 80, rule = "Host(`${var.domain}`) && !PathPrefix(`/v2`)" })
-}
-
-variable "traefik" {
-  default = null
-  type = object({
-    domain  = string
-    port    = optional(number, 80)
-    non-ssl = optional(bool, true)
-    ssl     = optional(bool, false)
-    rule    = optional(string)
-    network = optional(object({
-      name = string
-      id   = string
-    }))
-  })
-  description = "Whether to enable traefik for the service."
+  dns_nameservers = var.dns_nameservers
 }

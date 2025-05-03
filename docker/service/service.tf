@@ -133,9 +133,12 @@ resource "docker_service" "instance" {
     placement {
       max_replicas = var.parallelism_per_node
       constraints  = var.placement_constraints
-      platforms {
-        architecture = var.processor_architecture
-        os           = var.operating_system
+      dynamic "platforms" {
+        for_each = var.processor_architecture != null && var.operating_system != null ? [{}] : []
+        content {
+          architecture = var.processor_architecture
+          os           = var.operating_system
+        }
       }
     }
 

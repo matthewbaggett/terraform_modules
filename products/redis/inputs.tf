@@ -56,3 +56,8 @@ variable "placement_constraints" {
   type        = list(string)
   description = "Docker Swarm placement constraints"
 }
+variable "dns_nameservers" {
+  type        = list(string)
+  default     = null
+  description = "A list of DNS nameservers to use for the service."
+}

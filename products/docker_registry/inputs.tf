@@ -53,6 +53,17 @@ variable "networks" {
   description = "A list of networks to attach the service to"
   default     = []
 }
+variable "traefik" {
+  default = null
+  type = object({
+    domain  = string
+    port    = optional(number, 80)
+    non-ssl = optional(bool, true)
+    ssl     = optional(bool, false)
+    rule    = optional(string)
+  })
+  description = "Whether to enable traefik for the service."
+}
 variable "ports" {
   type = list(object({
     host         = optional(number, null)
@@ -62,4 +73,9 @@ variable "ports" {
   }))
   default     = [{ container = 5000 }]
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port."
+}
+variable "dns_nameservers" {
+  type        = list(string)
+  default     = null
+  description = "A list of DNS nameservers to use for the service."
 }

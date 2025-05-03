@@ -6,8 +6,9 @@ module "minio" {
   command                  = ["minio", "server", "/data", ]
   healthcheck              = ["CMD", "mc", "ready", "local", ]
   healthcheck_start_period = "20s"
-  converge_enable          = true
+  converge_enable          = var.converge_enable
   converge_timeout         = "2m"
+  start_first = false
   environment_variables = merge({
     MINIO_ADDRESS              = "0.0.0.0:9000"
     MINIO_CONSOLE_ADDRESS      = "0.0.0.0:9001"
@@ -17,6 +18,7 @@ module "minio" {
     MINIO_BROWSER_REDIRECT_URL = "https://${var.domain}/ui/"
     #MINIO_BROWSER_REDIRECT     = true
     MINIO_API_ROOT_ACCESS = "on"
+    MINIO_HTTP_TRACE = "/var/log/minio_http.log"
   }, var.environment_variables)
   ports                 = var.ports
   mounts                = var.mounts

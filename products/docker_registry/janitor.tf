@@ -1,4 +1,3 @@
-
 module "docker_registry_janitor" {
   source       = "../../docker/service"
   stack_name   = var.stack_name
@@ -14,4 +13,5 @@ module "docker_registry_janitor" {
   placement_constraints = var.placement_constraints
   networks              = [module.registry_network]
   converge_enable       = false
+  dns_nameservers = var.dns_nameservers
 }

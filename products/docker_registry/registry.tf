@@ -5,11 +5,11 @@ locals {
   registry_config_yaml = {
     version = 0.1
     storage = {
-      s3 = merge(nonsensitive(var.s3),{
-        v4auth       = true
-        chunksize    = 5242880
-        secure      = true
-        loglevel    = "on"
+      s3 = merge(nonsensitive(var.s3), {
+        v4auth    = true
+        chunksize = 5242880
+        secure    = true
+        loglevel  = "on"
       })
       cache = {
         blobdescriptor = "inmemory"
@@ -32,8 +32,8 @@ locals {
     }
     health = {
       storagedriver = {
-        enabled = true
-        interval = "10s"
+        enabled   = true
+        interval  = "10s"
         threshold = 3
       }
     }
@@ -52,7 +52,7 @@ locals {
 }
 module "docker_registry" {
   source                = "../../docker/service"
-  debug = true
+  debug                 = true
   stack_name            = var.stack_name
   service_name          = "registry"
   image                 = "registry:3"
@@ -68,7 +68,7 @@ module "docker_registry" {
   healthcheck      = ["CMD", "wget", "-q", "http://localhost:5000/", "-O", "/dev/null"]
   converge_enable  = true
   converge_timeout = "2m"
-  dns_nameservers = var.dns_nameservers
+  dns_nameservers  = var.dns_nameservers
   environment_variables = {
     OTEL_TRACES_EXPORTER = "none"
   }

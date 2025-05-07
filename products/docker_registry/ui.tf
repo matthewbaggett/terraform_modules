@@ -29,5 +29,5 @@ module "docker_registry_ui" {
   networks              = [module.registry_network]
   placement_constraints = var.placement_constraints
   traefik               = merge(var.traefik, { port = 80, rule = "Host(`${var.domain}`) && !PathPrefix(`/v2`)" })
-  dns_nameservers = var.dns_nameservers
+  dns_nameservers       = var.dns_nameservers
 }

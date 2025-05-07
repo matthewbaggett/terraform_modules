@@ -44,5 +44,5 @@ module "service" {
   placement_constraints    = var.placement_constraints
   parallelism              = 1
   start_first              = false
-  dns_nameservers = var.dns_nameservers
+  dns_nameservers          = var.dns_nameservers
 }

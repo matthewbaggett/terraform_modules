@@ -4,7 +4,7 @@ module "mailcatcher" {
   placement_constraints = var.placement_constraints
   stack_name            = var.stack_name
   service_name          = "mailcatcher"
-  image                 = "dockage/mailcatcher"
+  image                 = "dockage/mailcatcher:0.9.0"
   traefik               = { domain = var.domain, ssl = true, non-ssl = true, port = 1080 }
   converge_enable       = false
   healthcheck           = ["CMD", "wget", "-q", "--spider", "http://localhost:1080/"]

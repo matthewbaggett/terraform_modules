@@ -79,10 +79,10 @@ locals {
     #MICROSOFT_TENANT=common
 
     # Mailer config
-    MAILER_SMTP_ENABLE        = false
-    MAILER_USE_CUSTOM_CONFIGS = false
-    MAILER_ADDRESS_FROM       = "<from@example.com>"
-    MAILER_SMTP_URL           = "smtps://user@domain.com:pass@smtp.domain.com" # used if custom mailer configs is false
+    MAILER_SMTP_ENABLE        = true
+    MAILER_USE_CUSTOM_CONFIGS = true
+    MAILER_ADDRESS_FROM       = "<hoppscotch@${var.domains.frontend}>"
+    #MAILER_SMTP_URL           = "smtps://user@domain.com:pass@smtp.domain.com" # used if custom mailer configs is false
 
     # The following are used if custom mailer configs is true
     MAILER_SMTP_HOST               = var.smtp.host

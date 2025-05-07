@@ -25,5 +25,4 @@ locals {
   )
 
   networks = [for network in concat(var.networks, data.docker_network.traefik) : network if network != null]
-
 }

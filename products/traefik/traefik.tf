@@ -81,6 +81,10 @@ locals {
     var.enable_udp ? flatten([for name, ports in var.udp_entrypoints : [for port in ports : "--entrypoints.${name}.address=:${port}/udp"]]) : []
   )))
 }
+locals {
+  traefik_parallelism = var.traefik_instance_count != null ? var.traefik_instance_count : 1
+  traefik_global      = var.traefik_instance_count == null ? true : false
+}
 module "traefik" {
   source                = "../../docker/service"
   depends_on            = [module.docker_socket_proxy, module.network, ]
@@ -90,7 +94,8 @@ module "traefik" {
   networks              = concat([module.network, module.docker_socket_proxy.network, ], var.extra_networks)
   volumes               = { "certs" = "/certs" }
   placement_constraints = var.placement_constraints
-  global                = true
+  global                = local.traefik_global
+  parallelism           = local.traefik_parallelism
   healthcheck           = ["CMD", "wget", "--no-verbose", "--tries", 1, "--spider", "http://localhost:8080"]
   converge_enable       = true
   command               = local.command
@@ -106,15 +111,15 @@ module "traefik" {
     {
       host         = var.http_port
       container    = var.http_port
-      publish_mode = var.port_publish_mode
+      publish_mode = var.publish_mode
       }, {
       host         = var.https_port
       container    = var.https_port
-      publish_mode = var.port_publish_mode
+      publish_mode = var.publish_mode
       }, {
       host         = var.dashboard_port
       container    = var.dashboard_port
-      publish_mode = var.port_publish_mode
+      publish_mode = var.publish_mode
     },
   ]
 }

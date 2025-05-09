@@ -10,15 +10,18 @@ locals {
     }
   }
 }
-resource "random_integer" "subnet_ip_octet" {
-  for_each = local.ranges
-  min      = local.ranges[each.key].min
-  max      = local.ranges[each.key].max
+resource "random_integer" "subnet_ip_octet_high" {
+  min = local.ranges.high.min
+  max = local.ranges.high.max
+}
+resource "random_integer" "subnet_ip_octet_low" {
+  min = local.ranges.low.min
+  max = local.ranges.low.max
 }
 
 locals {
   // Generate a subnet
-  subnet = var.subnet != null ? var.subnet : "172.${random_integer.subnet_ip_octet["high"].result}.${random_integer.subnet_ip_octet["low"].result}.0/24"
+  subnet = var.subnet != null ? var.subnet : "172.${random_integer.subnet_ip_octet_high.result}.${random_integer.subnet_ip_octet_low.result}.0/24"
   // Calculate the gateway from the subnet
   gateway = cidrhost(local.subnet, 1)
 }

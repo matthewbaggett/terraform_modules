@@ -1,6 +1,6 @@
 variable "traefik" {
   description = "Whether to enable traefik for the service."
-  default = null
+  default     = null
   type = object({
     domain           = string
     port             = optional(number)
@@ -20,7 +20,7 @@ resource "random_password" "password" {
   special  = false
 }
 resource "random_password" "salt" {
-  for_each = random_password.password
+  for_each         = random_password.password
   length           = 8
   special          = true
   override_special = "!@#%&*()-_=+[]{}<>:?"
@@ -31,9 +31,9 @@ resource "htpasswd_password" "htpasswd" {
   salt     = random_password.salt[each.key].result
 }
 locals {
-  user_accounts = try(var.traefik.basic-auth-users, [])
-  user_pass_pairs = formatlist("%s:%s", [for user, password in random_password.password : user], [for user, password in random_password.password : password.result])
-  user_bcrypt_pairs = formatlist("%s:%s", [for user, htpasswd in htpasswd_password.htpasswd : user], [for user, htpasswd in htpasswd_password.htpasswd: htpasswd.bcrypt])
+  user_accounts     = try(var.traefik.basic-auth-users, [])
+  user_pass_pairs   = formatlist("%s:%s", [for user, password in random_password.password : user], [for user, password in random_password.password : password.result])
+  user_bcrypt_pairs = formatlist("%s:%s", [for user, htpasswd in htpasswd_password.htpasswd : user], [for user, htpasswd in htpasswd_password.htpasswd : htpasswd.bcrypt])
 }
 locals {
   is_traefik = var.traefik != null

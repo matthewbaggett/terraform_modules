@@ -43,12 +43,16 @@ variable "networks" {
 #     / /   / /   / / / / /| | / /_/ /
 #    / /___/ /___/ /_/ / ___ |/ ____/
 #   /_____/_____/_____/_/  |_/_/
+variable "lldap_container_version" {
+  description = "Version of the lldap container to use"
+  type        = string
+  default     = "stable"
+}
 variable "timezone" {
   type        = string
   description = "The timezone to set in the container."
   default     = "Europe/Amsterdam"
 }
-
 variable "base_dn" {
   type        = string
   description = "The base DN for the LDAP server."

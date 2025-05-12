@@ -8,11 +8,11 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.2"
+      version = "~> 3.5"
     }
     local = {
       source  = "hashicorp/local"
-      version = "~>2.1"
+      version = "~> 2.5"
     }
   }
 }

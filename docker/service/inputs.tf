@@ -26,6 +26,10 @@ variable "mirror" {
 variable "command" {
   type    = list(string)
   default = null
+  validation {
+    error_message = "First string should not be CMD or CMD-SHELL, but rather the command to run."
+    condition     = try(var.command[0], "") != "CMD" && try(var.command[0], "") != "CMD-SHELL"
+  }
 }
 variable "restart_policy" {
   type        = string
@@ -201,7 +205,7 @@ variable "placement_constraints" {
   description = "Docker Swarm placement constraints"
 }
 variable "processor_architecture" {
-  default     = "amd64"
+  default     = null
   type        = string
   description = "The processor architecture to use for the service."
 }

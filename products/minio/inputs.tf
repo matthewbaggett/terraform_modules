@@ -61,3 +61,8 @@ variable "environment_variables" {
   default     = {}
   description = "A map of environment variables to set in the container."
 }
+variable "converge_enable" {
+  default     = true
+  type        = bool
+  description = "Whether to enable the converge configuration."
+}

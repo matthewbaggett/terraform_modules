@@ -7,7 +7,7 @@ locals {
   # Calculate the docker image to use
   image = (
     local.is_build
-    ? docker_image.build["build"].name
+    ? docker_image.build[ "build"].name
     : (
       local.is_mirror
       ? docker_registry_image.mirror["mirror"].name
@@ -23,6 +23,5 @@ locals {
       : try("${data.docker_registry_image.image["default"].name}@${data.docker_registry_image.image["default"].sha256_digest}", null)
     )
   )
-
   network_ids = distinct([for network in concat(var.networks, [try(data.docker_network.traefik[0], null)]) : network.id if network != null])
 }

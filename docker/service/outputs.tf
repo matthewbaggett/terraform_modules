@@ -15,8 +15,8 @@ output "docker_service" {
 }
 output "endpoint" {
   value = try(
-    "https://${nonsensitive(one(local.user_pass_pairs))}${var.traefik.domain}",
-    "http://${nonsensitive(one(local.user_pass_pairs))}${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
+    "https://${nonsensitive(one(local.user_pass_pairs))}@${var.traefik.domain}",
+    "http://${nonsensitive(one(local.user_pass_pairs))}@${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
     "https://${var.traefik.domain}",
     "http://${docker_service.instance.name}:${docker_service.instance.endpoint_spec[0].ports[0].target_port}",
     null

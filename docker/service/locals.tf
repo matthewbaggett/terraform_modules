@@ -7,7 +7,7 @@ locals {
   # Calculate the docker image to use
   image = (
     local.is_build
-    ? docker_image.build[ "build"].name
+    ? docker_image.build["build"].name
     : (
       local.is_mirror
       ? docker_registry_image.mirror["mirror"].name

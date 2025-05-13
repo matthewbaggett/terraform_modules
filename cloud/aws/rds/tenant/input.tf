@@ -27,11 +27,13 @@ variable "engine" {
 }
 locals {
   supported_engines = {
-    mysql    = ["mysql", "aurora-mysql", "mariadb", ]
-    postgres = ["postgresql", "aurora-postgres", ]
+    mysql    = ["mysql", "aurora-mysql", ]
+    mariadb  = ["mariadb", ]
+    postgres = ["postgresql", "aurora-postgresql", ]
   }
-  is_mysql    = contains(local.supported_engines.mysql, var.engine)
-  is_postgres = contains(local.supported_engines.postgres, var.engine)
+  supported_engines_list = flatten([for k, v in local.supported_engines : v])
+  is_mysql               = contains(local.supported_engines.mysql, var.engine)
+  is_postgres            = contains(local.supported_engines.postgres, var.engine)
 }
 variable "mysql_binary" {
   type        = string
@@ -57,4 +59,24 @@ variable "debug_path" {
 }
 locals {
   debug_path = var.debug_path != null ? var.debug_path : "${path.root}/.debug/aws/rds/serverless/identities/${local.username}.json"
+}
+variable "bastion" {
+  type = object({
+    host             = string
+    port             = number
+    username         = string
+    private_key_file = string
+  })
+  description = "The bastion host to use for the SSH tunnel"
+}
+variable "endpoint" {
+  type = object({
+    host = string
+    port = number
+  })
+  description = "The endpoint of the RDS cluster or instance"
+  validation {
+    error_message = "Host isn't supposed to contain a port!"
+    condition     = can(regex("^[^:]+$", var.endpoint.host))
+  }
 }

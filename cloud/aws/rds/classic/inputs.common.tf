@@ -28,25 +28,25 @@ variable "engine" {
   type        = string
   description = "The database engine to use"
   validation {
-    error_message = "Must be one of: ${join(", ", local.supported_engines)}."
-    condition     = contains(local.supported_engines, var.engine)
+    error_message = "Must be one of: ${join(", ", flatten(local.supported_engines_list))}."
+    condition     = contains(local.supported_engines_list, var.engine)
   }
 }
 locals {
-  is_mysql    = var.engine == "mysql"
-  is_postgres = var.engine == "postgresql"
-  is_mariadb  = var.engine == "mariadb"
-  port        = local.is_mysql ? 3306 : local.is_postgres ? 5432 : local.is_mariadb ? 3306 : 0
+  is_mysql    = contains(local.supported_engines.mysql, var.engine)
+  is_postgres = contains(local.supported_engines.postgres, var.engine)
+  is_mariadb  = contains(local.supported_engines.mariadb, var.engine)
+  port        = local.is_mysql ? 3306 : (local.is_postgres ? 5432 : (local.is_mariadb ? 3306 : 0))
 }
 variable "engine_version" {
   type    = string
   default = null
   validation {
-    error_message = "If the engine is mysql_aurora, the engine_version must be one of ${join(", ", local.supported_mysql)}."
+    error_message = "If the engine is mysql_aurora, the engine_version must be one of ${join(", ", local.supported_engines_list)}."
     condition     = var.engine_version == null ? true : (local.is_mysql ? contains(local.supported_mysql, var.engine_version) : true)
   }
   validation {
-    error_message = "If the engine is aurora-postgresql, the engine_version must be one of ${join(", ", local.supported_postgres)}."
+    error_message = "If the engine is aurora-postgresql, the engine_version must be one of ${join(", ", local.supported_engines_list)}."
     condition     = var.engine_version == null ? true : (local.is_postgres ? contains(local.supported_postgres, var.engine_version) : true)
   }
 }
@@ -68,8 +68,20 @@ variable "skip_final_snapshot" {
   description = "Determines whether a final DB snapshot is created before the DB cluster is deleted."
   default     = false
 }
+variable "source_security_group_id" {
+  type        = string
+  description = "The security group ID to allow access to the RDS instance"
+}
 variable "enable_performance_insights" {
   type    = bool
   default = false
 }
-
+variable "bastion" {
+  type = object({
+    host             = string
+    port             = number
+    username         = string
+    private_key_file = string
+  })
+  description = "The bastion host to use for the SSH tunnel"
+}

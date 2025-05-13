@@ -7,10 +7,6 @@ resource "aws_security_group" "rds" {
     {}
   )
 }
-variable "source_security_group_id" {
-  type        = string
-  description = "The security group ID to allow access to the RDS instance"
-}
 data "aws_security_group" "source" {
   id = var.source_security_group_id
 }
@@ -20,5 +16,6 @@ resource "aws_security_group_rule" "sgr" {
   protocol                 = "tcp"
   from_port                = local.port
   to_port                  = local.port
-  source_security_group_id = var.source_security_group_id
+  source_security_group_id = data.aws_security_group.source.id
+  description              = "Security group between ${var.instance_name} and ${data.aws_security_group.source.name}"
 }

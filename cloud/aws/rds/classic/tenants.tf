@@ -7,4 +7,8 @@ module "tenants" {
   engine         = var.engine
   admin_identity = module.admin_identity
   endpoint       = local.endpoints.write
+  bastion        = var.bastion
+}
+resource "scratch_string" "debug" {
+  in = jsonencode(var.bastion)
 }

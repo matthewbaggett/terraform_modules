@@ -21,5 +21,9 @@ terraform {
     ssh = {
       source = "AndrewChubatiuk/ssh"
     }
+    scratch = {
+      source  = "BrendanThompson/scratch"
+      version = "~> 0.4"
+    }
   }
 }

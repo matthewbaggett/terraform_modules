@@ -65,7 +65,7 @@ locals {
     ? (
       var.traefik.rule != null
       ? var.traefik.rule
-      : "Host(`${var.traefik.domain}`)"
+      : try("Host(`${var.traefik.domain}`)", null)
     )
     : null
   )

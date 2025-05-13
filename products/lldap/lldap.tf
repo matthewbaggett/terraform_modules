@@ -5,13 +5,19 @@ module "lldap" {
   stack_name            = var.stack_name
   service_name          = "lldap"
   image                 = "lldap/lldap:${var.lldap_container_version}"
-  traefik               = { domain = var.domain, ssl = true, non-ssl = true, port = 17170 }
-  networks              = concat([module.network], var.networks)
-  converge_enable       = false
+  traefik = {
+    domain  = var.domain,
+    ssl     = false,
+    non-ssl = true,
+    port    = 17170
+  }
+  networks        = concat([module.network], var.networks)
+  converge_enable = false
   ports = [
     { container = 3890, host = 389, publish_mode = var.publish_mode },
     { container = 6360, host = 636, publish_mode = var.publish_mode },
   ]
+  start_first = false
   environment_variables = {
     UID                  = 1000
     GID                  = 1000

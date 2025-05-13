@@ -14,10 +14,18 @@ variable "stack_name" {
   description = "The name of the stack to deploy the service to."
   default     = "auth"
 }
-variable "publish_mode" {
-  type        = string
-  description = "The publish mode for the service."
-  default     = "ingress"
+variable "ports" {
+  description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port. Default is to expose everything."
+  type = list(object({
+    host = optional(number, null)
+    container = number
+    protocol = optional(string, "tcp")
+    publish_mode = optional(string, "ingress")
+  }))
+  default = [
+    { container = 3890, host = 389, publish_mode = "ingress" },
+    { container = 6360, host = 636, publish_mode = "ingress" },
+  ]
 }
 variable "placement_constraints" {
   description = "Placement constraints for the service."
@@ -70,7 +78,7 @@ variable "enable_password_reset" {
 }
 variable "smtp_enable" {
   type        = bool
-  description = "Whether to enable the SMTP server."
+  description = "Whether to enable sending mail via SMTP."
   default     = false
 }
 variable "smtp_server" {

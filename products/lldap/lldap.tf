@@ -13,11 +13,8 @@ module "lldap" {
   }
   networks        = concat([module.network], var.networks)
   converge_enable = false
-  ports = [
-    { container = 3890, host = 389, publish_mode = var.publish_mode },
-    { container = 6360, host = 636, publish_mode = var.publish_mode },
-  ]
-  start_first = false
+  ports           = var.ports
+  start_first     = false
   environment_variables = {
     UID                  = 1000
     GID                  = 1000

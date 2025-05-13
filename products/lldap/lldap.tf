@@ -22,7 +22,7 @@ module "lldap" {
     LLDAP_LDAP_USER_PASS = local.admin_user_password
 
     # Database options
-    LLDAP_DATABASE_URL = module.postgres.endpoint
+    LLDAP_DATABASE_URL = local.database_url_string
 
     # SMTP options
     LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET = var.smtp_enable ? var.enable_password_reset : false

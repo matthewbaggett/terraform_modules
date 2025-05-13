@@ -17,9 +17,9 @@ variable "stack_name" {
 variable "ports" {
   description = "A map of port mappings to expose on the host. The key is the host port, and the value is the container port. Default is to expose everything."
   type = list(object({
-    host = optional(number, null)
-    container = number
-    protocol = optional(string, "tcp")
+    host         = optional(number, null)
+    container    = number
+    protocol     = optional(string, "tcp")
     publish_mode = optional(string, "ingress")
   }))
   default = [

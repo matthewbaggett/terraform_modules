@@ -44,7 +44,7 @@ locals {
     substr(var.service_name, 0, 63 - 1 - 20),
   ])
   traefik_labels_basic_auth = {
-    "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.users"        = local.is_traefik ? join(",", local.user_bcrypt_pairs) : null
+    "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.users"        = local.is_traefik && length(local.user_accounts) > 0 ? join(",", local.user_bcrypt_pairs) : null
     "traefik.http.middlewares.${local.traefik_service}-auth.basicauth.removeheader" = local.is_traefik ? (length(local.user_bcrypt_pairs) > 0 ? "true" : "false") : null
   }
   traefik_labels_headers = (
@@ -52,7 +52,7 @@ locals {
     ? { for key, value in var.traefik.headers : "traefik.http.middlewares.${local.traefik_service}-headers.headers.customrequestheaders.${key}" => value }
     : {}
   )
-  has_auth    = length(local.traefik_labels_basic_auth) > 0
+  has_auth    = length(local.user_accounts) > 0 && length(local.traefik_labels_basic_auth) > 0
   has_headers = length(local.traefik_labels_headers) > 0
   traefik_middlewares = distinct(compact(concat(
     try(var.traefik.middlewares, []),

@@ -10,3 +10,6 @@ output "endpoint" {
 output "network" {
   value = module.network
 }
+output "database_url_string" {
+  value = local.database_url_string
+}

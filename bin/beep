@@ -34,10 +34,10 @@ else
 	case "$TYPE" in
 
 	okay | success)
-		SOUNDFILE="lib/beep/elevator.mp3"
+		TYPE="okay"
 		;;
 	fail | failure)
-		SOUNDFILE="lib/beep/broken.mp3"
+		TYPE="fail"
 		;;
 	*)
 		echo "Invalid type: $TYPE. Must be 'success|okay' or 'failure|fail'."
@@ -48,4 +48,4 @@ fi
 
 $SCRIPTPATH/notify "$SUBJECT" "$MESSAGE"
 
-$SCRIPTPATH/sound "$SOUNDFILE"
+$SCRIPTPATH/bell $TYPE

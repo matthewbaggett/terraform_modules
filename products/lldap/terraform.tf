@@ -10,7 +10,12 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.5"
     }
+    lldap = {
+      source  = "tasansga/lldap"
+      version = "~> 0.2"
+    }
   }
 }
+
 
 

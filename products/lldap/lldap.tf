@@ -24,6 +24,11 @@ module "lldap" {
     LLDAP_LDAP_BASE_DN   = var.base_dn
     LLDAP_LDAP_USER_PASS = local.admin_user_password
 
+    # LDAP over TLS options
+    LLDAP_LDAPS_OPTIONS__ENABLED   = true
+    LLDAP_LDAPS_OPTIONS__CERT_FILE = "/certs/certfile.crt"
+    LLDAP_LDAPS_OPTIONS__KEY_FILE  = "/certs/keyfile.key"
+
     # Database options
     LLDAP_DATABASE_URL = local.database_url_string
 
@@ -35,5 +40,9 @@ module "lldap" {
     LLDAP_SMTP_OPTIONS__USER                  = var.smtp_enable ? var.smtp_user : null
     LLDAP_SMTP_OPTIONS__PASSWORD              = var.smtp_enable ? var.smtp_password : null
     LLDAP_SMTP_OPTIONS__FROM                  = var.smtp_enable ? var.smtp_from : null
+  }
+  configs = {
+    "/certs/certfile.crt" = tls_self_signed_cert.cert.cert_pem
+    "/certs/keyfile.key"  = tls_private_key.key.private_key_pem
   }
 }

@@ -67,7 +67,7 @@ data "lldap_group" "service_readonly" {
   id = 3 // MB: Alas, this is how it be.
 }
 resource "lldap_member" "service_readonly" {
-  for_each = { for creds in var.service_accounts : creds.username => creds }
-  group_id = data.lldap_group.service_readonly.id
-  user_id  = lldap_user.service_accounts[each.key].id
+    for_each = { for creds in var.service_accounts : creds.username => creds }
+    group_id = data.lldap_group.service_readonly.id
+    user_id  = lldap_user.service_accounts[each.key].id
 }

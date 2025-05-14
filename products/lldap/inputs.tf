@@ -153,3 +153,28 @@ variable "postgres_placement_constraints" {
   type        = list(string)
   default     = []
 }
+
+#      __  __
+#     / / / /_______  __________
+#    / / / / ___/ _ \/ ___/ ___/
+#   / /_/ (__  )  __/ /  (__  )
+#   \____/____/\___/_/  /____/
+variable "service_accounts" {
+  type = list(object({
+    username     = string
+    email        = string
+    display_name = string
+  }))
+  default = []
+}
+variable "user_accounts" {
+  type = list(object({
+    username     = string
+    email        = string
+    display_name = string
+    first_name   = optional(string, "")
+    last_name    = optional(string, "")
+    avatar       = optional(string, null)
+  }))
+  default = []
+}

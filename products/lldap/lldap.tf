@@ -1,4 +1,5 @@
 module "lldap" {
+  // @todo: Write a healthcheck that uses a service account.
   source                = "../../docker/service"
   enable                = var.enable
   placement_constraints = var.placement_constraints

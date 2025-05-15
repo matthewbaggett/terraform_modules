@@ -20,13 +20,19 @@ module "lldap" {
     UID                  = 1000
     GID                  = 1000
     TZ                   = var.timezone
+    LLDAP_VERBOSE        = var.verbose
+    LLDAP_LDAP_PORT      = 389
+    #LLDAP_LDAPS_PORT     = 636
+    LLDAP_HTTP_URL       = "https://${var.domain}"
     LLDAP_JWT_SECRET     = nonsensitive(random_password.jwt_secret.result)
     LLDAP_KEY_SEED       = nonsensitive(random_password.key_seed.result)
+    LLDAP_KEY_FILE       = ""
     LLDAP_LDAP_BASE_DN   = var.base_dn
     LLDAP_LDAP_USER_PASS = local.admin_user_password
 
     # LDAP over TLS options
     LLDAP_LDAPS_OPTIONS__ENABLED   = true
+    LLDAP_LDAPS_OPTIONS__PORT = 636
     LLDAP_LDAPS_OPTIONS__CERT_FILE = "/certs/certfile.crt"
     LLDAP_LDAPS_OPTIONS__KEY_FILE  = "/certs/keyfile.key"
 

@@ -5,10 +5,10 @@ output "admin_user" {
   }
 }
 output "ldap_endpoint" {
-  value = "ldap://${module.lldap.docker_service.name}:3890"
+  value = "ldap://${module.lldap.docker_service.name}"
 }
 output "ldaps_endpoint" {
-  value = "ldaps://${module.lldap.docker_service.name}:6360"
+  value = "ldaps://${module.lldap.docker_service.name}"
 }
 output "admin_username" {
   value = "admin"

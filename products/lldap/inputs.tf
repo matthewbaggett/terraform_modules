@@ -23,8 +23,8 @@ variable "ports" {
     publish_mode = optional(string, "ingress")
   }))
   default = [
-    { container = 3890, host = 389, publish_mode = "ingress" },
-    { container = 6360, host = 636, publish_mode = "ingress" },
+    { container = 389, host = 389, publish_mode = "ingress" },
+    { container = 636, host = 636, publish_mode = "ingress" },
   ]
 }
 variable "placement_constraints" {
@@ -75,6 +75,11 @@ variable "enable_password_reset" {
   type        = bool
   description = "Whether to enable the password reset feature."
   default     = false
+}
+variable "verbose" {
+    type        = bool
+    description = "Whether to enable verbose output."
+    default     = false
 }
 variable "smtp_enable" {
   type        = bool

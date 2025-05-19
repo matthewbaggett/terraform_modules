@@ -24,13 +24,13 @@ resource "tls_cert_request" "lldap_crl" {
   private_key_pem = tls_private_key.lldap_key.private_key_pem
   dns_names       = [var.domain]
   subject {
-    common_name         = var.domain
+    common_name = var.domain
   }
 }
 resource "tls_locally_signed_cert" "lldap_cert" {
   #allowed_uses          = ["digital_signature", "key_encipherment", "server_auth", "client_auth"]
-  allowed_uses = []
-  set_subject_key_id = true
+  allowed_uses          = []
+  set_subject_key_id    = true
   ca_cert_pem           = tls_self_signed_cert.ca_cert.cert_pem
   ca_private_key_pem    = tls_private_key.ca_private_key.private_key_pem
   cert_request_pem      = tls_cert_request.lldap_crl.cert_request_pem

@@ -5,15 +5,15 @@ module "tester" {
   stack_name            = var.stack_name
   service_name          = "lldap-tester"
   image                 = "${var.lldap_container_image}:${var.lldap_container_version}"
-  networks        = [module.network]
-  converge_enable = false
-  command = ["/bin/sh", "/run.sh"]
+  networks              = [module.network]
+  converge_enable       = false
+  command               = ["/bin/sh", "/run.sh"]
   environment_variables = {
     LLDAP_ENDPOINT = local.ldaps_endpoint
   }
   configs = {
-    "/usr/local/share/ca-certificates/our-self-signed-cert.pem"   = tls_self_signed_cert.ca_cert.cert_pem
-    "/run.sh" = <<EOF
+    "/usr/local/share/ca-certificates/our-self-signed-cert.pem" = tls_self_signed_cert.ca_cert.cert_pem
+    "/run.sh"                                                   = <<EOF
 #!/bin/sh
 set -e
 set -x

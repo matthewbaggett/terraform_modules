@@ -5,8 +5,8 @@ output "admin_user" {
   }
 }
 locals {
-  ldap_endpoint = "ldap://${module.lldap.docker_service.name}"
-    ldaps_endpoint = "ldaps://${module.lldap.docker_service.name}"
+  ldap_endpoint  = "ldap://${module.lldap.docker_service.name}"
+  ldaps_endpoint = "ldaps://${module.lldap.docker_service.name}"
 }
 output "ldap_endpoint" {
   value = local.ldap_endpoint

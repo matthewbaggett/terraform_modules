@@ -32,10 +32,10 @@ module "lldap" {
     LLDAP_LDAP_USER_PASS = local.admin_password
 
     # LDAP over TLS options
-    LLDAP_LDAPS_OPTIONS__ENABLED  = true
-    LLDAP_LDAPS_OPTIONS__PORT     = 636
+    LLDAP_LDAPS_OPTIONS__ENABLED   = true
+    LLDAP_LDAPS_OPTIONS__PORT      = 636
     LLDAP_LDAPS_OPTIONS__CERT_FILE = "/certs/cert.pem"
-    LLDAP_LDAPS_OPTIONS__KEY_FILE = "/certs/key.pem"
+    LLDAP_LDAPS_OPTIONS__KEY_FILE  = "/certs/key.pem"
 
     # Database options
     LLDAP_DATABASE_URL = local.database_url_string

@@ -51,6 +51,11 @@ variable "networks" {
 #     / /   / /   / / / / /| | / /_/ /
 #    / /___/ /___/ /_/ / ___ |/ ____/
 #   /_____/_____/_____/_/  |_/_/
+variable "lldap_container_image" {
+  type        = string
+  description = "The docker image to use for the lldap service."
+  default     = "lldap/lldap"
+}
 variable "lldap_container_version" {
   description = "Version of the lldap container to use"
   type        = string
@@ -66,7 +71,12 @@ variable "base_dn" {
   description = "The base DN for the LDAP server."
   default     = "dc=example,dc=com"
 }
-variable "admin_user_password" {
+variable "admin_username" {
+  type        = string
+  description = "The username for the admin user."
+  default     = "admin"
+}
+variable "admin_password" {
   type        = string
   description = "The password for the admin user."
   default     = null
@@ -77,9 +87,25 @@ variable "enable_password_reset" {
   default     = false
 }
 variable "verbose" {
-    type        = bool
-    description = "Whether to enable verbose output."
-    default     = false
+  type        = bool
+  description = "Whether to enable verbose output."
+  default     = false
+}
+variable "certificate_expiry" {
+  type    = number
+  default = 87600
+}
+variable "lldap_ca_subject" {
+  description = "SSL Cert Subject for the CA"
+  type = object({
+    country             = string
+    province            = string
+    locality            = string
+    common_name         = string
+    organization        = string
+    organizational_unit = string
+  })
+  default = null
 }
 variable "smtp_enable" {
   type        = bool

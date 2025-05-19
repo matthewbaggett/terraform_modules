@@ -1,21 +1,25 @@
 output "admin_user" {
   sensitive = true
   value = {
-    admin = local.admin_user_password
+    admin = local.admin_password
   }
 }
+locals {
+  ldap_endpoint = "ldap://${module.lldap.docker_service.name}"
+    ldaps_endpoint = "ldaps://${module.lldap.docker_service.name}"
+}
 output "ldap_endpoint" {
-  value = "ldap://${module.lldap.docker_service.name}"
+  value = local.ldap_endpoint
 }
 output "ldaps_endpoint" {
-  value = "ldaps://${module.lldap.docker_service.name}"
+  value = local.ldaps_endpoint
 }
 output "admin_username" {
-  value = "admin"
+  value = var.admin_username
 }
 output "admin_password" {
   sensitive = true
-  value     = local.admin_user_password
+  value     = local.admin_password
 }
 output "endpoint" {
   value = module.lldap.endpoint
@@ -51,4 +55,14 @@ output "service_accounts" {
       password = random_password.service_accounts[creds.username].result
     }
   }
+}
+
+output "ca_private_key" {
+  value = tls_private_key.ca_private_key.private_key_pem
+}
+output "ca_cert" {
+  value = tls_self_signed_cert.ca_cert.cert_pem
+}
+output "lldap_cert" {
+  value = tls_locally_signed_cert.lldap_cert.cert_pem
 }

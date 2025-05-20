@@ -10,6 +10,8 @@ locals {
 module "postgres" {
   count                 = local.provision_ephemeral_postgres ? 1 : 0
   source                = "../postgres"
+  debug                 = var.debug
+  debug_path            = var.debug_path
   enable                = var.enable
   stack_name            = var.stack_name
   database              = "lldap"

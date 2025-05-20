@@ -1,6 +1,8 @@
 module "service" {
   source               = "../../docker/service"
   enable               = var.enable
+  debug                = var.debug
+  debug_path           = var.debug_path
   image                = "${var.postgres_image}:${var.postgres_version}"
   stack_name           = var.stack_name
   service_name         = var.service_name

@@ -2,6 +2,8 @@ module "lldap" {
   // @todo: Write a healthcheck that uses a service account and calls ldapwhoami on the ssl port.
   source                = "../../docker/service"
   enable                = var.enable
+  debug                 = var.debug
+  debug_path            = var.debug_path
   placement_constraints = var.placement_constraints
   stack_name            = var.stack_name
   service_name          = "lldap"
@@ -17,8 +19,8 @@ module "lldap" {
   ports           = var.ports
   start_first     = false
   environment_variables = {
-    #UID             = 1000
-    #GID             = 1000
+    UID             = 1000
+    GID             = 1000
     TZ              = var.timezone
     LLDAP_VERBOSE   = var.verbose
     LLDAP_LDAP_PORT = 389
@@ -54,5 +56,8 @@ module "lldap" {
     "/certs/cert.pem" = tls_locally_signed_cert.lldap_cert.cert_pem
     "/certs/key.pem"  = tls_private_key.lldap_key.private_key_pem
     "/certs/ca.pem"   = tls_self_signed_cert.ca_cert.cert_pem
+  }
+  volumes = {
+    "data" = "/data"
   }
 }

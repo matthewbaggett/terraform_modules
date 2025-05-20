@@ -3,6 +3,16 @@ variable "enable" {
   description = "Whether to enable the service."
   default     = true
 }
+variable "debug" {
+  type        = bool
+  default     = false
+  description = "Enable debug mode"
+}
+variable "debug_path" {
+  type        = string
+  description = "Path to write debug files to"
+  default     = null
+}
 variable "postgres_image" {
   default     = "postgres"
   type        = string

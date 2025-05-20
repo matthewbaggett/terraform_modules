@@ -9,6 +9,16 @@ variable "enable" {
   type        = bool
   description = "Whether to enable the service or to merely provision the service."
 }
+variable "debug" {
+  type        = bool
+  default     = false
+  description = "Enable debug mode"
+}
+variable "debug_path" {
+  type        = string
+  description = "Path to write debug files to"
+  default     = null
+}
 variable "stack_name" {
   type        = string
   description = "The name of the stack to deploy the service to."
@@ -35,6 +45,11 @@ variable "placement_constraints" {
 variable "domain" {
   type        = string
   description = "The domain to use for the service."
+  default     = null
+}
+variable "override_cert_domain" {
+  type        = string
+  description = "The domain to use for the certificate."
   default     = null
 }
 variable "networks" {

@@ -22,9 +22,8 @@ resource "tls_private_key" "lldap_key" {
 }
 resource "tls_cert_request" "lldap_crl" {
   private_key_pem = tls_private_key.lldap_key.private_key_pem
-  dns_names       = [var.domain]
   subject {
-    common_name = var.domain
+    common_name = var.override_cert_domain != null ? var.override_cert_domain : var.domain
   }
 }
 resource "tls_locally_signed_cert" "lldap_cert" {
@@ -36,7 +35,6 @@ resource "tls_locally_signed_cert" "lldap_cert" {
   cert_request_pem      = tls_cert_request.lldap_crl.cert_request_pem
   validity_period_hours = var.certificate_expiry
 }
-/*
 resource "local_file" "ca" {
   filename = "${path.module}/ca.pem"
   content  = tls_self_signed_cert.ca_cert.cert_pem
@@ -48,4 +46,4 @@ resource "local_file" "cert" {
 resource "local_file" "key" {
   filename = "${path.module}/key.pem"
   content  = tls_private_key.lldap_key.private_key_pem
-}*/
+}

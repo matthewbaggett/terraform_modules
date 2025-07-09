@@ -19,6 +19,7 @@ module "cloudinit" {
   service_account_username        = var.user.name
   service_account_password        = var.user.password
   service_account_public_ssh_keys = [var.user.public_key]
+  extra_apt_packages              = var.extra_apt_packages
   startup_scripts                 = var.startup_scripts
   manager_address                 = var.docker.manager_endpoint
   worker_token                    = var.docker.worker_token

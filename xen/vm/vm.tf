@@ -147,7 +147,7 @@ resource "null_resource" "final" {
   }
   provisioner "remote-exec" {
     inline = [
-      #"sudo rm -r /swarm",
+      "echo 'Post-setup SSH: Finished Finalization!';"
     ]
   }
 }

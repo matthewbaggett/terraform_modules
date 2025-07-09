@@ -78,3 +78,8 @@ variable "startup_scripts" {
   type        = list(string)
   default     = []
 }
+variable "extra_apt_packages" {
+  description = "Extra apt packages to install"
+  type        = list(string)
+  default     = []
+}

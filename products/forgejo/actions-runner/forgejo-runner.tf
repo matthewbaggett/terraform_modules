@@ -1,3 +1,9 @@
+module "docker_socket_proxy" {
+  source                = "../../../docker/socket-proxy"
+  stack_name            = var.stack_name
+  placement_constraints = ["node.role == manager"]
+  enable_all = true
+}
 module "forgejo_actions_runner" {
   source                = "../../../docker/service"
   enable                = var.enable
@@ -13,12 +19,12 @@ module "forgejo_actions_runner" {
     #    forgejo_RUNNER_LABELS             = join(",", var.forgejo_runner_labels)
     #    forgejo_RUNNER_REGISTRATION_TOKEN = var.forgejo_token
     #    CONFIG_FILE                       = "/config.yaml"
-    #DOCKER_HOST = module.docker_socket_proxy.endpoint
+    DOCKER_HOST = module.docker_socket_proxy.endpoint
   }
-  mounts = {
-    "/var/run/docker.sock" = "/var/run/docker.sock"
-  }
-  networks      = var.networks
+  #mounts = {
+  #  "/var/run/docker.sock" = "/var/run/docker.sock"
+  #}
+  networks      = concat(var.networks, [module.docker_socket_proxy.network])
   command       = ["/bin/bash", "/entrypoint.sh"]
   restart_delay = "1m"
   configs = {

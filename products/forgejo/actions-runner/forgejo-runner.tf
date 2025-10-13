@@ -43,6 +43,9 @@ EOF
       runner = {
         file           = ".runner"
         capacity       = 2
+        envs = {
+          DOCKER_HOST = module.docker_socket_proxy.endpoint,
+        }
         env_file       = ".env"
         timeout        = "3h"
         insecure       = false
@@ -58,12 +61,12 @@ EOF
         external_server = ""
       }
       container = {
-        network        = null
+        network        = module.docker_socket_proxy.network.name
         privileged     = false
         options        = null
         workdir_parent = null
         valid_volumes  = []
-        docker_host    = ""
+        docker_host    = module.docker_socket_proxy.endpoint
         force_pull     = true
         force_rebuild  = false
       }

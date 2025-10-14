@@ -1,4 +1,3 @@
-
 module "ocis" {
   source                = "../../docker/service"
   stack_name            = var.stack_name

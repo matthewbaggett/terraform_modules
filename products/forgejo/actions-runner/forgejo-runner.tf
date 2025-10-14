@@ -38,11 +38,11 @@ exec /bin/forgejo-runner --config /config.yaml daemon
 EOF
     "/config.yaml" = yamlencode({
       log = {
-        level = "info"
+        level = "debug"
       }
       runner = {
         file           = ".runner"
-        capacity       = 2
+        capacity       = var.capacity
         envs = {
           DOCKER_HOST = module.docker_socket_proxy.endpoint,
         }

@@ -151,6 +151,14 @@ resource "docker_service" "instance" {
       reservation {
         memory_bytes = var.reserved_ram_mb != null ? 1024 * 1024 * var.reserved_ram_mb : 0
         nano_cpus    = var.reserved_cpu != null ? (1000000000 / 100) * var.reserved_cpu : 0
+
+        // Reserve generic resources if specified, stuff like GPUs.
+        dynamic "generic_resources" {
+          for_each = length(var.reserved_generic_resources) > 0 ? [1] : []
+          content {
+            discrete_resources_spec = var.reserved_generic_resources
+          }
+        }
       }
     }
   }

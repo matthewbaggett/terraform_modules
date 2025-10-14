@@ -9,7 +9,7 @@ variable "forgejo_image" {
   description = "The docker image to use for the forgejo runner service."
 }
 variable "forgejo_version" {
-  default     = "9"
+  default     = "12"
   type        = string
   description = "The version of the docker image to use for the forgejo runner service."
 }

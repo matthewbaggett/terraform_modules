@@ -244,3 +244,8 @@ variable "shm_size_mb" {
   type        = number
   description = "The size of the shared memory segment in megabytes."
 }
+variable "reserved_generic_resources" {
+  default = []
+  type    = list(string)
+  description = "A list of generic resources to reserve for the service."
+}

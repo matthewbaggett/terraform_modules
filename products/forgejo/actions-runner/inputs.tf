@@ -9,7 +9,7 @@ variable "forgejo_actions_runner_image" {
   description = "The docker image to use for the forgejo runner service."
 }
 variable "forgejo_actions_runner_version" {
-  default     = "10"
+  default     = "11"
   type        = string
   description = "The version of the docker image to use for the forgejo runner service."
 }
@@ -25,6 +25,11 @@ variable "parallelism" {
   description = "The number of instances of the runner to run"
   type        = number
   default     = 2
+}
+variable "capacity" {
+  type        = number
+  description = "The capacity to use for the forgejo instance."
+  default     = 1
 }
 variable "forgejo_runner_name" {
   description = "The name to use for the runner"

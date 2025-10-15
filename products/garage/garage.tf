@@ -1,4 +1,3 @@
-
 module "garage" {
   source          = "../../docker/service"
   stack_name      = var.stack_name
@@ -15,7 +14,10 @@ module "garage" {
       }, {
       host      = var.s3_port
       container = var.s3_port
-      }
+      }, {
+      host      = var.admin_port
+      container = var.admin_port
+    }
   ]
   placement_constraints = var.placement_constraints
   mounts = {

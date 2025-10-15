@@ -20,3 +20,11 @@ root_domain = ".${domain}"
 bind_addr = "[::]:${web_port}"
 root_domain = ".${domain}"
 index = "index.html"
+add_host_to_metrics = true
+
+[admin]
+api_bind_addr = "[::]:${admin_port}"
+metrics_token = "${metrics_token}"
+metrics_require_token = true
+admin_token = "${admin_token}"
+#trace_sink = "http://localhost:4317"

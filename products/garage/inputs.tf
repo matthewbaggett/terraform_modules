@@ -40,6 +40,11 @@ variable "web_port" {
     description = "Port to bind the web server to."
     default     = 3902
 }
+variable "admin_port" {
+  type = number
+    description = "Port to bind the admin server to."
+    default = 3903
+}
 variable "s3_region" {
     type        = string
     description = "The S3 region to report via the API."

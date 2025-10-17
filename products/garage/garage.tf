@@ -1,7 +1,7 @@
 module "garage" {
   source          = "../../docker/service"
   stack_name      = var.stack_name
-  service_name    = "garage"
+  service_name    = var.service_name
   image           = "${var.image}:${var.tag}"
   converge_enable = false
   ports = [

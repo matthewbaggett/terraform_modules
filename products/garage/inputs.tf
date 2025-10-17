@@ -7,6 +7,11 @@ variable "stack_name" {
   type        = string
   description = "Stack Name"
 }
+variable "service_name" {
+    type        = string
+    description = "Service Name"
+  default = "garage"
+}
 variable "image" {
   type        = string
   default     = "dxflrs/garage"
@@ -25,15 +30,15 @@ variable "rpc_public_addr" {
     type        = string
     description = "This is how other garage services will reach garage. e.g 'garage.s3.example.org:3901'"
 }
+variable "s3_port" {
+  type        = number
+  description = "Port to bind the s3 server to."
+  default     = 3900
+}
 variable "rpc_port" {
     type        = number
     description = "Port to bind the rpc server to."
     default     = 3901
-}
-variable "s3_port" {
-    type        = number
-    description = "Port to bind the s3 server to."
-    default     = 3900
 }
 variable "web_port" {
     type        = number
@@ -49,4 +54,9 @@ variable "s3_region" {
     type        = string
     description = "The S3 region to report via the API."
     default     = "us-east-1"
+}
+variable "replication_factor" {
+  type = number
+  description = "The replication factor to use for the garage service."
+  default = 1
 }

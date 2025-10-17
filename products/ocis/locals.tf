@@ -13,8 +13,8 @@ locals {
     OCIS_EXCLUDE_RUN_SERVICES : "idm" # Disable the built in LDAP server
 
     OCIS_LDAP_URI : var.ldap.uri
-    OCIS_LDAP_INSECURE :var.ldap.insecure ? "true" : "false"
-    OCIS_LDAP_BIND_DN :var.ldap.bind.dn
+    OCIS_LDAP_INSECURE : var.ldap.insecure ? "true" : "false"
+    OCIS_LDAP_BIND_DN : var.ldap.bind.dn
     OCIS_LDAP_BIND_PASSWORD : var.ldap.bind.password
     OCIS_ADMIN_USER_ID : var.ldap.admin_user_uuid
 

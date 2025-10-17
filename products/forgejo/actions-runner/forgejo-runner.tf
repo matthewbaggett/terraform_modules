@@ -2,7 +2,7 @@ module "docker_socket_proxy" {
   source                = "../../../docker/socket-proxy"
   stack_name            = var.stack_name
   placement_constraints = ["node.role == manager"]
-  enable_all = true
+  enable_all            = true
 }
 module "forgejo_actions_runner" {
   source                = "../../../docker/service"
@@ -41,8 +41,8 @@ EOF
         level = "debug"
       }
       runner = {
-        file           = ".runner"
-        capacity       = var.capacity
+        file     = ".runner"
+        capacity = var.capacity
         envs = {
           DOCKER_HOST = module.docker_socket_proxy.endpoint,
         }

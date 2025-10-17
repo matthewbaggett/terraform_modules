@@ -19,8 +19,8 @@ variable "tag" {
   default     = "latest"
 }
 variable "webui_image" {
-  type = string
-  default = "ghcr.io/open-webui/open-webui"
+  type        = string
+  default     = "ghcr.io/open-webui/open-webui"
   description = "The docker image to use for the webui."
 }
 variable "webui_tag" {

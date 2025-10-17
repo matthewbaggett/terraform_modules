@@ -15,7 +15,7 @@ variable "image" {
 variable "tag" {
   type        = string
   description = "Tag of the docker image to use."
-  default = "7"
+  default     = "7"
 }
 variable "domain" {
   type        = string
@@ -23,7 +23,7 @@ variable "domain" {
 }
 variable "ldap" {
   type = object({
-    uri = string
+    uri      = string
     insecure = bool
     base_dn  = string
     bind = object({
@@ -31,20 +31,20 @@ variable "ldap" {
       password = string
     })
     admin_user_uuid = optional(string)
-    user_base_dn =string
-    group_base_dn =string
-    user_filter  =string
-    group_filter =string
+    user_base_dn    = string
+    group_base_dn   = string
+    user_filter     = string
+    group_filter    = string
   })
 }
 variable "s3" {
-    type = object({
-        endpoint   = string
-        region     = string
-        access_key = string
-        secret_key = string
-        bucket     = string
-    })
+  type = object({
+    endpoint   = string
+    region     = string
+    access_key = string
+    secret_key = string
+    bucket     = string
+  })
 }
 variable "log" {
   type = object({

@@ -101,4 +101,4 @@ JWT_SECRET = YYPen0kJxu9VjTflmyhwJ65Pm2TFYMbyKYqUhvD0PiA
 
 [actions]
 ENABLED = true
-DEFAULT_ACTIONS_URL = https://github.com
+DEFAULT_ACTIONS_URL = ${default_actions_url}

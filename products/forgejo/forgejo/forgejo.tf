@@ -8,16 +8,17 @@ module "forgejo" {
   networks              = concat(var.networks, [module.network])
   configs = {
     "/data/gitea/conf/app.ini" = templatefile("${path.module}/app.ini.tpl", merge({
-      name              = var.forgejo_name
-      slogan            = var.forgejo_slogan
-      domain            = var.traefik != null ? var.traefik.domain : ""
-      email             = var.forgejo_email
-      ssh_port          = var.ssh_port
-      database_host     = module.postgres.docker_service.name
-      database_port     = 5432
-      database_database = module.postgres.database
-      database_username = module.postgres.username
-      database_password = module.postgres.password
+      name                = var.forgejo_name
+      slogan              = var.forgejo_slogan
+      domain              = var.traefik != null ? var.traefik.domain : ""
+      email               = var.forgejo_email
+      ssh_port            = var.ssh_port
+      database_host       = module.postgres.docker_service.name
+      database_port       = 5432
+      database_database   = module.postgres.database
+      database_username   = module.postgres.username
+      database_password   = module.postgres.password
+      default_actions_url = var.default_actions_url
     }))
   }
   mounts = merge(var.mounts, {

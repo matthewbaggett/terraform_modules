@@ -85,3 +85,9 @@ variable "traefik" {
   })
   description = "Whether to enable traefik for the service."
 }
+
+variable "default_actions_url" {
+    type        = string
+    description = "The default URL for Forgejo Actions."
+    default     = "https://github.com"
+}

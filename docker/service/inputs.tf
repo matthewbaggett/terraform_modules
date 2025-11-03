@@ -63,6 +63,11 @@ variable "environment_variables" {
   default     = {}
   description = "A map of environment variables to set in the container."
 }
+variable "capacities" {
+  type        = list(string)
+  default     = []
+  description = "A list of capabilities to add to the container."
+}
 variable "networks" {
   type = list(object({
     name = string

@@ -75,6 +75,7 @@ resource "docker_service" "instance" {
           file_name   = configs.key
         }
       }
+
       # Same for secrets
       dynamic "secrets" {
         for_each = var.secrets
@@ -84,6 +85,9 @@ resource "docker_service" "instance" {
           file_name   = secrets.key
         }
       }
+
+      # Add any capabilities requested
+      cap_add = var.capacities
 
       # Allow overriding DNS server in use
       dynamic "dns_config" {

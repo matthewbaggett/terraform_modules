@@ -22,6 +22,17 @@ variable "tag" {
   default     = "v2.1.0"
   description = "Tag of the docker image to use."
 }
+
+variable "ui_image" {
+  type        = string
+  default     = "khairul169/garage-webui"
+  description = "The docker image to use."
+}
+variable "ui_tag" {
+  type        = string
+  default     = "latest"
+  description = "Tag of the docker image to use."
+}
 variable "domain" {
   type        = string
   description = "Domain to use e.g s3.example.org"
@@ -49,6 +60,11 @@ variable "admin_port" {
   type        = number
   description = "Port to bind the admin server to."
   default     = 3903
+}
+variable "ui_port" {
+  type        = number
+  description = "Port to bind the UI to."
+  default     = 3909
 }
 variable "s3_region" {
   type        = string

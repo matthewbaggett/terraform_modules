@@ -19,6 +19,7 @@ module "garage" {
       container = var.admin_port
     }
   ]
+  networks = [module.network]
   placement_constraints = var.placement_constraints
   mounts = {
     "/data/garage/meta" = "/var/lib/garage/meta"

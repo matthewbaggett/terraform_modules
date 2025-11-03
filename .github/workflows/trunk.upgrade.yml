@@ -27,21 +27,21 @@ jobs:
       pull-requests: write # For trunk to create PRs
     steps:
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
+        uses: https://git.grey.ooo/actions/setup-php@v2
         with:
           php-version: 8.3
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: https://git.grey.ooo/actions/checkout@v4
       - name: "Trunk Upgrade"
-        uses: trunk-io/trunk-action/upgrade@v1
+        uses: https://git.grey.ooo/actions/trunk-action/upgrade@v1
       - name: "PR: Find Pull Request"
-        uses: juliangruber/find-pull-request-action@v1
+        uses: https://git.grey.ooo/actions/find-pull-request-action@v1
         id: find-pull-request
         with:
           labels: trunk
       - name: "PR: Enable Pull Request Automerge"
         continue-on-error: true
-        uses: peter-evans/enable-pull-request-automerge@v3
+        uses: https://git.grey.ooo/actions/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ steps.find-pull-request.outputs.number }}

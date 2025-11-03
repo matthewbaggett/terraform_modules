@@ -24,8 +24,8 @@ jobs:
     permissions:
       actions: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: https://git.grey.ooo/actions/checkout@v4
       - name: "Trunk Cache"
-        uses: trunk-io/trunk-action@v1
+        uses: https://git.grey.ooo/actions/trunk-action@v1
         with:
           check-mode: populate_cache_only

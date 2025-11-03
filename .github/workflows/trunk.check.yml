@@ -23,6 +23,6 @@ jobs:
       checks: write # For trunk to post annotations
       contents: read # For repo checkout
     steps:
-      - uses: actions/checkout@v4
+      - uses: https://git.grey.ooo/actions/checkout@v4
       - name: "Trunk Check"
-        uses: trunk-io/trunk-action@v1
+        uses: https://git.grey.ooo/actions/trunk-action@v1

@@ -18,7 +18,7 @@ module "forgejo_actions_runner" {
     #    forgejo_RUNNER_NAME               = var.forgejo_runner_name
     #    forgejo_RUNNER_LABELS             = join(",", var.forgejo_runner_labels)
     #    forgejo_RUNNER_REGISTRATION_TOKEN = var.forgejo_token
-    #    CONFIG_FILE                       = "/config.yaml"
+    #    CONFIG_FILE                       = "/config.yml"
     DOCKER_HOST = module.docker_socket_proxy.endpoint
   }
   #mounts = {
@@ -32,11 +32,11 @@ module "forgejo_actions_runner" {
 #!/bin/bash
 set -xe
 echo "Configuring runner..."
-/bin/forgejo-runner --config /config.yaml register --no-interactive --instance "${var.forgejo_instance_url}" --name ${var.forgejo_runner_name} --token ${var.forgejo_token}
+/bin/forgejo-runner --config /config.yml register --no-interactive --instance "${var.forgejo_instance_url}" --name ${var.forgejo_runner_name} --token ${var.forgejo_token}
 echo "Starting runner..."
-exec /bin/forgejo-runner --config /config.yaml daemon
+exec /bin/forgejo-runner --config /config.yml daemon
 EOF
-    "/config.yaml" = yamlencode({
+    "/config.yml" = yamlencode({
       log = {
         level = "debug"
       }

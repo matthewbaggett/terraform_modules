@@ -60,7 +60,7 @@ variable "forgejo_token" {
 variable "service_name" {
   type        = string
   description = "The name of the service to deploy."
-  default     = "forgejo-actions-runner"
+  default     = "actions-runner"
 }
 variable "stack_name" {
   type        = string

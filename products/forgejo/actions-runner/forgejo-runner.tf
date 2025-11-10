@@ -43,9 +43,9 @@ EOF
       runner = {
         file     = ".runner"
         capacity = var.capacity
-        envs = {
-          DOCKER_HOST = module.docker_socket_proxy.endpoint,
-        }
+        #envs = {
+        #  DOCKER_HOST = module.docker_socket_proxy.endpoint,
+        #}
         env_file       = ".env"
         timeout        = "3h"
         insecure       = false

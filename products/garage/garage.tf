@@ -6,20 +6,24 @@ module "garage" {
   converge_enable = false
   ports = [
     {
-      host      = var.rpc_port
-      container = var.rpc_port
+      host         = var.rpc_port
+      container    = var.rpc_port
+      publish_mode = "host"
       }, {
-      host      = var.web_port
-      container = var.web_port
+      host         = var.web_port
+      container    = var.web_port
+      publish_mode = "host"
       }, {
-      host      = var.s3_port
-      container = var.s3_port
+      host         = var.s3_port
+      container    = var.s3_port
+      publish_mode = "host"
       }, {
-      host      = var.admin_port
-      container = var.admin_port
+      host         = var.admin_port
+      container    = var.admin_port
+      publish_mode = "host"
     }
   ]
-  networks = [module.network]
+  networks              = [module.network]
   placement_constraints = var.placement_constraints
   mounts = {
     "/data/garage/meta" = "/var/lib/garage/meta"

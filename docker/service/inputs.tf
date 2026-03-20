@@ -23,6 +23,11 @@ variable "mirror" {
   default     = null
   description = "Whether to mirror the image to the local registry. Value is the mirror location."
 }
+variable "user" {
+  type        = string
+  default     = null
+  description = "The user to run the container as. Can be either a username or a UID."
+}
 variable "command" {
   type    = list(string)
   default = null

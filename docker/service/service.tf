@@ -9,6 +9,7 @@ resource "docker_service" "instance" {
     container_spec {
       image   = local.image_fully_qualified
       command = var.command
+      user    = var.user
       env     = var.environment_variables
 
       # Mount the shm if needed

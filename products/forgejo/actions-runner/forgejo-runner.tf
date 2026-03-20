@@ -21,9 +21,10 @@ module "forgejo_actions_runner" {
     #    CONFIG_FILE                       = "/config.yml"
     DOCKER_HOST = module.docker_socket_proxy.endpoint
   }
-  #mounts = {
-  #  "/var/run/docker.sock" = "/var/run/docker.sock"
-  #}
+  mounts = {
+    #"/var/run/docker.sock" = "/var/run/docker.sock"
+    "/data/cache/forgejo-runner" = "/data"
+  }
   networks      = concat(var.networks, [module.docker_socket_proxy.network])
   command       = ["/bin/bash", "/entrypoint.sh"]
   restart_delay = "1m"
@@ -43,9 +44,9 @@ EOF
       runner = {
         file     = ".runner"
         capacity = var.capacity
-        #envs = {
-        #  DOCKER_HOST = module.docker_socket_proxy.endpoint,
-        #}
+        envs = {
+          DOCKER_HOST = module.docker_socket_proxy.endpoint,
+        }
         env_file       = ".env"
         timeout        = "3h"
         insecure       = false
